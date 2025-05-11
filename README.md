@@ -1,24 +1,43 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Junie's Portfolio
+
+This is a personal portfolio website built with [Next.js](https://nextjs.org) to showcase my projects and skills.
+
+## Features
+
+- Responsive design for all devices
+- Dark mode support
+- Sections for About Me, Projects, and Contact
+- Clean and modern UI using Geist font
 
 ## Getting Started
 
 First, run the development server:
 
 ```bash
+# Using npm
 npm run dev
-# or
+
+# Using yarn
 yarn dev
-# or
+
+# Using pnpm (recommended)
 pnpm dev
-# or
+
+# Using bun
 bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the portfolio.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Customization
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+You can customize the portfolio by:
+
+1. Updating the content in `app/page.tsx`
+2. Modifying styles in `app/page.module.css` and `app/globals.css`
+3. Adding your own projects and information
+
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a custom font from Vercel.
 
 ## Learn More
 
