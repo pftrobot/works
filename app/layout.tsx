@@ -1,30 +1,26 @@
-import type { Metadata } from 'next'
-import { Geist, Geist_Mono } from 'next/font/google'
-import './globals.css'
+import type { ReactNode } from 'react'
+import './globals.scss'
+import styles from './layout.module.scss'
 
-const geistSans = Geist({
-  variable: '--font-geist-sans',
-  subsets: ['latin'],
-})
+import { JetBrains_Mono } from 'next/font/google'
 
-const geistMono = Geist_Mono({
-  variable: '--font-geist-mono',
-  subsets: ['latin'],
-})
+const mono = JetBrains_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: "Yiseul's Portfolio",
-  description: 'Welcome to my portfolio website showcasing my work and skills',
+export const metadata = {
+  title: 'Tech Crime Scene - YS',
+  description: '기술 문제 해결 과정을 수사히는 것처럼 보여줍니다',
 }
 
-export default function RootLayout({
-  children,
-}: Readonly<{
-  children: React.ReactNode
-}>) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>{children}</body>
+    <html lang="ko">
+      <body className={`${styles.body} ${mono.variable}`}>
+        <header className={styles.header}>
+          <h1 className={styles.logo}>수사일지</h1>
+        </header>
+        <main className={styles.main}>{children}</main>
+        <footer className={styles.footer}>&copy; 2025 Yiseul Oh.</footer>
+      </body>
     </html>
   )
 }

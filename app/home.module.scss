@@ -1,0 +1,56 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.intro {
+  margin-bottom: 3rem;
+}
+
+.headline {
+  font-size: 2.2rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.tagline {
+  font-size: 1rem;
+  color: #a0a0a0;
+}
+
+.actions {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.primaryBtn,
+.secondaryBtn {
+  text-decoration: none;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.4rem;
+  font-weight: 500;
+  transition: background 0.2s;
+}
+
+.primaryBtn {
+  background-color: #2970ff;
+  color: #fff;
+}
+
+.primaryBtn:hover {
+  background-color: #1657d2;
+}
+
+.secondaryBtn {
+  border: 1px solid #444;
+  color: #ccc;
+}
+
+.secondaryBtn:hover {
+  background-color: #222;
+}

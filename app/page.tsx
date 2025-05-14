@@ -1,53 +1,22 @@
-import styles from './page.module.css'
+import Link from 'next/link'
+import styles from './home.module.scss'
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <h1>Welcome to Junie&apos;s Portfolio</h1>
-        <p>I&apos;m a developer passionate about creating beautiful and functional web applications.</p>
+    <section className={styles.home}>
+      <div className={styles.intro}>
+        <h2 className={styles.headline}>기술 문제는 범죄다.</h2>
+        <p className={styles.tagline}>사건 파일을 열고, 기술 수사를 시작하세요.</p>
+      </div>
 
-        <div className={styles.ctas}>
-          <a href="#projects" className={styles.primary}>
-            View My Projects
-          </a>
-          <a href="#contact" className={styles.secondary}>
-            Contact Me
-          </a>
-        </div>
-
-        <section id="about">
-          <h2>About Me</h2>
-          <p>
-            Hello! I&apos;m Junie, a web developer with experience in React, Next.js, and modern frontend
-            technologies.
-          </p>
-        </section>
-
-        <section id="projects">
-          <h2>My Projects</h2>
-          <ol>
-            <li>Portfolio Website - A personal showcase built with Next.js</li>
-            <li>Project 2 - Description coming soon</li>
-            <li>Project 3 - Description coming soon</li>
-          </ol>
-        </section>
-
-        <section id="contact">
-          <h2>Get In Touch</h2>
-          <p>Feel free to reach out to me for collaboration or questions.</p>
-        </section>
-      </main>
-
-      <footer className={styles.footer}>
-        <a href="https://github.com" target="_blank" rel="noopener noreferrer">
-          GitHub
-        </a>
-        <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer">
-          LinkedIn
-        </a>
-        <a href="mailto:example@example.com">Email</a>
-      </footer>
-    </div>
+      <div className={styles.actions}>
+        <Link href="/case" className={styles.primaryBtn}>
+          사건 기록 보기
+        </Link>
+        <Link href="/about" className={styles.secondaryBtn}>
+          수사관 프로파일
+        </Link>
+      </div>
+    </section>
   )
 }
