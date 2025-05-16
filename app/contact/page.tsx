@@ -1,9 +1,10 @@
+import PageTitle from '@/components/common/PageTitle'
 import styles from './styles/contact.module.scss'
 
 export default function ContactPage() {
   return (
     <section className={styles.contactWrap}>
-      <h1 className={styles.title}>제보 센터</h1>
+      <PageTitle>제보 센터</PageTitle>
 
       <section>
         <h2 className={styles.subtitle}>접수 안내</h2>

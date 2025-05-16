@@ -1,9 +1,10 @@
+import PageTitle from '@/components/common/PageTitle'
 import styles from './styles/lab.module.scss'
 
 export default function LabPage() {
   return (
     <section className={styles.labWrap}>
-      <h1 className={styles.title}>실험실</h1>
+      <PageTitle>실험실</PageTitle>
 
       <section>
         <h2 className={styles.subtitle}>실험 개요</h2>

@@ -1,4 +1,6 @@
 import type { ReactNode } from 'react'
+import Header from '@/components/common/Header'
+import Footer from '@/components/common/Footer'
 import './globals.scss'
 import styles from './layout.module.scss'
 
@@ -11,15 +13,16 @@ export const metadata = {
   description: '기술 문제 해결 과정을 수사히는 것처럼 보여줍니다',
 }
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+interface RootLayoutProps {
+  children: ReactNode
+}
+export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko">
       <body className={`${styles.body} ${mono.variable}`}>
-        <header className={styles.header}>
-          <h1 className={styles.logo}>수사일지</h1>
-        </header>
+        <Header />
         <main className={styles.main}>{children}</main>
-        <footer className={styles.footer}>&copy; 2025 Yiseul Oh.</footer>
+        <Footer />
       </body>
     </html>
   )

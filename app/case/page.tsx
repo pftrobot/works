@@ -1,9 +1,10 @@
+import PageTitle from '@/components/common/PageTitle'
 import styles from './styles/caseList.module.scss'
 
 export default function CaseListPage() {
   return (
     <section className={styles.caseListWrap}>
-      <h1 className={styles.title}>사건 기록 목록</h1>
+      <PageTitle>사건 기록 목록</PageTitle>
 
       <section>
         <h2 className={styles.subtitle}>목록 설명</h2>

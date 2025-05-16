@@ -1,0 +1,46 @@
+.header {
+  background-color: #121212;
+  border-bottom: 1px solid #2c2c2c;
+}
+
+.inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 32px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.logo {
+  font-size: 20px;
+  font-weight: 600;
+  text-decoration: none;
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+}
+
+.nav {
+  display: flex;
+  gap: 24px;
+}
+
+.nav a {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 16px;
+  color: #bbbbbb;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+
+.nav a:hover {
+  color: #ffffff;
+}
+
+.active {
+  color: #2970ff;
+  font-weight: 600;
+}

@@ -1,9 +1,10 @@
+import PageTitle from '@/components/common/PageTitle'
 import styles from './styles/about.module.scss'
 
 export default function AboutPage() {
   return (
     <section className={styles.about}>
-      <h1 className={styles.title}>프로파일</h1>
+      <PageTitle>프로파일</PageTitle>
 
       <section>
         <h2 className={styles.subtitle}>프로필</h2>
