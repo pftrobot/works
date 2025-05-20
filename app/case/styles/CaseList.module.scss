@@ -1,0 +1,45 @@
+.caseWrap {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 48px 32px;
+
+  .caseList {
+    list-style: none;
+    padding: 0;
+
+    li {
+      margin-bottom: 20px;
+
+      button {
+        width: 100%;
+        background: #1a1a1a;
+        border: 1px solid #333;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: left;
+        color: inherit;
+        cursor: pointer;
+
+        h3 {
+          font-size: 16px;
+          margin-bottom: 8px;
+
+          span {
+            color: #888;
+            font-weight: 400;
+          }
+        }
+
+        p {
+          font-size: 14px;
+          color: #ccc;
+        }
+
+        &:hover {
+          background-color: #222;
+          border-color: #444;
+        }
+      }
+    }
+  }
+}

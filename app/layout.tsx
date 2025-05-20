@@ -1,6 +1,7 @@
 import type { ReactNode } from 'react'
 import Header from '@/components/common/Header'
 import Footer from '@/components/common/Footer'
+import { ModalProvider } from '@/components/common/ModalProvider'
 import './globals.scss'
 import styles from './layout.module.scss'
 
@@ -20,9 +21,11 @@ export default function RootLayout({ children }: RootLayoutProps) {
   return (
     <html lang="ko">
       <body className={`${styles.body} ${mono.variable}`}>
-        <Header />
-        <main className={styles.main}>{children}</main>
-        <Footer />
+        <ModalProvider>
+          <Header />
+          <main className={styles.main}>{children}</main>
+          <Footer />
+        </ModalProvider>
       </body>
     </html>
   )

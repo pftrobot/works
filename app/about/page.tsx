@@ -1,9 +1,10 @@
 'use client'
 
+import { ReactNode } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ScrollFadeInSection } from '@/hooks/useScrollFadeIn'
-import ProfileCard from './components/ProfileCard'
+import PageTitle from '@/components/common/PageTitle'
 import {
   dnaList,
   techGroups,
@@ -12,17 +13,18 @@ import {
   recentCases,
   guideSteps,
 } from '@/data/aboutData'
+import ProfileCard from './components/ProfileCard'
 import styles from './styles/About.module.scss'
 
-function Block({
+const Block = ({
   title,
   description,
   children,
 }: {
   title: string
   description: string
-  children: React.ReactNode
-}) {
+  children: ReactNode
+}) => {
   return (
     <ScrollFadeInSection>
       <section>
@@ -37,6 +39,8 @@ function Block({
 export default function AboutPage() {
   return (
     <section className={styles.aboutWrap}>
+      <PageTitle>프로파일</PageTitle>
+
       <motion.div
         className={styles.profileSection}
         initial={{ opacity: 0, y: 24 }}
@@ -104,13 +108,12 @@ export default function AboutPage() {
 
       <Block title="최근 사건 기록" description="최근 해결한 기술 사건을 요약했습니다">
         <ul className={styles.caseList}>
-          {recentCases.map(({ id, title, desc, tech }) => (
+          {recentCases.map(({ id, title, desc }) => (
             <li key={`recent-case-${id}`}>
               <strong>
                 [Case #{id}] {title}
               </strong>
               <p>사건 개요: {desc}</p>
-              <p>기술 포인트: {tech}</p>
             </li>
           ))}
         </ul>

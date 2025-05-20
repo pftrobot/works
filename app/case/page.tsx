@@ -1,22 +1,37 @@
-import PageTitle from '@/components/common/PageTitle'
-import styles from './styles/caseList.module.scss'
+'use client'
 
-export default function CaseListPage() {
+import { useState } from 'react'
+import { caseList, CaseMeta } from '@/data/casesMeta'
+import PageTitle from '@/components/common/PageTitle'
+import CaseDetailModal from './components/CaseDetailModal'
+import styles from './styles/CaseList.module.scss'
+
+export default function CasePage() {
+  const [selected, setSelected] = useState<CaseMeta | null>(null)
+
   return (
-    <section className={styles.caseListWrap}>
+    <main className={styles.caseWrap}>
       <PageTitle>사건 기록 목록</PageTitle>
 
-      <section>
-        <h2 className={styles.subtitle}>목록 설명</h2>
-        <p className={styles.text}>
-          지금까지 해결한 기술 사건 파일을 정리했습니다. 사건을 선택해 수사 과정을 따라가 보세요.
-        </p>
-      </section>
+      <p className={styles.description}>
+        실제 기술 문제들을 사건처럼 분석하고 정리한 수사기록입니다. 사건을 선택해 수사 과정을
+        따라가보세요.
+      </p>
 
-      <section>
-        <h2 className={styles.subtitle}>사건 파일</h2>
-        {/* TODO: 사건 카드 목록 */}
-      </section>
-    </section>
+      <ul className={styles.caseList}>
+        {caseList.map((item) => (
+          <li key={item.id}>
+            <button type="button" onClick={() => setSelected(item)}>
+              <h3>
+                [#{item.slug.toUpperCase()}] {item.title} – <span>{item.subtitle}</span>
+              </h3>
+              <p>{item.summary}</p>
+            </button>
+          </li>
+        ))}
+      </ul>
+
+      <CaseDetailModal open={!!selected} onClose={() => setSelected(null)} caseMeta={selected} />
+    </main>
   )
 }
