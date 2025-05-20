@@ -1,0 +1,174 @@
+.aboutWrap {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 48px 32px;
+
+  section {
+    margin-bottom: 60px;
+
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    > p {
+      font-size: 14px;
+      color: #ccc;
+      margin-bottom: 16px;
+    }
+  }
+}
+
+.profileSection {
+  margin-bottom: 60px;
+}
+
+.dnaChart {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin-top: 20px;
+
+  div {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    span {
+      width: 130px;
+      font-size: 14px;
+      color: #ccc;
+      text-align: right;
+    }
+
+    div {
+      height: 14px;
+      background-color: #2970ff;
+      border-radius: 4px;
+      transition: width 0.4s ease;
+      flex-shrink: 0;
+    }
+  }
+}
+
+.techGrid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 24px;
+  margin-top: 24px;
+
+  h4 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    color: #ddd;
+  }
+
+  ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-size: 14px;
+    color: #aaa;
+
+    li {
+      margin-bottom: 6px;
+    }
+  }
+}
+
+.caseList {
+  margin-top: 24px;
+  padding-left: 0;
+  list-style: none;
+
+  li {
+    background-color: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 8px;
+    padding: 16px 20px;
+    margin-bottom: 16px;
+
+    strong {
+      font-size: 15px;
+      color: #ddd;
+    }
+
+    p {
+      font-size: 14px;
+      color: #aaa;
+      margin: 8px 0;
+    }
+
+    small {
+      font-size: 12px;
+      color: #777;
+    }
+  }
+}
+
+.caseMore {
+  margin-top: 16px;
+
+  a {
+    font-size: 14px;
+    color: #2970ff;
+    text-decoration: none;
+    transition: color 0.2s;
+
+    &:hover {
+      color: #5293ff;
+    }
+  }
+}
+
+.timeline {
+  margin-top: 24px;
+  padding-left: 0;
+  list-style: none;
+  border-left: 2px solid #333;
+
+  li {
+    position: relative;
+    padding-left: 16px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    color: #bbb;
+
+    time {
+      display: inline-block;
+      font-size: 13px;
+      color: #888;
+      margin-right: 8px;
+    }
+
+    &::before {
+      content: '';
+      position: absolute;
+      left: -6px;
+      top: 6px;
+      width: 10px;
+      height: 10px;
+      background-color: #2970ff;
+      border-radius: 50%;
+    }
+  }
+}
+
+.guideList {
+  margin: 20px 0;
+  padding-left: 20px;
+  list-style: disc;
+
+  li {
+    font-size: 14px;
+    color: #bbb;
+    margin-bottom: 8px;
+
+    strong {
+      color: #eee;
+      margin-right: 6px;
+    }
+  }
+}
