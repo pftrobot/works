@@ -31,7 +31,12 @@ export default function CasePage() {
         ))}
       </ul>
 
-      <CaseDetailModal open={!!selected} onClose={() => setSelected(null)} caseMeta={selected} />
+      <CaseDetailModal
+        key={selected?.id}
+        open={Boolean(selected)}
+        onClose={() => setSelected(null)}
+        caseMeta={selected}
+      />
     </main>
   )
 }
