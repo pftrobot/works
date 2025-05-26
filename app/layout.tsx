@@ -1,30 +1,32 @@
 import type { ReactNode } from 'react'
-import Header from '@/components/common/Header'
-import Footer from '@/components/common/Footer'
-import { ModalProvider } from '@/components/common/ModalProvider'
+import { Noto_Sans_KR, JetBrains_Mono } from 'next/font/google'
+import { AnimationProvider } from '@/contexts/AnimationContext'
+import { ModalProvider } from '@/contexts/ModalContext'
+import LayoutContent from '@/components/common/LayoutContent'
+
 import './globals.scss'
 import styles from './layout.module.scss'
 
-import { JetBrains_Mono } from 'next/font/google'
-
-const mono = JetBrains_Mono({ variable: '--font-geist-mono', subsets: ['latin'] })
+const monoFont = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' })
+const notoFont = Noto_Sans_KR({
+  subsets: ['latin'],
+  weight: ['400', '500', '700'],
+  variable: '--font-body',
+})
 
 export const metadata = {
   title: 'Tech Crime Scene - YS',
   description: '기술 문제 해결 과정을 수사히는 것처럼 보여줍니다',
 }
 
-interface RootLayoutProps {
-  children: ReactNode
-}
-export default function RootLayout({ children }: RootLayoutProps) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko">
-      <body className={`${styles.body} ${mono.variable}`}>
+      <body className={`${styles.body} ${notoFont.variable} ${monoFont.variable}`}>
         <ModalProvider>
-          <Header />
-          <main className={styles.main}>{children}</main>
-          <Footer />
+          <AnimationProvider>
+            <LayoutContent>{children}</LayoutContent>
+          </AnimationProvider>
         </ModalProvider>
       </body>
     </html>

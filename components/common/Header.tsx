@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { IconHome, IconNotebook, IconFlask, IconUser, IconMail } from '@tabler/icons-react'
+import { IconNotebook, IconFlask, IconUser, IconMail } from '@tabler/icons-react'
 import styles from './Header.module.scss'
 
 export default function Header() {
@@ -12,8 +12,7 @@ export default function Header() {
     <header className={styles.header}>
       <div className={styles.inner}>
         <Link href="/" className={styles.logo}>
-          <IconHome size={20} stroke={2} style={{ marginRight: 8 }} />
-          기술 수사일지
+          WhoPushed
         </Link>
 
         <nav className={styles.nav}>

@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext, useContext, useState, ReactNode } from 'react'
-import Modal from './Modal'
+import Modal from '@/components/common/Modal'
 
 interface ModalState {
   content: ReactNode | null

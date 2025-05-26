@@ -1,7 +1,9 @@
 .home {
   display: flex;
   flex-direction: column;
+  justify-content: center;
   align-items: center;
+  min-height: calc(100vh - 12rem);
   padding: 4rem 2rem;
   text-align: center;
 }
@@ -11,46 +13,51 @@
 }
 
 .headline {
-  font-size: 2.2rem;
+  font-family: var(--font-mono), sans-serif;
+  font-size: 2.8rem;
   font-weight: bold;
   margin-bottom: 1rem;
+  position: relative;
+}
+
+.cursor {
+  color: #2970ff;
+  font-weight: normal;
+  margin-left: 2px;
 }
 
 .tagline {
   font-size: 1rem;
   color: #a0a0a0;
+  line-height: 1.6;
+  max-width: 640px;
+  margin: 0 auto;
 }
 
 .actions {
   display: flex;
-  gap: 1.5rem;
+  gap: 2rem;
   flex-wrap: wrap;
   justify-content: center;
-}
+  margin-top: 0.8rem;
 
-.primaryBtn,
-.secondaryBtn {
-  text-decoration: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.4rem;
-  font-weight: 500;
-  transition: background 0.2s;
-}
+  > a{
+    background-color: #111;
+    border: 1px solid #333;
+    color: #ddd;
+    padding: 0.75rem 1.75rem;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    border-radius: 4px;
+    transition: all 0.25s ease;
+    position: relative;
 
-.primaryBtn {
-  background-color: #2970ff;
-  color: #fff;
-}
-
-.primaryBtn:hover {
-  background-color: #1657d2;
-}
-
-.secondaryBtn {
-  border: 1px solid #444;
-  color: #ccc;
-}
-
-.secondaryBtn:hover {
-  background-color: #222;
+    &:hover {
+      background-color: #1e1e1e;
+      border-color: #555;
+      transform: translateY(-2px);
+      box-shadow: 0 0 8px rgba(255, 255, 255, 0.08);
+    }
+  }
 }

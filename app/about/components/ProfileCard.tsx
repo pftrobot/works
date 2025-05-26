@@ -1,18 +1,17 @@
-// TODO : Image
-// import Image from 'next/image'
+import Image from 'next/image'
 import styles from '../styles/Profile.module.scss'
 
 export default function ProfileCard() {
   return (
     <div className={styles.card}>
       <div className={styles.imageBox}>
-        {/*<Image*/}
-        {/*  src="/images/profile.png" // 실제 흑백 만화체 이미지 경로*/}
-        {/*  alt="기술 수사관 프로필"*/}
-        {/*  width={120}*/}
-        {/*  height={120}*/}
-        {/*  className={styles.image}*/}
-        {/*/>*/}
+        <Image
+          src="/images/profile.png" // 실제 흑백 만화체 이미지 경로
+          alt="기술 수사관 프로필"
+          width={120}
+          height={120}
+          className={styles.image}
+        />
       </div>
       <div className={styles.info}>
         <h2 className={styles.title}>기술 수사관: 오이슬</h2>
