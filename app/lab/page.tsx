@@ -4,7 +4,7 @@ import styles from './styles/lab.module.scss'
 export default function LabPage() {
   return (
     <section className={styles.labWrap}>
-      <PageTitle>실험실</PageTitle>
+      <PageTitle>LABORATORY</PageTitle>
 
       <section>
         <h2 className={styles.subtitle}>실험 개요</h2>

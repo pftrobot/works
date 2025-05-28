@@ -1,44 +1,110 @@
 .caseWrap {
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 48px 32px;
+  $keyColor: #ff4d4d;
 
-  .caseList {
-    list-style: none;
-    padding: 0;
+  inline-size: calc(100% - 10rem);
+  margin-inline: auto;
 
-    li {
-      margin-bottom: 20px;
+  .description {
+    font-size: 0.875rem;
+    color: #aaa;
+    line-height: 1.6;
+    margin-block-end: 4.8rem;
+  }
 
-      button {
-        width: 100%;
-        background: #1a1a1a;
-        border: 1px solid #333;
-        border-radius: 10px;
-        padding: 20px;
-        text-align: left;
-        color: inherit;
-        cursor: pointer;
+  .caseGrid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(32.5rem, 1fr));
+    gap: 6rem 8rem;
+    margin-block-start: 2.5rem;
 
-        h3 {
-          font-size: 16px;
-          margin-bottom: 8px;
+    .card {
+      display: flex;
+      flex-direction: column;
+      padding: 0;
+      border: none;
+      background-color: transparent;
+      cursor: pointer;
+      transition: transform 0.2s ease;
 
-          span {
-            color: #888;
-            font-weight: 400;
+      &:hover {
+        .thumbnail {
+          border-color: $keyColor;
+
+          img {
+            filter: sepia(10%) grayscale(0%);
+            transform: scale(1.08);
           }
         }
+      }
 
-        p {
-          font-size: 14px;
-          color: #ccc;
+      .thumbnail {
+        position: relative;
+        overflow: hidden;
+        aspect-ratio: 16 / 9;
+        border: 1px solid #c5a46a;
+        border-radius: 0.625rem;
+        transition: border 0.6s ease;
+
+        img {
+          inline-size: 100%;
+          block-size: 100%;
+          display: block;
+          object-fit: cover;
+          filter: sepia(90%) grayscale(10%);
+          transform: scale(1);
+          transition:
+                  filter 1.2s cubic-bezier(0.22, 1, 0.36, 1),
+                  transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+      }
+
+      .textWrap {
+        position: relative;
+        min-block-size: 10rem;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        text-align: left;
+        padding-block-start: 1.2rem;
+        padding-block-end: 1.6rem;
+
+        .animatedText {
+          display: inline-block;
+          will-change: clip-path;
         }
 
-        &:hover {
-          background-color: #222;
-          border-color: #444;
+        .slug {
+          font-size: 2rem;
+          font-weight: 600;
+          color: #fcfff2;
+          text-transform: uppercase;
+          letter-spacing: -0.1rem;
+          line-height: 1.2;
         }
+
+        .title {
+          font-size: 0.88rem;
+          font-weight: 600;
+          color: #fcfff2;
+          letter-spacing: 0.04em;
+        }
+
+        &::after {
+          position: absolute;
+          inset-block-end: 0;
+          inset-inline-start: 0;
+          inset-inline-end: 0;
+          display: block;
+          inline-size: 100%;
+          block-size: 1px;
+          content: '';
+          background-color: $keyColor;
+        }
+      }
+
+      .char {
+        display: inline-block;
+        white-space: pre;
       }
     }
   }

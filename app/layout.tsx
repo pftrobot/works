@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Noto_Sans_KR, JetBrains_Mono } from 'next/font/google'
+import { Noto_Sans_KR, JetBrains_Mono, Orbitron } from 'next/font/google'
 import { AnimationProvider } from '@/contexts/AnimationContext'
 import { ModalProvider } from '@/contexts/ModalContext'
 import LayoutContent from '@/components/common/LayoutContent'
@@ -14,6 +14,12 @@ const notoFont = Noto_Sans_KR({
   variable: '--font-body',
 })
 
+const orbitron = Orbitron({
+  subsets: ['latin'],
+  weight: ['600', '700', '800'],
+  variable: '--font-title',
+})
+
 export const metadata = {
   title: 'Tech Crime Scene - YS',
   description: '기술 문제 해결 과정을 수사히는 것처럼 보여줍니다',
@@ -22,7 +28,9 @@ export const metadata = {
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko">
-      <body className={`${styles.body} ${notoFont.variable} ${monoFont.variable}`}>
+      <body
+        className={`${styles.body} ${notoFont.variable} ${monoFont.variable} ${orbitron.variable}`}
+      >
         <ModalProvider>
           <AnimationProvider>
             <LayoutContent>{children}</LayoutContent>

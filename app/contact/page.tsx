@@ -4,7 +4,7 @@ import styles from './styles/contact.module.scss'
 export default function ContactPage() {
   return (
     <section className={styles.contactWrap}>
-      <PageTitle>제보 센터</PageTitle>
+      <PageTitle>REPORT CENTER</PageTitle>
 
       <section>
         <h2 className={styles.subtitle}>접수 안내</h2>

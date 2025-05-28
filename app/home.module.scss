@@ -3,61 +3,67 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 12rem);
-  padding: 4rem 2rem;
+  min-block-size: calc(100vh - 12rem);
+  padding-block: 4rem;
+  padding-inline: 2rem;
   text-align: center;
-}
 
-.intro {
-  margin-bottom: 3rem;
-}
+  .intro {
+    margin-block-end: 3rem;
+  }
 
-.headline {
-  font-family: var(--font-mono), sans-serif;
-  font-size: 2.8rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
-  position: relative;
-}
-
-.cursor {
-  color: #2970ff;
-  font-weight: normal;
-  margin-left: 2px;
-}
-
-.tagline {
-  font-size: 1rem;
-  color: #a0a0a0;
-  line-height: 1.6;
-  max-width: 640px;
-  margin: 0 auto;
-}
-
-.actions {
-  display: flex;
-  gap: 2rem;
-  flex-wrap: wrap;
-  justify-content: center;
-  margin-top: 0.8rem;
-
-  > a{
-    background-color: #111;
-    border: 1px solid #333;
-    color: #ddd;
-    padding: 0.75rem 1.75rem;
-    font-size: 0.95rem;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    border-radius: 4px;
-    transition: all 0.25s ease;
+  .headline {
     position: relative;
+    font-family: var(--font-mono), sans-serif;
+    font-size: 2.8rem;
+    font-weight: 700;
+    margin-block-end: 1rem;
+  }
 
-    &:hover {
-      background-color: #1e1e1e;
-      border-color: #555;
-      transform: translateY(-2px);
-      box-shadow: 0 0 8px rgba(255, 255, 255, 0.08);
+  .cursor {
+    font-weight: 400;
+    color: #2970ff;
+    margin-inline-start: 0.125rem;
+  }
+
+  .tagline {
+    font-size: 1rem;
+    color: #a0a0a0;
+    line-height: 1.6;
+    max-inline-size: 40rem;
+    margin-block: 0;
+    margin-inline: auto;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    margin-block-start: 0.8rem;
+
+    > a {
+      position: relative;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 0.95rem;
+      color: #ddd;
+      text-transform: uppercase;
+      letter-spacing: 0.0625rem;
+      padding-block: 0.75rem;
+      padding-inline: 1.75rem;
+      border: 1px solid #333;
+      border-radius: 0.25rem;
+      background-color: #111;
+      transition: all 0.25s ease;
+
+      &:hover {
+        background-color: #1e1e1e;
+        border-color: #555;
+        transform: translateY(-0.125rem);
+        box-shadow: 0 0 0.5rem rgba(255, 255, 255, 0.08);
+      }
     }
   }
 }

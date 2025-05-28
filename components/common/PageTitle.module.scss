@@ -1,14 +1,15 @@
 .title {
-  font-size: 28px;
+  font-family: var(--font-title), sans-serif;
+  font-size: 2.25rem;
   font-weight: bold;
-  color: #ffffff;
-  margin-bottom: 32px;
-  border-bottom: 2px solid #333;
-  padding-bottom: 12px;
+  color: #fff;
+  padding-block-end: 1.2rem;
+  margin-block-end: 1.2rem;
+  border-block-end: 2px solid #333;
 
   & + .description {
-    font-size: 14px;
+    font-size: 0.875rem;
     color: #aaa;
-    margin-bottom: 32px;
+    margin-block-end: 2rem;
   }
 }

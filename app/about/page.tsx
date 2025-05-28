@@ -39,7 +39,7 @@ const Block = ({
 export default function AboutPage() {
   return (
     <section className={styles.aboutWrap}>
-      <PageTitle>프로파일</PageTitle>
+      <PageTitle>PROFILE</PageTitle>
 
       <motion.div
         className={styles.profileSection}
