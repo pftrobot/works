@@ -38,49 +38,54 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
   }
 
   return (
-    <Modal open={open} onClose={onClose} width={560}>
-      <div className={styles.modalContent}>
-        <h2 className={styles.title}>{title}</h2>
-        <h3 className={styles.subtitle}>{subtitle}</h3>
+    <Modal open={open} onClose={onClose} width={1120}>
+      <div className={styles.modalWrap}>
+        <div className={styles.leftColumn}>
+          <h2 className={styles.title}>{title}</h2>
+          <h3 className={styles.subtitle}>{subtitle}</h3>
+          <p className={styles.summary}>{summary}</p>
+        </div>
 
-        {quizStep === 'question' ? (
-          <>
-            <p className={styles.summary}>{summary}</p>
-            <p className={styles.question}>{quiz.question}</p>
-            <ul className={styles.options}>
-              {quiz.options.map((opt, idx) => (
-                <li key={idx}>
-                  <button onClick={() => handleOptionClick(idx)}>{opt}</button>
-                </li>
-              ))}
-            </ul>
-          </>
-        ) : (
-          <>
-            <div className={styles.answerResult}>
+        <div className={styles.rightColumn}>
+          {quizStep === 'question' ? (
+            <>
+              <p className={styles.question}>{quiz.question}</p>
+              <ul className={styles.options}>
+                {quiz.options.map((opt, idx) => (
+                  <li key={idx}>
+                    <button className={styles.optionBtn} onClick={() => handleOptionClick(idx)}>
+                      {opt}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </>
+          ) : (
+            <div className={styles.answerWrap}>
               {selectedOption === quiz.answer ? (
-                <p className={styles.correct}>정답입니다!</p>
+                <p className={styles.answerCorrect}>정답입니다!</p>
               ) : (
-                <p className={styles.incorrect}>
+                <p className={styles.answerWrong}>
                   오답입니다. 정답은 “{quiz.options[quiz.answer]}”입니다.
                 </p>
               )}
-              <button className={styles.backButton} onClick={handleBackToQuestion}>
+
+              <button className={styles.backBtn} onClick={handleBackToQuestion}>
                 질문 다시 보기
               </button>
+
+              <p className={styles.description}>{description}</p>
+
+              {tech && tech.length > 0 && <TechTagList tech={tech} />}
+
+              {link && (
+                <a href={link} target="_blank" rel="noopener noreferrer" className={styles.link}>
+                  자세히 보기
+                </a>
+              )}
             </div>
-
-            <p className={styles.description}>{description}</p>
-
-            {tech && tech.length > 0 && <TechTagList tech={tech} />}
-
-            {link && (
-              <a href={link} target="_blank" rel="noopener noreferrer" className={styles.link}>
-                자세히 보기
-              </a>
-            )}
-          </>
-        )}
+          )}
+        </div>
       </div>
 
       <ConfirmModal
