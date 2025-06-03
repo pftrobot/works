@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import styles from '../styles/Profile.module.scss'
+import styles from './Profile.module.scss'
 
 export default function ProfileCard() {
   return (

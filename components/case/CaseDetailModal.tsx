@@ -4,7 +4,7 @@ import Modal from '@/components/common/Modal'
 import ConfirmModal from '@/components/common/ConfirmModal'
 import TechTagList from '@/components/common/TechTagList'
 import { CaseMeta } from '@/data/casesMeta'
-import styles from '../styles/CaseDetailModal.module.scss'
+import styles from './CaseDetailModal.module.scss'
 import { useState } from 'react'
 
 interface Props {
