@@ -5,6 +5,7 @@
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
+    "clean": "rimraf .next",
     "start": "next start",
     "lint": "next lint",
     "format": "prettier --write ."
@@ -28,6 +29,7 @@
     "eslint-config-prettier": "^10.1.5",
     "eslint-plugin-prettier": "^5.4.0",
     "prettier": "^3.5.3",
+    "rimraf": "^6.0.1",
     "typescript": "^5"
   },
   "packageManager": "pnpm@9.15.0"
