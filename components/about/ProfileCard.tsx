@@ -6,7 +6,7 @@ export default function ProfileCard() {
     <div className={styles.card}>
       <div className={styles.imageBox}>
         <Image
-          src="/images/profile.png" // 실제 흑백 만화체 이미지 경로
+          src="/imgs/cat_face.png"
           alt="기술 수사관 프로필"
           width={120}
           height={120}

@@ -1,11 +1,12 @@
 .card {
+  inline-size: 64%;
   display: flex;
   align-items: center;
   gap: 1.5rem;
   padding: 2rem;
   border: 1px solid #333;
   border-radius: 0.75rem;
-  background-color: #1a1a1a;
+  background-color: rgba(0, 0, 0, 0.6);
 }
 
 .imageBox {
@@ -14,15 +15,16 @@
   block-size: 7.5rem;
   border: 2px solid #444;
   border-radius: 50%;
-  background-color: #000;
+  background-color: #efefef;
   overflow: hidden;
 }
 
 .image {
-  inline-size: 100%;
+  inline-size: 80%;
   block-size: 100%;
-  object-fit: cover;
+  object-fit: contain;
   filter: grayscale(100%) contrast(1.2);
+  margin-inline: auto;
 }
 
 .info {

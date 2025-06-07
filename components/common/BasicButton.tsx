@@ -33,7 +33,7 @@ export default function BasicButton(props: BasicButtonProps) {
 
   return (
     <motion.div
-      whileHover={{ y: -2, boxShadow: '0 4px 12px rgba(255, 255, 255, 0.05)' }}
+      whileHover={{ y: -2, boxShadow: '0 4px 12px #ffffff05' }}
       whileTap={{ scale: 0.97 }}
     >
       {'href' in props ? (
