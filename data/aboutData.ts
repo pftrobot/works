@@ -1,11 +1,12 @@
 import { caseList } from './casesMeta'
 
 export const dnaList = [
-  { label: '문제 중심형', size: '92%' },
-  { label: '인터랙션 집착형', size: '68%' },
-  { label: '성능 최적화형', size: '88%' },
-  { label: '문서화 중시형', size: '75%' },
-  { label: '디버깅 집착형', size: '90%' },
+  { label: '문제 중심형', size: '92%', color: '#009688' },
+  { label: '인터랙션 집착형', size: '68%', color: '#558b2f' },
+  { label: '성능 최적화형', size: '88%', color: '#ab47bc' },
+  { label: '문서화 중시형', size: '75%', color: '#e53935' },
+  { label: '디버깅 집착형', size: '90%', color: '#1e88e5' },
+  { label: '경험 중시형', size: '73%', color: '#5e35b1' },
 ]
 
 export const techGroups = [

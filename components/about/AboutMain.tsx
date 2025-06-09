@@ -1,9 +1,9 @@
 'use client'
 
+import { useInView } from 'react-intersection-observer'
+import Link from 'next/link'
 import { motion } from 'framer-motion'
-import PageTitle from '@/components/common/PageTitle'
-import ProfileCard from '@/components/about/ProfileCard'
-import Block from './Block'
+import { useAnimationContext } from '@/contexts/AnimationContext'
 import {
   dnaList,
   techGroups,
@@ -12,10 +12,24 @@ import {
   recentCases,
   guideSteps,
 } from '@/data/aboutData'
+import PageTitle from '@/components/common/PageTitle'
+import ProfileCard from '@/components/about/ProfileCard'
+import Block from './Block'
 import styles from './AboutMain.module.scss'
-import Link from 'next/link'
+import { useEffect } from 'react'
 
 export default function AboutMain() {
+  const { setAnimationDone } = useAnimationContext()
+  const [refProfile, inViewProfile] = useInView({ triggerOnce: true, threshold: 0.1 })
+  const [refDna, inViewDna] = useInView({ triggerOnce: true, threshold: 0.2 })
+
+  useEffect(() => {
+    const timeout = setTimeout(() => {
+      setAnimationDone(true)
+    }, 800)
+    return () => clearTimeout(timeout)
+  }, [setAnimationDone])
+
   return (
     <motion.section
       className={styles.aboutWrap}
@@ -23,12 +37,13 @@ export default function AboutMain() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
     >
-      <PageTitle>PROFILE</PageTitle>
+      <PageTitle className={styles.pageTitle}>PROFILE</PageTitle>
 
       <motion.div
+        ref={refProfile}
         className={styles.profileSection}
         initial={{ opacity: 0, y: 24 }}
-        animate={{ opacity: 1, y: 0 }}
+        animate={inViewProfile ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6 }}
       >
         <ProfileCard />
@@ -38,14 +53,57 @@ export default function AboutMain() {
         title="수사 스타일 DNA"
         description="기술 문제를 어떻게 접근하는지, 성향을 수치화해 보았습니다"
       >
-        <div className={styles.dnaChart}>
-          {dnaList.map(({ label, size }) => (
-            <div key={label}>
-              <span>{label}</span>
-              <div style={{ width: size }} />
-            </div>
+        <motion.div
+          ref={refDna}
+          className={styles.dnaChart}
+          initial="hidden"
+          animate={inViewDna ? 'visible' : 'hidden'}
+          variants={{
+            visible: { transition: { staggerChildren: 0.15 } },
+            hidden: {},
+          }}
+        >
+          {dnaList.map(({ label, size, color }) => (
+            <motion.div
+              key={label}
+              className={styles.dnaItem}
+              style={
+                {
+                  '--para-color': color,
+                  '--bar-color': color,
+                  '--bar-size': size,
+                } as React.CSSProperties
+              }
+              variants={{
+                hidden: { opacity: 0, x: -20, scale: 0.95 },
+                visible: {
+                  opacity: 1,
+                  x: 0,
+                  scale: 1,
+                  transition: { duration: 0.4, ease: 'easeOut' },
+                },
+              }}
+            >
+              <div className={styles.labelTop}>
+                <span className={styles.skillText}>{'//'} SKILL</span>
+                <span className={styles.iconShape} />
+              </div>
+              <div className={styles.labelLine}>
+                <div className={styles.parallelogram} />
+                <span className={styles.labelText}>{label.toUpperCase()}</span>
+              </div>
+              <div className={styles.barLine}>
+                <motion.div
+                  className={styles.barFill}
+                  initial={{ width: 0 }}
+                  animate={{ width: size }}
+                  transition={{ duration: 0.6, ease: 'easeOut' }}
+                />
+              </div>
+              <div className={styles.percentage}>{size}</div>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
       </Block>
 
       <Block title="주요 수사 장비" description="다음과 같은 기술 스택과 도구를 주로 사용합니다">
