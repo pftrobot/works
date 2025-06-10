@@ -4,16 +4,33 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useAnimationContext } from '@/contexts/AnimationContext'
 import BasicButton from '@/components/common/BasicButton'
-import FingerprintSVG from '@/public/imgs/Fingerprint.svg'
 import styles from './HomeMain.module.scss'
 import FingerprintScan from '@/components/home/FingerprintScan'
 
 export default function HomeMain() {
   const [phase, setPhase] = useState<'scan' | 'typing' | 'done'>('scan')
   const [displayedText, setDisplayedText] = useState('')
+  const [scanText, setScanText] = useState('')
+  const [showFingerprint, setShowFingerprint] = useState(false)
   const fullText = 'ACCESS GRANTED'
   const typingSpeed = 100
   const { setAnimationDone } = useAnimationContext()
+
+  useEffect(() => {
+    if (phase === 'scan') {
+      let i = 0
+      const interval = setInterval(() => {
+        if (i <= '지문 인식 중...'.length) {
+          setScanText('지문 인식 중...'.slice(0, i))
+          i++
+        } else {
+          clearInterval(interval)
+          setTimeout(() => setShowFingerprint(true), 300)
+        }
+      }, 80)
+      return () => clearInterval(interval)
+    }
+  }, [phase])
 
   useEffect(() => {
     if (phase === 'typing') {
@@ -39,8 +56,10 @@ export default function HomeMain() {
       <AnimatePresence>
         {phase === 'scan' && (
           <motion.div className={styles.fingerprintWrap}>
-            <FingerprintScan onScanComplete={() => setPhase('typing')} />
-            <p className={styles.scanText}>지문 인식 중...</p>
+            <div className={styles.fingerprintInner}>
+              {showFingerprint && <FingerprintScan onScanComplete={() => setPhase('typing')} />}
+              {scanText && <p className={styles.scanText}>{scanText}</p>}
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

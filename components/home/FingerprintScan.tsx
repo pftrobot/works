@@ -65,7 +65,7 @@ export default function FingerprintScan({ onScanComplete }: FingerprintScanProps
   }, [controls])
 
   useEffect(() => {
-    const totalDuration = 0.07 * paths.length + 1.5 // delay 누적 + 마지막 애니메이션 시간
+    const totalDuration = 0.12 * paths.length + 0.6 // delay 누적 + 마지막 애니메이션 시간
     const timeout = setTimeout(() => {
       setIsDone(true)
     }, totalDuration * 1000)
@@ -75,7 +75,16 @@ export default function FingerprintScan({ onScanComplete }: FingerprintScanProps
   return (
     <svg viewBox="0 0 764 790" width="764" height="790" xmlns="http://www.w3.org/2000/svg">
       {paths.map((d, i) => (
-        <path key={`gray-${i}`} d={d} fill="none" stroke="#666" strokeWidth="1.5" />
+        <motion.path
+          key={`gray-${i}`}
+          d={d}
+          fill="none"
+          stroke="#666"
+          strokeWidth="1.5"
+          initial={{ opacity: 0 }}
+          animate={isDone ? { opacity: 0 } : { opacity: 1 }}
+          transition={{ duration: 1.1, delay: 0.1 }}
+        />
       ))}
 
       {paths.map((d, i) => (
@@ -83,10 +92,10 @@ export default function FingerprintScan({ onScanComplete }: FingerprintScanProps
           key={i}
           d={d}
           fill="none"
-          stroke="#2970ff"
-          strokeWidth="1.5"
+          stroke="#0067ff"
+          strokeWidth="2"
           initial={{
-            strokeDasharray: '100 20',
+            strokeDasharray: '100 100',
             strokeDashoffset: 120,
             opacity: 0,
             scale: 1,
@@ -101,6 +110,7 @@ export default function FingerprintScan({ onScanComplete }: FingerprintScanProps
                   y: (i % 3 === 0 ? 1 : -1) * 100,
                 }
               : {
+                  strokeDasharray: '100 0',
                   strokeDashoffset: 0,
                   opacity: 1,
                 }
@@ -112,18 +122,6 @@ export default function FingerprintScan({ onScanComplete }: FingerprintScanProps
           }}
         />
       ))}
-      {/*{paths.map((d, i) => (*/}
-      {/*  <motion.path*/}
-      {/*    key={`blue-${i}`}*/}
-      {/*    custom={i}*/}
-      {/*    d={d}*/}
-      {/*    stroke="aquamarine"*/}
-      {/*    strokeWidth="1.5"*/}
-      {/*    fill="none"*/}
-      {/*    initial={{ strokeDasharray: '100 20', strokeDashoffset: 120, opacity: 0 }}*/}
-      {/*    animate={controls}*/}
-      {/*  />*/}
-      {/*))}*/}
     </svg>
   )
 }
