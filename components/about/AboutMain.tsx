@@ -2,19 +2,12 @@
 
 import { useEffect, ReactNode } from 'react'
 import { useInView } from 'react-intersection-observer'
-import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { useAnimationContext } from '@/contexts/AnimationContext'
-import {
-  dnaList,
-  techGroups,
-  caseWeapons,
-  timeline,
-  recentCases,
-  guideSteps,
-} from '@/data/aboutData'
+import { dnaList, techGroups, timeline } from '@/data/aboutData'
 import PageTitle from '@/components/common/PageTitle'
 import ProfileCard from '@/components/about/ProfileCard'
+import TimelineCards from '@/components/about/TimelineCards'
 import Block from './Block'
 import styles from './AboutMain.module.scss'
 import {
@@ -220,75 +213,8 @@ export default function AboutMain() {
         </div>
       </Block>
 
-      <Block
-        title="사건별 사용 무기"
-        description="각 기술 사건에서 사용된 전략과 도구를 정리했습니다"
-      >
-        <ul className={styles.caseList}>
-          {caseWeapons.map(({ id, title, summary, tech }) => (
-            <li key={`case-list-${id}`}>
-              <strong>
-                [Case #{id}] {title}
-              </strong>
-              <p>{summary}</p>
-              <small>사용 기술: {tech}</small>
-            </li>
-          ))}
-        </ul>
-      </Block>
-
       <Block title="성장 연대표" description="기술 수사관으로 성장해온 여정을 정리했습니다.">
-        <motion.ul
-          className={styles.timeline}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          {timeline.map((item, index) => (
-            <motion.li
-              key={item.id}
-              className={`${styles.timelineItem} ${index % 2 === 0 ? styles.left : styles.right}`}
-              initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.6, ease: 'easeOut' }}
-              viewport={{ once: true, amount: 0.5 }}
-            >
-              <div className={styles.logLine}>
-                <span className={styles.year}>{item.year}</span>
-                <span className={styles.text}>{item.text}</span>
-              </div>
-            </motion.li>
-          ))}
-        </motion.ul>
-      </Block>
-
-      <Block title="최근 사건 기록" description="최근 해결한 기술 사건을 요약했습니다">
-        <ul className={styles.caseList}>
-          {recentCases.map(({ id, title, desc }) => (
-            <li key={`recent-case-${id}`}>
-              <strong>
-                [Case #{id}] {title}
-              </strong>
-              <p>사건 개요: {desc}</p>
-            </li>
-          ))}
-        </ul>
-        <div className={styles.caseMore}>
-          <Link href="/case">사건 더보기</Link>
-        </div>
-      </Block>
-
-      <Block
-        title="관람 가이드"
-        description="이 사이트는 단순한 이력서가 아닙니다. 각 사건은 실제 기술 문제를 해결한 과정을 시뮬레이션처럼 구성했습니다."
-      >
-        <ul className={styles.guideList}>
-          {guideSteps.map((item, index) => (
-            <li key={`guide-${index}`}>
-              <strong>{index + 1}단계</strong> {item}
-            </li>
-          ))}
-        </ul>
+        <TimelineCards data={timeline} />
       </Block>
     </motion.section>
   )

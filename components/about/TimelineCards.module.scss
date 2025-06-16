@@ -1,0 +1,35 @@
+.timelineWrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  justify-content: center;
+  margin-top: 2rem;
+
+  .card {
+    background-color: #1f1f1f;
+    border: 1px solid #444;
+    border-radius: 0.75rem;
+    padding: 1.25rem;
+    width: clamp(260px, 40%, 320px);
+    color: #eee;
+    box-shadow: 0 0 0.5rem rgba(255, 169, 77, 0.1);
+    transition: transform 0.3s ease;
+
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 0 0.75rem rgba(255, 169, 77, 0.2);
+    }
+
+    .year {
+      font-size: 0.875rem;
+      color: #ffa94d;
+      margin-bottom: 0.5rem;
+    }
+
+    .text {
+      font-size: 0.9375rem;
+      color: #ccc;
+      line-height: 1.6;
+    }
+  }
+}
