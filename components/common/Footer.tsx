@@ -1,7 +1,13 @@
+'use client'
+
+import { useState } from 'react'
 import Link from 'next/link'
 import styles from './Footer.module.scss'
+import GuideModal from './GuideModal'
 
 const Footer = () => {
+  const [openGuide, setOpenGuide] = useState(false)
+
   return (
     <footer className={styles.footer}>
       <div className={styles.inner}>
@@ -9,11 +15,16 @@ const Footer = () => {
         <nav className={styles.links}>
           <Link href="/about">프로파일</Link>
           <Link href="/contact">제보</Link>
+          <button onClick={() => setOpenGuide(true)} className={styles.linkButton}>
+            Guide
+          </button>
           <a href="https://github.com/yourname" target="_blank" rel="noopener noreferrer">
             GitHub
           </a>
         </nav>
       </div>
+
+      <GuideModal open={openGuide} onClose={() => setOpenGuide(false)} />
     </footer>
   )
 }

@@ -6,6 +6,7 @@ import { useAnimationContext } from '@/contexts/AnimationContext'
 import BasicButton from '@/components/common/BasicButton'
 import styles from './HomeMain.module.scss'
 import FingerprintScan from '@/components/home/FingerprintScan'
+import GuideNotice from '@/components/home/GuideNotice'
 
 export default function HomeMain() {
   const [phase, setPhase] = useState<'scan' | 'typing' | 'done'>('scan')
@@ -14,7 +15,18 @@ export default function HomeMain() {
   const [showFingerprint, setShowFingerprint] = useState(false)
   const fullText = 'ACCESS GRANTED'
   const typingSpeed = 100
-  const { setAnimationDone } = useAnimationContext()
+  const { setAnimationDone, animationDone } = useAnimationContext()
+
+  useEffect(() => {
+    if (animationDone) {
+      const timeout = setTimeout(() => {
+        setPhase('done')
+      }, 2800)
+      return () => clearTimeout(timeout)
+    } else {
+      setPhase('scan')
+    }
+  }, [animationDone])
 
   useEffect(() => {
     if (phase === 'scan') {
@@ -101,6 +113,8 @@ export default function HomeMain() {
           </motion.div>
         </div>
       )}
+
+      {phase === 'done' && <GuideNotice />}
     </section>
   )
 }
