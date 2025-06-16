@@ -1,38 +1,60 @@
 import { caseList } from './casesMeta'
 
 export const dnaList = [
-  { label: '문제 중심형', size: '92%', color: '#009688' },
-  { label: '인터랙션 집착형', size: '68%', color: '#558b2f' },
-  { label: '성능 최적화형', size: '88%', color: '#ab47bc' },
-  { label: '문서화 중시형', size: '75%', color: '#e53935' },
-  { label: '디버깅 집착형', size: '90%', color: '#1e88e5' },
-  { label: '경험 중시형', size: '73%', color: '#5e35b1' },
+  { id: 'dna-1', label: 'Problem Focused', size: '92%', color: '#3f88ff' },
+  { id: 'dna-2', label: 'Interaction Focused', size: '68%', color: '#00bfa6' },
+  { id: 'dna-3', label: 'Speed Optimizer', size: '88%', color: '#a259ff' },
+  { id: 'dna-4', label: 'Likes Documents', size: '75%', color: '#ff6f61' },
+  { id: 'dna-5', label: 'Debug Lover', size: '90%', color: '#dab53b' },
+  { id: 'dna-6', label: 'Experience First', size: '73%', color: '#0091ea' },
 ]
 
 export const techGroups = [
   {
     category: 'Frontend',
-    items: ['Typescript', 'React', 'Next', 'Vue', 'Nuxt', 'SCSS', 'CSS Modules'],
+    items: [
+      { label: 'Typescript', highlight: true },
+      { label: 'React', highlight: true },
+      { label: 'Next', highlight: true },
+      { label: 'Vue' },
+      { label: 'Nuxt' },
+      { label: 'SCSS' },
+      { label: 'CSS Modules' },
+    ],
   },
   {
     category: 'State / API',
-    items: ['Zustand', 'React Query', 'Pinia', 'RESTful API', 'WebSocket'],
+    items: [
+      { label: 'Zustand', highlight: true },
+      { label: 'React Query', highlight: true },
+      { label: 'Pinia' },
+      { label: 'RESTful API' },
+      { label: 'WebSocket' },
+    ],
   },
   {
     category: 'Infra / Tools',
-    items: ['Pnpm', 'Yarn berry', 'Poetry', 'Vite', 'Storybook', 'GitHub Actions', 'AWS S3'],
+    items: [
+      { label: 'Pnpm' },
+      { label: 'Yarn berry' },
+      { label: 'Poetry' },
+      { label: 'Vite', highlight: true },
+      { label: 'Storybook' },
+      { label: 'GitHub Actions', highlight: true },
+      { label: 'AWS S3' },
+    ],
   },
   {
     category: 'Etc',
     items: [
-      'ReChartJs',
-      'Otplib',
-      'Google Auth',
-      'next-auth',
-      'Corbado',
-      'PDF WebViewer',
-      'WebGL',
-      'Canvas',
+      { label: 'ReChartJs' },
+      { label: 'Otplib' },
+      { label: 'Google Auth' },
+      { label: 'next-auth' },
+      { label: 'Corbado' },
+      { label: 'PDF WebViewer', highlight: true },
+      { label: 'WebGL', highlight: true },
+      { label: 'Canvas' },
     ],
   },
 ]

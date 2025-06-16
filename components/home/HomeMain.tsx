@@ -49,7 +49,7 @@ export default function HomeMain() {
       }, typingSpeed)
       return () => clearInterval(timer)
     }
-  }, [phase])
+  }, [phase, setAnimationDone])
 
   return (
     <section className={styles.home}>

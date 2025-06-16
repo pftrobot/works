@@ -4,7 +4,7 @@ import { motion, useAnimationControls } from 'framer-motion'
 import { useState, useEffect } from 'react'
 
 interface FingerprintScanProps {
-  onScanComplete?: () => void
+  onScanComplete: () => void
 }
 
 const paths = [
@@ -36,7 +36,6 @@ export default function FingerprintScan({ onScanComplete }: FingerprintScanProps
 
   useEffect(() => {
     async function runAnimation() {
-      // 점선 애니메이션 시작
       controls.start((i) => ({
         strokeDasharray: '150 15',
         strokeDashoffset: 120,
@@ -48,7 +47,6 @@ export default function FingerprintScan({ onScanComplete }: FingerprintScanProps
         },
       }))
 
-      // 이어진 선 전환은 중간쯤(약 0.6s)부터 시작
       setTimeout(() => {
         controls.start({
           strokeDasharray: 'none',
@@ -58,7 +56,7 @@ export default function FingerprintScan({ onScanComplete }: FingerprintScanProps
             ease: 'easeOut',
           },
         })
-      }, 2700) // 점선 애니메이션과 겹쳐짐
+      }, 2700)
     }
 
     runAnimation()
@@ -120,6 +118,13 @@ export default function FingerprintScan({ onScanComplete }: FingerprintScanProps
             ease: 'easeInOut',
             delay: i * 0.07,
           }}
+          onAnimationComplete={
+            isDone && i === paths.length - 1
+              ? () => {
+                  onScanComplete()
+                }
+              : undefined
+          }
         />
       ))}
     </svg>

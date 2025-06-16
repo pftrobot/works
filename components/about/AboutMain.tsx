@@ -1,5 +1,6 @@
 'use client'
 
+import { useEffect, ReactNode } from 'react'
 import { useInView } from 'react-intersection-observer'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
@@ -16,7 +17,23 @@ import PageTitle from '@/components/common/PageTitle'
 import ProfileCard from '@/components/about/ProfileCard'
 import Block from './Block'
 import styles from './AboutMain.module.scss'
-import { useEffect } from 'react'
+import {
+  IconBug,
+  IconBolt,
+  IconPuzzle,
+  IconFileText,
+  IconCpu,
+  IconCompass,
+} from '@tabler/icons-react'
+
+const iconMap: Record<string, ReactNode> = {
+  'dna-1': <IconPuzzle />,
+  'dna-2': <IconBolt />,
+  'dna-3': <IconCpu />,
+  'dna-4': <IconFileText />,
+  'dna-5': <IconBug />,
+  'dna-6': <IconCompass />,
+} as const
 
 export default function AboutMain() {
   const { setAnimationDone } = useAnimationContext()
@@ -55,7 +72,7 @@ export default function AboutMain() {
       >
         <motion.div
           ref={refDna}
-          className={styles.dnaChart}
+          className={styles.dnaWrap}
           initial="hidden"
           animate={inViewDna ? 'visible' : 'hidden'}
           variants={{
@@ -63,9 +80,9 @@ export default function AboutMain() {
             hidden: {},
           }}
         >
-          {dnaList.map(({ label, size, color }) => (
+          {dnaList.map(({ id, label, size, color }) => (
             <motion.div
-              key={label}
+              key={id}
               className={styles.dnaItem}
               style={
                 {
@@ -75,31 +92,97 @@ export default function AboutMain() {
                 } as React.CSSProperties
               }
               variants={{
-                hidden: { opacity: 0, x: -20, scale: 0.95 },
+                hidden: { opacity: 0, x: -20 },
                 visible: {
                   opacity: 1,
                   x: 0,
-                  scale: 1,
-                  transition: { duration: 0.4, ease: 'easeOut' },
+                  transition: {
+                    duration: 0.4,
+                    ease: 'easeOut',
+                  },
                 },
               }}
+              initial="hidden"
+              animate={inViewDna ? 'visible' : 'hidden'}
             >
               <div className={styles.labelTop}>
                 <span className={styles.skillText}>{'//'} SKILL</span>
-                <span className={styles.iconShape} />
+                <span className={styles.iconShape}>{iconMap[id]}</span>
               </div>
               <div className={styles.labelLine}>
-                <div className={styles.parallelogram} />
+                <motion.div
+                  className={styles.parallelogramMain}
+                  variants={{
+                    hidden: { opacity: 0, x: -8 },
+                    visible: {
+                      opacity: 1,
+                      x: 0,
+                      transition: {
+                        duration: 0.4,
+                        ease: 'easeOut',
+                      },
+                    },
+                  }}
+                />
+                <motion.div
+                  className={styles.parallelogramSmall1}
+                  variants={{
+                    hidden: { opacity: 0, x: 0 },
+                    visible: {
+                      opacity: 1,
+                      x: 5,
+                      transition: {
+                        delay: 0.2,
+                        duration: 0.3,
+                        ease: 'easeOut',
+                      },
+                    },
+                  }}
+                />
+                <motion.div
+                  className={styles.parallelogramSmall2}
+                  variants={{
+                    hidden: { opacity: 0, x: 4 },
+                    visible: {
+                      opacity: 1,
+                      x: 8,
+                      transition: {
+                        delay: 0.3,
+                        duration: 0.3,
+                        ease: 'easeOut',
+                      },
+                    },
+                  }}
+                />
+                <motion.div
+                  className={styles.parallelogramSmall3}
+                  variants={{
+                    hidden: { opacity: 0, x: 8 },
+                    visible: {
+                      opacity: 1,
+                      x: 12,
+                      transition: {
+                        delay: 0.4,
+                        duration: 0.3,
+                        ease: 'easeOut',
+                      },
+                    },
+                  }}
+                />
                 <span className={styles.labelText}>{label.toUpperCase()}</span>
               </div>
-              <div className={styles.barLine}>
+              <motion.div
+                className={styles.barLine}
+                variants={{ hidden: { width: 0 }, visible: { width: '100%' } }}
+                transition={{ duration: 0.2, ease: 'easeOut', delay: 0.1 }}
+              >
                 <motion.div
                   className={styles.barFill}
                   initial={{ width: 0 }}
                   animate={{ width: size }}
-                  transition={{ duration: 0.6, ease: 'easeOut' }}
+                  transition={{ duration: 0.1, ease: 'easeOut', delay: 0.6 }}
                 />
-              </div>
+              </motion.div>
               <div className={styles.percentage}>{size}</div>
             </motion.div>
           ))}
@@ -107,15 +190,31 @@ export default function AboutMain() {
       </Block>
 
       <Block title="주요 수사 장비" description="다음과 같은 기술 스택과 도구를 주로 사용합니다">
-        <div className={styles.techGrid}>
+        <div className={styles.techBox}>
           {techGroups.map(({ category, items }) => (
-            <div key={`skill-${category as string}`}>
+            <div key={category} className={styles.techItem}>
               <h4>{category}</h4>
-              <ul>
-                {(items as string[]).map((tech) => (
-                  <li key={`skill-item-${tech}`}>{tech}</li>
+              <div className={styles.toolBox}>
+                {items.map(({ label, highlight }, index) => (
+                  <motion.div
+                    key={`tech-item-${label}`}
+                    className={
+                      highlight ? `${styles.highlight} ${styles.toolItem}` : styles.toolItem
+                    }
+                    initial={{ rotateY: 90, opacity: 0 }}
+                    whileInView={{ rotateY: 0, opacity: 1 }}
+                    transition={{
+                      duration: 0.6,
+                      ease: 'easeOut',
+                      delay: index * 0.1,
+                    }}
+                    viewport={{ once: true, amount: 0.2 }} // 한 번만 실행 + 어느 정도 보여야 실행
+                  >
+                    <div className={styles.toolIcon} />
+                    <span className={styles.toolName}>{label}</span>
+                  </motion.div>
                 ))}
-              </ul>
+              </div>
             </div>
           ))}
         </div>
@@ -139,13 +238,28 @@ export default function AboutMain() {
       </Block>
 
       <Block title="성장 연대표" description="기술 수사관으로 성장해온 여정을 정리했습니다.">
-        <ul className={styles.timeline}>
-          {timeline.map(({ id, year, text }) => (
-            <li key={`history-${id}`}>
-              <time>{year}</time> {text}
-            </li>
+        <motion.ul
+          className={styles.timeline}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true, amount: 0.2 }}
+        >
+          {timeline.map((item, index) => (
+            <motion.li
+              key={item.id}
+              className={`${styles.timelineItem} ${index % 2 === 0 ? styles.left : styles.right}`}
+              initial={{ opacity: 0, x: index % 2 === 0 ? -40 : 40 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.6, ease: 'easeOut' }}
+              viewport={{ once: true, amount: 0.5 }}
+            >
+              <div className={styles.logLine}>
+                <span className={styles.year}>{item.year}</span>
+                <span className={styles.text}>{item.text}</span>
+              </div>
+            </motion.li>
           ))}
-        </ul>
+        </motion.ul>
       </Block>
 
       <Block title="최근 사건 기록" description="최근 해결한 기술 사건을 요약했습니다">
