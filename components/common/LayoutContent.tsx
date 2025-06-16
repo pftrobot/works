@@ -11,7 +11,7 @@ export default function LayoutContent({ children }: { children: ReactNode }) {
   const { animationDone } = useAnimationContext()
 
   return (
-    <>
+    <div className={styles.layout}>
       <motion.div
         initial={{ opacity: 0, y: -40 }}
         animate={{ opacity: animationDone ? 1 : 0, y: animationDone ? 0 : -40 }}
@@ -19,9 +19,7 @@ export default function LayoutContent({ children }: { children: ReactNode }) {
       >
         <Header />
       </motion.div>
-
       <main className={styles.main}>{children}</main>
-
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: animationDone ? 1 : 0, y: animationDone ? 0 : 40 }}
@@ -29,6 +27,6 @@ export default function LayoutContent({ children }: { children: ReactNode }) {
       >
         <Footer />
       </motion.div>
-    </>
+    </div>
   )
 }

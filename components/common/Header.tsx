@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { IconNotebook, IconFlask, IconUser, IconMail } from '@tabler/icons-react'
+import { IconNotebook, IconUser, IconMail } from '@tabler/icons-react'
 import styles from './Header.module.scss'
 
 export default function Header() {
@@ -17,16 +17,16 @@ export default function Header() {
 
         <nav className={styles.nav}>
           <Link href="/case" className={pathname.startsWith('/case') ? styles.active : undefined}>
-            <IconNotebook size={18} stroke={1.5} />
             <span>CASE</span>
           </Link>
           <Link href="/about" className={pathname === '/about' ? styles.active : undefined}>
-            <IconUser size={18} stroke={1.5} />
             <span>PROFILE</span>
           </Link>
           <Link href="/contact" className={pathname === '/contact' ? styles.active : undefined}>
-            <IconMail size={18} stroke={1.5} />
             <span>CONTACT</span>
+          </Link>
+          <Link href="/medal" className={pathname === '/medal' ? styles.active : undefined}>
+            <span>MEDAL</span>
           </Link>
         </nav>
       </div>
