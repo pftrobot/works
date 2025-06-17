@@ -3,6 +3,7 @@
 import { ReactNode, MouseEvent } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
+
 import styles from './BasicButton.module.scss'
 
 type Variant = 'primary' | 'secondary'

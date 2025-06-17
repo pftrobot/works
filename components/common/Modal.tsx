@@ -3,6 +3,7 @@
 import { ReactNode, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { IconSquareRoundedX } from '@tabler/icons-react'
+
 import styles from './Modal.module.scss'
 
 interface ModalProps {

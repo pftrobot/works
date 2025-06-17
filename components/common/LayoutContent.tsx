@@ -2,7 +2,9 @@
 
 import { ReactNode } from 'react'
 import { motion } from 'framer-motion'
+
 import { useAnimationContext } from '@/contexts/AnimationContext'
+
 import Header from '@/components/common/Header'
 import Footer from '@/components/common/Footer'
 import styles from '@/app/layout.module.scss'

@@ -3,8 +3,10 @@
 import { useEffect, ReactNode } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
+
 import { useAnimationContext } from '@/contexts/AnimationContext'
 import { dnaList, techGroups, timeline } from '@/data/aboutData'
+
 import PageTitle from '@/components/common/PageTitle'
 import ProfileCard from '@/components/about/ProfileCard'
 import TimelineCards from '@/components/about/TimelineCards'

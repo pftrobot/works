@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+
 import Modal from '@/components/common/Modal'
 import styles from './GuideModal.module.scss'
 

@@ -1,7 +1,8 @@
 'use client'
 
-import { motion, AnimatePresence } from 'framer-motion'
 import { useEffect, useState } from 'react'
+import { motion, AnimatePresence } from 'framer-motion'
+
 import styles from './GuideNotice.module.scss'
 
 export default function GuideNotice() {

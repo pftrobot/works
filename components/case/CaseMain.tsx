@@ -3,8 +3,10 @@
 import { useEffect, useRef, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
+
 import { useAnimationContext } from '@/contexts/AnimationContext'
 import { caseList, CaseMeta } from '@/data/casesMeta'
+
 import PageTitle from '@/components/common/PageTitle'
 import CaseDetailModal from './CaseDetailModal'
 import styles from './CaseMain.module.scss'

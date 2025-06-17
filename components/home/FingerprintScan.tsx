@@ -1,7 +1,7 @@
 'use client'
 
-import { motion, useAnimationControls } from 'framer-motion'
 import { useState, useEffect } from 'react'
+import { motion, useAnimationControls } from 'framer-motion'
 
 interface FingerprintScanProps {
   onScanComplete: () => void

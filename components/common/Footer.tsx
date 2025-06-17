@@ -2,8 +2,9 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import styles from './Footer.module.scss'
+
 import GuideModal from './GuideModal'
+import styles from './Footer.module.scss'
 
 const Footer = () => {
   const [openGuide, setOpenGuide] = useState(false)
