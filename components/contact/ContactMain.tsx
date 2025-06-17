@@ -3,7 +3,11 @@
 import { useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
+
 import { useAnimationContext } from '@/contexts/AnimationContext'
+import { addMedal } from '@/utils/medalUtils'
+import { MedalType } from '@/types/medal'
+
 import BasicButton from '@/components/common/BasicButton'
 import styles from './ContactMain.module.scss'
 
@@ -31,6 +35,7 @@ export default function ContactMain() {
   const handleSubmit = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault()
     console.log('::: Form submitted:', formData)
+    addMedal(MedalType.Contact)
   }
 
   const containerVariants = {

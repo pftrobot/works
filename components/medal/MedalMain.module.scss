@@ -61,4 +61,30 @@
       font-weight: bold;
     }
   }
+
+  .hintBox {
+    margin-top: 3rem;
+    background: #1b1b1b;
+    border: 1px solid #333;
+    border-radius: 0.5rem;
+    padding: 1.5rem;
+    color: #ccc;
+    font-size: 0.9rem;
+    line-height: 1.6;
+
+    h3 {
+      font-size: 1rem;
+      color: #ffa94d;
+      margin-bottom: 1rem;
+    }
+
+    ul {
+      padding-left: 1.25rem;
+
+      li {
+        list-style: disc;
+        margin-bottom: 0.5rem;
+      }
+    }
+  }
 }

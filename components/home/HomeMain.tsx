@@ -2,11 +2,15 @@
 
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+
 import { useAnimationContext } from '@/contexts/AnimationContext'
+import { addMedal } from '@/utils/medalUtils'
+import { MedalType } from '@/types/medal'
+
 import BasicButton from '@/components/common/BasicButton'
-import styles from './HomeMain.module.scss'
 import FingerprintScan from '@/components/home/FingerprintScan'
 import GuideNotice from '@/components/home/GuideNotice'
+import styles from './HomeMain.module.scss'
 
 export default function HomeMain() {
   const [phase, setPhase] = useState<'scan' | 'typing' | 'done'>('scan')
@@ -115,6 +119,11 @@ export default function HomeMain() {
       )}
 
       {phase === 'done' && <GuideNotice />}
+
+      {/* TODO 테스트용 이스터에그 */}
+      <button onClick={() => addMedal(MedalType.Egg)} className={styles.hiddenBtn}>
+        사실 이스터에그
+      </button>
     </section>
   )
 }

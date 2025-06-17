@@ -64,6 +64,23 @@
       }
     }
   }
+
+  .hiddenBtn {
+    position: fixed;
+    bottom: 0;
+    right: 0;
+    font-size: 0.75rem;
+    color: #666;
+    background: none;
+    border: 1px dashed #444;
+    padding: 0.25rem 0.5rem;
+    border-radius: 0.25rem;
+
+    &:hover {
+      color: #fff;
+      border-color: #888;
+    }
+  }
 }
 
 .fingerprintWrap {

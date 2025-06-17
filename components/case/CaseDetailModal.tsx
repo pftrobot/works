@@ -1,11 +1,15 @@
 'use client'
 
+import { useState } from 'react'
+
+import { addMedal } from '@/utils/medalUtils'
+import { MedalType } from '@/types/medal'
+import { CaseMeta } from '@/data/casesMeta'
+
 import Modal from '@/components/common/Modal'
 import ConfirmModal from '@/components/common/ConfirmModal'
 import TechTagList from '@/components/common/TechTagList'
-import { CaseMeta } from '@/data/casesMeta'
 import styles from './CaseDetailModal.module.scss'
-import { useState } from 'react'
 
 interface Props {
   open: boolean
@@ -35,6 +39,14 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
     setQuizStep('question')
     setSelectedOption(null)
     setConfirmVisible(false)
+  }
+
+  if (quizStep === 'answer' && selectedOption === quiz.answer) {
+    const stored = localStorage.getItem('case_medal_track')
+    const solvedIds = stored ? (JSON.parse(stored) as Array<string | number>) : []
+    if (!solvedIds.includes(caseMeta.id)) {
+      addMedal(MedalType.Case, caseMeta.id)
+    }
   }
 
   return (
