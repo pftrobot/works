@@ -3,12 +3,91 @@
 
   inline-size: calc(100% - 10rem);
   margin-inline: auto;
+  padding-bottom: 5rem;
 
   .description {
     font-size: 0.875rem;
     color: #aaa;
     line-height: 1.6;
     margin-block-end: 4.8rem;
+  }
+
+  .filterSection {
+    margin-bottom: 2rem;
+
+    .filterButtons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+
+      .filterButton {
+        padding: 0.5rem 1rem;
+        border: 1px solid #e0e0e0;
+        border-radius: 20px;
+        background: #fff;
+        color: #666;
+        font-size: 0.875rem;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          border-color: #333;
+          color: #333;
+          background: #f8f9fa;
+        }
+
+        &.active {
+          background: #333;
+          color: #fff;
+          border-color: #333;
+        }
+      }
+    }
+
+    .filterStatus {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.75rem 1rem;
+      background: #f8f9fa;
+      border-radius: 8px;
+      border-left: 3px solid #333;
+
+      .filterText {
+        font-size: 0.875rem;
+        color: #333;
+        font-weight: 500;
+      }
+
+      .clearFilter {
+        padding: 0.25rem 0.75rem;
+        background: transparent;
+        border: 1px solid #666;
+        border-radius: 4px;
+        color: #666;
+        font-size: 0.75rem;
+        cursor: pointer;
+        transition: all 0.2s ease;
+
+        &:hover {
+          background: #666;
+          color: #fff;
+        }
+      }
+    }
+  }
+
+  .noResults {
+    text-align: center;
+    padding: 3rem 1rem;
+    color: #666;
+
+    p {
+      font-size: 1.125rem;
+      margin: 0;
+    }
   }
 
   .caseGrid {
