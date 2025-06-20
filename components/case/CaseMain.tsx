@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
 
 import { useAnimationContext } from '@/contexts/AnimationContext'
 import { caseList, CaseMeta } from '@/data/casesMeta'
@@ -11,12 +12,12 @@ import PageTitle from '@/components/common/PageTitle'
 import CaseDetailModal from './CaseDetailModal'
 import styles from './CaseMain.module.scss'
 
-const FILTER_KEYWORDS = ['렌더링', '인증', '인터랙션', 'SSR', '데이터', '컴포넌트'] as const
+const FILTER_KEYWORDS = ['전체', '렌더링', '인증', '인터랙션', 'SSR', '데이터', '컴포넌트'] as const
 type FilterKeyword = (typeof FILTER_KEYWORDS)[number]
 
 export default function CaseMain() {
   const [selected, setSelected] = useState<CaseMeta | null>(null)
-  const [activeFilter, setActiveFilter] = useState<FilterKeyword | null>(null)
+  const [activeFilters, setActiveFilters] = useState<FilterKeyword[]>([])
   const [filteredCases, setFilteredCases] = useState<CaseMeta[]>(caseList)
   const [animationKey, setAnimationKey] = useState(0)
   const { setAnimationDone } = useAnimationContext()
@@ -43,13 +44,24 @@ export default function CaseMain() {
     ))
 
   const handleFilterClick = (filter: FilterKeyword) => {
-    if (activeFilter === filter) {
-      setActiveFilter(null)
+    if (filter === '전체') {
+      setActiveFilters([])
+      setFilteredCases(caseList)
+      setAnimationKey((prev) => prev + 1)
+      return
+    }
+
+    const newFilters = activeFilters.includes(filter)
+      ? activeFilters.filter((f) => f !== filter)
+      : [...activeFilters, filter]
+
+    setActiveFilters(newFilters)
+
+    if (newFilters.length === 0) {
       setFilteredCases(caseList)
     } else {
-      setActiveFilter(filter)
       const filtered = caseList.filter((caseItem) =>
-        caseItem.tech.some((tech) => tech.includes(filter)),
+        newFilters.every((filter) => caseItem.tech.some((tech) => tech.includes(filter))),
       )
       setFilteredCases(filtered)
     }
@@ -62,6 +74,50 @@ export default function CaseMain() {
     }, 800)
     return () => clearTimeout(timeout)
   }, [setAnimationDone])
+
+  const CaseCard = ({ item, onClick }: { item: CaseMeta; onClick: () => void }) => {
+    const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 })
+
+    return (
+      <motion.button
+        ref={ref}
+        key={item.id}
+        type="button"
+        className={styles.card}
+        onClick={onClick}
+        initial={{ opacity: 0, y: 30 }}
+        animate={inView ? { opacity: 1, y: 0 } : {}}
+        transition={{
+          duration: 0.5,
+          ease: 'easeOut',
+        }}
+      >
+        <div className={styles.thumbnail}>
+          <Image
+            src={item.thumbnail}
+            alt={item.title}
+            fill
+            sizes="(max-width: 768px) 100vw, 50vw"
+            className={styles.image}
+          />
+        </div>
+
+        <motion.div
+          className={styles.textWrap}
+          initial="hidden"
+          animate={inView ? 'visible' : 'hidden'}
+          variants={textParentVariant}
+        >
+          <motion.div className={styles.slug} variants={textParentVariant}>
+            {textToSpans(item.slug.toUpperCase(), styles.char)}
+          </motion.div>
+          <motion.div className={styles.title} variants={textParentVariant}>
+            {textToSpans(item.title, styles.char)}
+          </motion.div>
+        </motion.div>
+      </motion.button>
+    )
+  }
 
   return (
     <motion.main
@@ -89,18 +145,27 @@ export default function CaseMain() {
         transition={{ delay: 0.4, duration: 0.5 }}
       >
         <div className={styles.filterButtons}>
-          {FILTER_KEYWORDS.map((filter) => (
-            <motion.button
-              key={filter}
-              type="button"
-              className={`${styles.filterButton} ${activeFilter === filter ? styles.active : ''}`}
-              onClick={() => handleFilterClick(filter)}
-              whileHover={{ scale: 1.05 }}
-              whileTap={{ scale: 0.95 }}
-            >
-              {filter}
-            </motion.button>
-          ))}
+          {FILTER_KEYWORDS.map((filter) => {
+            const count =
+              filter === '전체'
+                ? caseList.length
+                : caseList.filter((caseItem) => caseItem.tech.some((tech) => tech.includes(filter)))
+                    .length
+            const isActive =
+              filter === '전체' ? activeFilters.length === 0 : activeFilters.includes(filter)
+            return (
+              <motion.button
+                key={filter}
+                type="button"
+                className={`${styles.filterButton} ${isActive ? styles.active : ''}`}
+                onClick={() => handleFilterClick(filter)}
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+              >
+                {`${filter} (${count})`}
+              </motion.button>
+            )
+          })}
         </div>
       </motion.div>
 
@@ -113,44 +178,8 @@ export default function CaseMain() {
           exit={{ opacity: 0 }}
           transition={{ duration: 0.3 }}
         >
-          {filteredCases.map((item, i) => (
-            <motion.button
-              key={item.id}
-              type="button"
-              className={styles.card}
-              onClick={() => setSelected(item)}
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                duration: 0.5,
-                ease: 'easeOut',
-                delay: i * 0.08,
-              }}
-            >
-              <div className={styles.thumbnail}>
-                <Image
-                  src={item.thumbnail}
-                  alt={item.title}
-                  fill
-                  sizes="(max-width: 768px) 100vw, 50vw"
-                  className={styles.image}
-                />
-              </div>
-
-              <motion.div
-                className={styles.textWrap}
-                initial="hidden"
-                animate="visible"
-                variants={textParentVariant}
-              >
-                <motion.div className={styles.slug} variants={textParentVariant}>
-                  {textToSpans(item.slug.toUpperCase(), styles.char)}
-                </motion.div>
-                <motion.div className={styles.title} variants={textParentVariant}>
-                  {textToSpans(item.title, styles.char)}
-                </motion.div>
-              </motion.div>
-            </motion.button>
+          {filteredCases.map((item) => (
+            <CaseCard key={item.id} item={item} onClick={() => setSelected(item)} />
           ))}
         </motion.div>
       </AnimatePresence>

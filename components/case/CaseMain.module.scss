@@ -92,7 +92,7 @@
 
   .caseGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(32.5rem, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
     gap: 6rem 8rem;
     margin-block-start: 2.5rem;
 
