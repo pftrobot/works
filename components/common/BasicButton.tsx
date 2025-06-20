@@ -33,25 +33,27 @@ export default function BasicButton(props: BasicButtonProps) {
   const classNames = `${styles.button} ${styles[variant]} ${className}`
 
   return (
-    <motion.div
-      whileHover={{ y: -2, boxShadow: '0 4px 12px #ffffff05' }}
-      whileTap={{ scale: 0.97 }}
-    >
-      {'href' in props ? (
-        'external' in props ? (
-          <a href={props.href} className={classNames} target="_blank" rel="noopener noreferrer">
-            {children}
-          </a>
+    <div className={styles.buttonWrap}>
+      <motion.div
+        whileHover={{ y: -2, boxShadow: '0 4px 12px #ffffff05' }}
+        whileTap={{ scale: 0.97 }}
+      >
+        {'href' in props ? (
+          'external' in props ? (
+            <a href={props.href} className={classNames} target="_blank" rel="noopener noreferrer">
+              {children}
+            </a>
+          ) : (
+            <Link href={props.href || ''} className={classNames}>
+              {children}
+            </Link>
+          )
         ) : (
-          <Link href={props.href || ''} className={classNames}>
+          <button type="button" onClick={props.onClick} className={classNames}>
             {children}
-          </Link>
-        )
-      ) : (
-        <button type="button" onClick={props.onClick} className={classNames}>
-          {children}
-        </button>
-      )}
-    </motion.div>
+          </button>
+        )}
+      </motion.div>
+    </div>
   )
 }

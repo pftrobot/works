@@ -6,10 +6,12 @@
   justify-content: center;
   background-color: #00000060;
   z-index: 999;
+  container-type: inline-size;
 
   .modal {
     position: relative;
-    max-inline-size: 90%;
+    inline-size: 100%;
+    max-inline-size: 32rem;
     padding: 2rem;
     border: 1px solid #282828;
     border-radius: 0.75rem;
@@ -29,6 +31,34 @@
 
       &:hover {
         color: #fff;
+      }
+    }
+  }
+
+  @container (max-width: 600px) {
+    .modal {
+      inline-size: 100%;
+      max-inline-size: 100%;
+      padding: 1.5rem;
+
+      .close {
+        top: 0.75rem;
+        right: 1rem;
+        font-size: 0.8125rem;
+      }
+    }
+  }
+
+  @container (max-width: 400px) {
+    .modal {
+      inline-size: 100%;
+      max-inline-size: 100%;
+      padding: 1rem;
+
+      .close {
+        top: 0.5rem;
+        right: 0.75rem;
+        font-size: 0.75rem;
       }
     }
   }

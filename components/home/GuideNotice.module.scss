@@ -1,4 +1,6 @@
 .guideNotice {
+  container-name: guide-notice-container / inline-size;
+
   position: fixed;
   top: 2rem;
   left: 50%;
@@ -11,4 +13,11 @@
   z-index: 999;
   box-shadow: 0 0 0.5rem rgba(255, 169, 77, 0.2);
   border: 1px solid #ffa94d;
+}
+
+@container guide-notice-container (max-width: 500px) {
+  .guideNotice {
+    font-size: 0.75rem;
+    padding: 0.5rem 1rem;
+  }
 }

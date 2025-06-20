@@ -5,7 +5,7 @@ import { ModalProvider } from '@/contexts/ModalContext'
 import LayoutContent from '@/components/common/LayoutContent'
 
 import './globals.scss'
-import styles from './layout.module.scss'
+import styles from '../components/common/LayoutContent.module.scss'
 
 const monoFont = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' })
 const notoFont = Noto_Sans_KR({

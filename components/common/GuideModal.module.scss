@@ -1,4 +1,6 @@
 .wrap {
+  container: guide-modal / inline-size;
+
   padding: 2rem;
 
   .title {
@@ -28,6 +30,22 @@
         color: #fff;
         margin-right: 0.5rem;
       }
+    }
+  }
+}
+
+@container guide-modal (max-width: 480px) {
+  .title {
+    font-size: 1.125rem;
+  }
+
+  .description {
+    font-size: 0.8125rem;
+  }
+
+  .guideList {
+    li {
+      font-size: 0.75rem;
     }
   }
 }

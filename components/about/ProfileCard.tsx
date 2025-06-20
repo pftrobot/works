@@ -3,7 +3,7 @@ import styles from './Profile.module.scss'
 
 export default function ProfileCard() {
   return (
-    <div className={styles.card}>
+    <div className={styles.profileWrap}>
       <div className={styles.imageBox}>
         <Image
           src="/imgs/cat_face.png"

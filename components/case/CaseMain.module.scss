@@ -1,6 +1,8 @@
 .caseWrap {
   $keyColor: #ff4d4d;
 
+  container: container-width / inline-size;
+
   inline-size: calc(100% - 10rem);
   margin-inline: auto;
   padding-bottom: 5rem;
@@ -184,6 +186,37 @@
       .char {
         display: inline-block;
         white-space: pre;
+      }
+    }
+  }
+
+  @container container-width (max-width: 900px) {
+    .caseGrid {
+      gap: 3rem 2rem;
+
+      .card {
+        .textWrap {
+          min-block-size: 8rem;
+
+          .slug {
+            font-size: 1.5rem;
+          }
+
+          .title {
+            font-size: 0.75rem;
+          }
+        }
+
+        .thumbnail {
+          aspect-ratio: 4 / 3;
+        }
+      }
+    }
+
+    .filterSection {
+      .filterButtons {
+        //flex-direction: column;
+        //align-items: flex-start;
       }
     }
   }

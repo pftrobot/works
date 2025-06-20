@@ -1,4 +1,6 @@
 .modalWrap {
+  container: case-detail-container / inline-size;
+
   display: flex;
   gap: 4rem;
   font-size: 0.875rem;
@@ -123,6 +125,54 @@
         color: #999;
         text-decoration: underline;
         cursor: pointer;
+      }
+    }
+  }
+}
+
+@container case-detail-container (max-width: 900px) {
+  .leftColumn {
+    .title {
+      font-size: 1.5rem;
+    }
+
+    .subtitle {
+      font-size: 0.875rem;
+    }
+
+    .summary {
+      font-size: 0.8125rem;
+    }
+  }
+
+  .rightColumn {
+    padding-block-start: 1.6rem;
+
+    .question {
+      font-size: 0.875rem;
+    }
+
+    .options {
+      gap: 0.5rem;
+
+      button {
+        padding-block: 0.625rem;
+        padding-inline: 0.75rem;
+        font-size: 0.875rem;
+      }
+    }
+
+    .answerWrap {
+      .description {
+        font-size: 0.8125rem;
+      }
+
+      .link {
+        font-size: 0.8125rem;
+      }
+
+      .backBtn {
+        font-size: 0.8125rem;
       }
     }
   }

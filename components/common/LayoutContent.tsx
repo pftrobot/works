@@ -7,7 +7,7 @@ import { useAnimationContext } from '@/contexts/AnimationContext'
 
 import Header from '@/components/common/Header'
 import Footer from '@/components/common/Footer'
-import styles from '@/app/layout.module.scss'
+import styles from '@/components/common/LayoutContent.module.scss'
 
 export default function LayoutContent({ children }: { children: ReactNode }) {
   const { animationDone } = useAnimationContext()

@@ -1,4 +1,6 @@
 .header {
+  container: layout-header / inline-size;
+
   padding: 2rem;
 
   .inner {
@@ -40,6 +42,22 @@
         font-weight: 600;
         color: #2970ff;
       }
+    }
+  }
+}
+
+@container layout-header (max-width: 800px) {
+  .inner {
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+
+  .nav {
+    justify-content: center;
+    flex-wrap: wrap;
+
+    a {
+      font-size: 0.875rem;
     }
   }
 }
