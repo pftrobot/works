@@ -1,4 +1,6 @@
 .home {
+  container: home-container / inline-size;
+
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -16,6 +18,10 @@
     font-size: 2.8rem;
     font-weight: 700;
     margin-block-end: .4rem;
+
+    @container home-container (max-width: 600px){
+      font-size: 2rem;
+    }
   }
 
   .cursor {
@@ -31,6 +37,10 @@
     max-inline-size: 40rem;
     margin-block: 0;
     margin-inline: auto;
+
+    @container home-container (max-width: 600px){
+      font-size: 0.875rem;
+    }
   }
 
   .actions {
@@ -61,6 +71,20 @@
         border-color: #555;
         transform: translateY(-0.125rem);
         box-shadow: 0 0 0.5rem #ffffff08;
+      }
+
+      @container home-container (max-width: 600px){
+        font-size: 0;
+
+        &::before {
+          content: '';
+          display: inline-block;
+          width: 1.25rem;
+          height: 1.25rem;
+          background-repeat: no-repeat;
+          background-size: contain;
+          margin-inline-end: 0.5rem;
+        }
       }
     }
   }

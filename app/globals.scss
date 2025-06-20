@@ -19,6 +19,12 @@ body, h1, h2, h3, h4, p, figure, blockquote, dl, dd, ul, ol, div {
   margin: 0;
 }
 
+button {
+  padding: 0;
+  border: none;
+  cursor: pointer;
+}
+
 ul, ol {
   list-style: none;
 }

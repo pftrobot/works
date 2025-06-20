@@ -9,6 +9,12 @@
     align-items: center;
     inline-size: calc(100% - 10rem);
     margin-inline: auto;
+
+    @container layout-header (max-width: 800px) {
+      gap: 1.5rem;
+      inline-size: 100%;
+      margin-inline: 0;
+    }
   }
 
   .logo {
@@ -24,6 +30,14 @@
   .nav {
     display: flex;
     gap: 1.5rem;
+
+    .icon {
+      display: none;
+    }
+
+    .label {
+      display: inline;
+    }
 
     a {
       display: flex;
@@ -43,21 +57,22 @@
         color: #2970ff;
       }
     }
-  }
-}
 
-@container layout-header (max-width: 800px) {
-  .inner {
-    flex-direction: column;
-    gap: 1.5rem;
-  }
+    @container layout-header (max-width: 800px) {
+      justify-content: center;
+      flex-wrap: wrap;
 
-  .nav {
-    justify-content: center;
-    flex-wrap: wrap;
+      .icon {
+        display: inline;
+      }
 
-    a {
-      font-size: 0.875rem;
+      .label {
+        display: none;
+      }
+
+      a {
+        font-size: 0.875rem;
+      }
     }
   }
 }
