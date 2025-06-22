@@ -2,24 +2,14 @@
   container: page-title / inline-size;
 
   font-family: var(--font-title), sans-serif;
-  font-size: 2.25rem;
+  font-size: 1.25rem;
   font-weight: bold;
-  color: #fff;
-  padding-block-end: 1.2rem;
-  margin-block-end: 1.2rem;
-  border-block-end: 2px solid #333;
-
-  & + .description {
-    font-size: 0.875rem;
-    color: #aaa;
-    margin-block-end: 2rem;
-  }
+  color: #fff2bf;
+  padding-block-end: 1.125rem;
+  margin-block-end: 1.125rem;
+  border-block-end: 1px solid #464646;
 
   @container page-title (max-width: 500px) {
     font-size: 1.5rem;
-
-    & + .description {
-      font-size: 0.75rem;
-    }
   }
 }

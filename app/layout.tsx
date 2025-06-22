@@ -1,23 +1,27 @@
 import type { ReactNode } from 'react'
-import { Noto_Sans_KR, JetBrains_Mono, Orbitron } from 'next/font/google'
+import { JetBrains_Mono, Orbitron } from 'next/font/google'
+import localFont from 'next/font/local'
+
 import { AnimationProvider } from '@/contexts/AnimationContext'
 import { ModalProvider } from '@/contexts/ModalContext'
 import LayoutContent from '@/components/common/LayoutContent'
 
 import './globals.scss'
-import styles from '../components/common/LayoutContent.module.scss'
+import styles from '@/components/common/LayoutContent.module.scss'
 
 const monoFont = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' })
-const notoFont = Noto_Sans_KR({
-  subsets: ['latin'],
-  weight: ['400', '500', '700'],
-  variable: '--font-body',
-})
 
 const orbitron = Orbitron({
   subsets: ['latin'],
   weight: ['600', '700', '800'],
   variable: '--font-title',
+})
+
+const pretendard = localFont({
+  src: '../public/fonts/Pretendard.woff2',
+  display: 'swap',
+  weight: '100 900',
+  variable: '--font-body',
 })
 
 export const metadata = {
@@ -29,7 +33,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="ko">
       <body
-        className={`${styles.body} ${notoFont.variable} ${monoFont.variable} ${orbitron.variable}`}
+        className={`${styles.body} ${pretendard.variable} ${monoFont.variable} ${orbitron.variable}`}
       >
         <ModalProvider>
           <AnimationProvider>

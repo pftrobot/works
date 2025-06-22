@@ -111,9 +111,14 @@ export default function CaseMain() {
           <motion.div className={styles.slug} variants={textParentVariant}>
             {textToSpans(item.slug.toUpperCase(), styles.char)}
           </motion.div>
-          <motion.div className={styles.title} variants={textParentVariant}>
-            {textToSpans(item.title, styles.char)}
-          </motion.div>
+          <div className={styles.descArea}>
+            <motion.div className={styles.title} variants={textParentVariant}>
+              {textToSpans(item.title, styles.char)}
+            </motion.div>
+            <motion.div className={`${styles.title} ${styles.sub}`} variants={textParentVariant}>
+              {textToSpans(item.subtitle, styles.char)}
+            </motion.div>
+          </div>
         </motion.div>
       </motion.button>
     )

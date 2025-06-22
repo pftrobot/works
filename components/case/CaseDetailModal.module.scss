@@ -2,18 +2,15 @@
   container: case-detail-container / inline-size;
 
   display: flex;
-  gap: 4rem;
-  font-size: 0.875rem;
-  line-height: 1.6;
-  color: #ccc;
+  gap: 2.75rem;
 
   .leftColumn {
-    flex: 1;
     display: flex;
     flex-direction: column;
+    inline-size: 21rem;
 
     .title {
-      font-size: 1.875rem;
+      font-size: 1.5rem;
       font-weight: 700;
       color: #fff;
       margin-block-end: 0.5rem;
@@ -23,17 +20,19 @@
     }
 
     .subtitle {
-      font-size: 1rem;
-      color: #aaa;
-      margin-block-end: 1rem;
+      font-size: 1.125rem;
+      color: #e53838;
+      margin-block-end: 2.75rem;
       opacity: 0;
       animation: fadeSlideUp 0.6s ease forwards;
       animation-delay: 0.2s;
     }
 
     .summary {
-      font-size: 0.9375rem;
-      color: #bbb;
+      font-size: 1rem;
+      color: #ababab;
+      line-height: 1.75;
+      letter-spacing: -0.32px;
       opacity: 0;
       animation: fadeSlideUp 0.6s ease forwards;
       animation-delay: 0.3s;
@@ -44,13 +43,13 @@
     flex: 1;
     display: flex;
     flex-direction: column;
-    padding-block-start: 2.4rem;
+    padding-block-start: 0.375rem;
 
     .question {
       font-size: 1rem;
       font-weight: 600;
-      color: #ddd;
-      margin-block-end: 1rem;
+      color: #fffdd8;
+      margin-block-end: 2rem;
       opacity: 0;
       animation: fadeSlideUp 0.6s ease forwards;
       animation-delay: 0.4s;
@@ -63,20 +62,20 @@
 
       button {
         display: block;
-        padding-block: 0.75rem;
-        padding-inline: 1rem;
+        color: #fff;
         text-align: start;
-        color: #ccc;
+        padding-block: 0.625rem;
+        padding-inline: 1.25rem;
+        opacity: 0;
         background-color: #1e1e1e;
-        border: 1px solid #444;
+        border: 1px solid #1e1e1e;
         border-radius: 0.5rem;
         cursor: pointer;
-        transition: background 0.2s;
-        opacity: 0;
+        transition: border-color 0.2s;
         animation: fadeSlideUp 0.6s ease forwards;
 
         &:hover {
-          background-color: #475441;
+          border-color: #c5a46a;
         }
       }
 
@@ -87,32 +86,36 @@
     }
 
     .answerWrap {
-      margin-block-start: 1rem;
+      background: url('/imgs/medal_grayscale.png') no-repeat 100% 0 / 3.75rem auto;
+
+      &.correct {
+        background-image: url('/imgs/medal.png');
+      }
 
       .answerCorrect {
-        font-weight: 700;
-        color: #32d296;
-        margin-block-end: 1rem;
+        color: #005eff;
+        margin-block-end: 3.75rem;
       }
 
       .answerWrong {
-        font-weight: 700;
-        color: #f0506e;
-        margin-block-end: 1rem;
+        color: #e53838;
+        margin-block-end: 3.75rem;
       }
 
       .description {
-        margin-block-start: 1.25rem;
         font-size: 0.875rem;
-        color: #bbb;
+        color: #fff;
+        line-height: 1.7;
+        letter-spacing: -0.28px;
+        margin-block-start: 1rem;
       }
 
       .link {
         display: inline-block;
-        margin-block-start: 1rem;
         font-size: 0.875rem;
         color: #58a6ff;
         text-decoration: underline;
+        margin-block-start: 1rem;
 
         &:hover {
           color: #80c4ff;
@@ -120,11 +123,22 @@
       }
 
       .backBtn {
-        margin-block-start: 1.25rem;
-        font-size: 0.875rem;
-        color: #999;
-        text-decoration: underline;
+        position: relative;
+        font-size: 1rem;
+        color: #ababab;
         cursor: pointer;
+        background-color: transparent;
+
+        &::before {
+          position: absolute;
+          inset-block-end: 3px;
+          inset-inline-start: 0;
+          display: block;
+          inline-size: 100%;
+          block-size: 1px;
+          content: '';
+          background-color: #ababab;
+        }
       }
     }
   }
@@ -156,9 +170,9 @@
       gap: 0.5rem;
 
       button {
+        font-size: 0.875rem;
         padding-block: 0.625rem;
         padding-inline: 0.75rem;
-        font-size: 0.875rem;
       }
     }
 

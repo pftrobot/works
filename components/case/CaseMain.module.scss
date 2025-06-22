@@ -1,49 +1,50 @@
 .caseWrap {
   $keyColor: #ff4d4d;
+  $keyTextColor: #fff2bf;
 
   container: container-width / inline-size;
 
   inline-size: calc(100% - 10rem);
+  padding-block-end: 5rem;
   margin-inline: auto;
-  padding-bottom: 5rem;
 
   .description {
-    font-size: 0.875rem;
-    color: #aaa;
-    line-height: 1.6;
-    margin-block-end: 4.8rem;
+    font-size: 1.125rem;
+    color: #ffffff50;
+    margin-block-end: 4.5rem;
   }
 
   .filterSection {
-    margin-bottom: 2rem;
+    margin-block-end: 2.5rem;
 
     .filterButtons {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
-      margin-bottom: 1rem;
+      gap: 1.125rem;
 
       .filterButton {
-        padding: 0.5rem 1rem;
-        border: 1px solid #e0e0e0;
-        border-radius: 20px;
-        background: #fff;
-        color: #666;
+        color: #999;
         font-size: 0.875rem;
-        font-weight: 500;
-        cursor: pointer;
+        font-weight: 600;
+        padding-block: 0.625rem;
+        padding-inline: 1.25rem;
+        border-radius: 1.25rem;
+        background-color: #323232;
+        border: 1px solid transparent;
         transition: all 0.2s ease;
+        cursor: pointer;
 
-        &:hover {
-          border-color: #333;
-          color: #333;
-          background: #f8f9fa;
+        @media (hover: hover) {
+          &:hover {
+            color: #fff;
+            background-color: #c5a46a;
+          }
         }
 
         &.active {
-          background: #333;
-          color: #fff;
-          border-color: #333;
+          color: #f5c064;
+          border-color: #c5a46a;
+          background-color: #323232;
         }
       }
     }
@@ -52,30 +53,32 @@
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0.75rem 1rem;
-      background: #f8f9fa;
-      border-radius: 8px;
+      padding-block: 0.75rem;
+      padding-inline: 1rem;
+      background-color: #f8f9fa;
+      border-radius: 0.5rem;
       border-left: 3px solid #333;
 
       .filterText {
         font-size: 0.875rem;
-        color: #333;
         font-weight: 500;
+        color: #333;
       }
 
       .clearFilter {
-        padding: 0.25rem 0.75rem;
-        background: transparent;
-        border: 1px solid #666;
-        border-radius: 4px;
         color: #666;
         font-size: 0.75rem;
+        padding-block: 0.25rem;
+        padding-inline: 0.75rem;
+        background-color: transparent;
+        border: 1px solid #666;
+        border-radius: 4px;
         cursor: pointer;
         transition: all 0.2s ease;
 
         &:hover {
-          background: #666;
           color: #fff;
+          background-color: #666;
         }
       }
     }
@@ -83,8 +86,9 @@
 
   .noResults {
     text-align: center;
-    padding: 3rem 1rem;
     color: #666;
+    padding-block: 3rem;
+    padding-inline: 1rem;
 
     p {
       font-size: 1.125rem;
@@ -94,8 +98,8 @@
 
   .caseGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(20rem, 1fr));
-    gap: 6rem 8rem;
+    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+    gap: 6.125rem 4.125rem;
     margin-block-start: 2.5rem;
 
     .card {
@@ -141,13 +145,13 @@
 
       .textWrap {
         position: relative;
-        min-block-size: 10rem;
+        min-block-size: 9rem;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         text-align: left;
-        padding-block-start: 1.2rem;
-        padding-block-end: 1.6rem;
+        padding-block-start: 1.125rem;
+        padding-block-end: 1.125rem;
 
         .animatedText {
           display: inline-block;
@@ -155,31 +159,38 @@
         }
 
         .slug {
-          font-size: 2rem;
+          font-size: 1.75rem;
           font-weight: 600;
-          color: #fcfff2;
+          color: $keyTextColor;
           text-transform: uppercase;
           letter-spacing: -0.1rem;
-          line-height: 1.2;
         }
 
-        .title {
-          font-size: 0.88rem;
-          font-weight: 600;
-          color: #fcfff2;
-          letter-spacing: 0.04em;
-        }
+        .descArea {
+          display: flex;
+          justify-content: space-between;
 
-        &::after {
-          position: absolute;
-          inset-block-end: 0;
-          inset-inline-start: 0;
-          inset-inline-end: 0;
-          display: block;
-          inline-size: 100%;
-          block-size: 1px;
-          content: '';
-          background-color: $keyColor;
+          .title {
+            font-size: 1.125rem;
+            font-weight: 400;
+            color: #fff;
+
+            &.sub {
+              color: #e53838;
+            }
+          }
+
+          &::after {
+            position: absolute;
+            inset-block-end: 0;
+            inset-inline-start: 0;
+            inset-inline-end: 0;
+            display: block;
+            inline-size: 100%;
+            block-size: 1px;
+            content: '';
+            background-color: $keyColor;
+          }
         }
       }
 
@@ -210,13 +221,6 @@
         .thumbnail {
           aspect-ratio: 4 / 3;
         }
-      }
-    }
-
-    .filterSection {
-      .filterButtons {
-        //flex-direction: column;
-        //align-items: flex-start;
       }
     }
   }

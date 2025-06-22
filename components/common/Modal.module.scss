@@ -1,4 +1,6 @@
 .overlay {
+  container-type: inline-size;
+
   position: fixed;
   inset: 0;
   display: flex;
@@ -6,27 +8,28 @@
   justify-content: center;
   background-color: #00000060;
   z-index: 999;
-  container-type: inline-size;
 
   .modal {
     position: relative;
+    overflow-y: auto;
     inline-size: 100%;
-    max-inline-size: 32rem;
-    padding: 2rem;
+    max-inline-size: 50rem;
+    max-block-size: 95vh;
+    color: #eee;
+    padding: 3.5rem;
     border: 1px solid #282828;
     border-radius: 0.75rem;
-    background-color: #00000085;
-    color: #eee;
+    background-color: #000;
     animation: popIn 0.4s cubic-bezier(0.22, 1, 0.36, 1);
 
     .close {
       position: absolute;
-      top: 1rem;
-      right: 1.25rem;
-      background: none;
-      border: none;
+      inset-block-start: 1.25rem;
+      inset-inline-end: 1.25rem;
       font-size: 0.875rem;
       color: #999;
+      background: none;
+      border: none;
       cursor: pointer;
 
       &:hover {
@@ -42,8 +45,8 @@
       padding: 1.5rem;
 
       .close {
-        top: 0.75rem;
-        right: 1rem;
+        inset-block-start: 0.75rem;
+        inset-inline-end: 1rem;
         font-size: 0.8125rem;
       }
     }
@@ -56,8 +59,8 @@
       padding: 1rem;
 
       .close {
-        top: 0.5rem;
-        right: 0.75rem;
+        inset-block-start: 0.5rem;
+        inset-inline-end: 0.75rem;
         font-size: 0.75rem;
       }
     }

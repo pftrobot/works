@@ -1,6 +1,7 @@
 'use client'
 
 import { useState } from 'react'
+import classNames from 'classnames'
 
 import { addMedal } from '@/utils/medalUtils'
 import { MedalType } from '@/types/medal'
@@ -61,7 +62,7 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
         <div className={styles.rightColumn}>
           {quizStep === 'question' ? (
             <>
-              <p className={styles.question}>{quiz.question}</p>
+              <p className={styles.question}>Q. {quiz.question}</p>
               <ul className={styles.options}>
                 {quiz.options.map((opt, idx) => (
                   <li key={idx}>
@@ -73,12 +74,20 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
               </ul>
             </>
           ) : (
-            <div className={styles.answerWrap}>
+            <div
+              className={classNames(styles.answerWrap, {
+                [styles.correct]: selectedOption === quiz.answer,
+              })}
+            >
               {selectedOption === quiz.answer ? (
-                <p className={styles.answerCorrect}>정답입니다!</p>
+                <p className={styles.answerCorrect}>
+                  정답입니다! <br />
+                  메달을 획득했습니다
+                </p>
               ) : (
                 <p className={styles.answerWrong}>
-                  오답입니다. 정답은 “{quiz.options[quiz.answer]}”입니다.
+                  오답입니다 <br />
+                  다시 도전해보세요
                 </p>
               )}
 
