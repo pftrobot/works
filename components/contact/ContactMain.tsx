@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
+import classNames from 'classnames'
 
 import { useAnimationContext } from '@/contexts/AnimationContext'
 import { addMedal } from '@/utils/medalUtils'
@@ -13,11 +14,34 @@ import styles from './ContactMain.module.scss'
 
 export default function ContactMain() {
   const { setAnimationDone } = useAnimationContext()
+
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     message: '',
   })
+  const [formErrors, setFormErrors] = useState({
+    name: '',
+    email: '',
+    message: '',
+  })
+
+  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
+
+  const validate = () => {
+    const errors = {
+      name: formData.name.trim() ? '' : '이름을 입력해주세요',
+      email: formData.email.trim()
+        ? isValidEmail(formData.email)
+          ? ''
+          : '올바른 이메일 형식이 아닙니다'
+        : '이메일을 입력해주세요',
+      message: formData.message.trim() ? '' : '내용을 입력해주세요',
+    }
+
+    setFormErrors(errors)
+    return Object.values(errors).every((e) => e === '')
+  }
 
   const [ref, inView] = useInView({
     triggerOnce: true,
@@ -26,14 +50,12 @@ export default function ContactMain() {
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }))
+    setFormData((prev) => ({ ...prev, [name]: value }))
   }
 
   const handleSubmit = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault()
+    if (!validate()) return
     console.log('::: Form submitted:', formData)
     addMedal(MedalType.Contact)
   }
@@ -72,7 +94,7 @@ export default function ContactMain() {
         variants={containerVariants}
         initial="hidden"
         animate={inView ? 'visible' : 'hidden'}
-        className={styles.content}
+        className={styles.inner}
       >
         <motion.div variants={leftVariants} className={styles.leftSection}>
           <div className={styles.heroText}>
@@ -100,9 +122,11 @@ export default function ContactMain() {
                 placeholder="Name*"
                 value={formData.name}
                 onChange={handleInputChange}
-                className={styles.input}
-                required
+                className={classNames(styles.input, {
+                  [styles.error]: formErrors.name,
+                })}
               />
+              {formErrors.name && <p className={styles.errorText}>{formErrors.name}</p>}
             </div>
 
             <div className={styles.inputGroup}>
@@ -112,9 +136,11 @@ export default function ContactMain() {
                 placeholder="Email*"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={styles.input}
-                required
+                className={classNames(styles.input, {
+                  [styles.error]: formErrors.email,
+                })}
               />
+              {formErrors.email && <p className={styles.errorText}>{formErrors.email}</p>}
             </div>
 
             <div className={styles.inputGroup}>
@@ -123,17 +149,15 @@ export default function ContactMain() {
                 placeholder="Project Information*"
                 value={formData.message}
                 onChange={handleInputChange}
-                className={styles.textarea}
+                className={classNames(styles.textarea, {
+                  [styles.error]: formErrors.message,
+                })}
                 rows={6}
-                required
               />
+              {formErrors.message && <p className={styles.errorText}>{formErrors.message}</p>}
             </div>
 
-            <BasicButton
-              variant="primary"
-              onClick={(e) => handleSubmit(e)}
-              className={styles.submitButton}
-            >
+            <BasicButton variant="primary" onClick={handleSubmit} className={styles.submitButton}>
               Send
             </BasicButton>
           </form>
