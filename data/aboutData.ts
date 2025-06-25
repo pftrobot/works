@@ -1,12 +1,12 @@
 import { caseList } from './casesMeta'
 
 export const dnaList = [
-  { id: 'dna-1', label: 'Problem Focused', size: '92%', color: '#3f88ff' },
-  { id: 'dna-2', label: 'Interaction Focused', size: '68%', color: '#00bfa6' },
-  { id: 'dna-3', label: 'Speed Optimizer', size: '88%', color: '#a259ff' },
-  { id: 'dna-4', label: 'Likes Documents', size: '75%', color: '#ff6f61' },
-  { id: 'dna-5', label: 'Debug Lover', size: '90%', color: '#dab53b' },
-  { id: 'dna-6', label: 'Experience First', size: '73%', color: '#0091ea' },
+  { id: 'dna-1', label: 'Problem Focused', size: '92%', color: '#504630' },
+  { id: 'dna-2', label: 'Interaction Focused', size: '68%', color: '#50463080' },
+  { id: 'dna-3', label: 'Speed Optimizer', size: '88%', color: '#948159' },
+  { id: 'dna-4', label: 'Likes Documents', size: '75%', color: '#94815980' },
+  { id: 'dna-5', label: 'Debug Lover', size: '90%', color: '#e8cea1' },
+  { id: 'dna-6', label: 'Experience First', size: '73%', color: '#e8cea180' },
 ]
 
 export const techGroups = [

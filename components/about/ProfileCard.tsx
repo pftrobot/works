@@ -14,7 +14,9 @@ export default function ProfileCard() {
         />
       </div>
       <div className={styles.info}>
-        <h2 className={styles.title}>기술 수사관: 오이슬</h2>
+        <h2 className={styles.title}>
+          오이슬 <span>기술 수사관</span>
+        </h2>
         <p className={styles.description}>
           기술 문제는 반드시 흔적을 남깁니다. 그 단서를 포착하고 구조화하는 것, 그것이 제 수사
           방식입니다.

@@ -2,17 +2,11 @@
   container: about-container / inline-size;
 
   inline-size: calc(100% - 10rem);
-  padding-block: 4rem;
-  padding-inline: 2rem;
   margin-inline: auto;
   z-index: 1;
 
   @media (max-width: 1000px){
     inline-size: calc(100% - 2rem);
-  }
-
-  .pageTitle {
-    border: none;
   }
 
   > * {
@@ -21,26 +15,34 @@
   }
 
   section {
-    margin-block-end: 5rem;
+    margin-block-end: 6.25rem;
 
     h2 {
       font-size: 1.5rem;
-      font-weight: 700;
-      margin-block-end: 1rem;
+      font-weight: 600;
       color: #f5f5f5;
+      line-height: 1;
+      margin-block-end: 0.625rem;
+
+      span{
+        font-family: var(--font-title), sans-serif;
+        font-weight: 700;
+        color: #fff2bf;
+        margin-inline-start: 1.25rem;
+      }
     }
 
     > p {
-      font-size: 0.9375rem;
-      color: #bbb;
-      line-height: 1.8;
+      font-size: 1.125rem;
+      font-weight: 400;
+      color: #ffffff50;
       margin-block-end: 1.5rem;
     }
   }
 }
 
 .profileSection {
-  margin-block-end: 4.5rem;
+  margin-block-end: 2.5rem;
 }
 
 .dnaWrap {
@@ -68,7 +70,7 @@
         text-transform: uppercase;
         letter-spacing: 0.05em;
         white-space: nowrap;
-        text-indent: 2px;
+        text-indent: 1rem;
         z-index: 2;
       }
 
@@ -78,7 +80,8 @@
         justify-content: center;
         inline-size: 2.4rem;
         block-size: 2.4rem;
-        background: #222;
+        margin-inline-end: -1.25rem;
+        background: #272727;
         clip-path: polygon(50% 0%, 93% 25%, 93% 75%, 50% 100%, 7% 75%, 7% 25%);
         flex-shrink: 0;
         z-index: 2;
@@ -207,27 +210,43 @@
   gap: 2.5rem;
 
   .techItem {
-    padding: 1.25rem;
-    background: #1a1a1a;
-    border-radius: 0.75rem;
-    box-shadow: 0 0 0.5rem rgba(255, 169, 77, 0.15);
+    padding-block: 1.5rem;
+    padding-inline: 1.875rem;
+    background: #161616;
+    border: solid 1px #c5a46a50;
+    border-radius: 0.5rem;
 
     h4 {
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
-      color: #ffa94d;
+      font-size: 1.125rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+      color: #f5c064;
     }
 
     .toolBox {
+      position: relative;
       display: flex;
       flex-wrap: wrap;
-      gap: 0.75rem;
+      gap: 1rem 0.75rem;
+      padding-inline-start: 2.8rem;
+      padding-block-start: 1.25rem;
+
+      &::before {
+        position: absolute;
+        inset-block-start: 0;
+        inset-inline-start: 1.75rem;
+        display: inline-block;
+        content: "";
+        inline-size: 1px;
+        block-size: 3.5rem;
+        background-color: #4a4a4a;
+      }
     }
 
     .toolItem {
       display: flex;
       align-items: center;
+      align-self: flex-end;
       gap: 0.5rem;
       padding: 0.5rem 0.75rem;
       background: #252525;
@@ -239,27 +258,19 @@
       backface-visibility: hidden;
       perspective: 800px;
 
-      &:hover {
-        background: #2f2f2f;
-      }
-
       &.highlight {
-        background: #ffa94d;
+        background-color: #f5ca64;
         color: #000;
 
         .toolIcon {
           background: #000;
-        }
-
-        &:hover {
-          background: #ffc07a;
         }
       }
 
       .toolIcon {
         width: 1.25rem;
         height: 1.25rem;
-        background: #ffa94d;
+        background-color: #f5ca64;
         border-radius: 0.2rem;
       }
     }

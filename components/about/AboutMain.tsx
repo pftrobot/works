@@ -49,7 +49,7 @@ export default function AboutMain() {
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.8, ease: 'easeOut' }}
     >
-      <PageTitle className={styles.pageTitle}>PROFILE</PageTitle>
+      <PageTitle>PROFILE</PageTitle>
 
       <motion.div
         ref={refProfile}
@@ -62,7 +62,8 @@ export default function AboutMain() {
       </motion.div>
 
       <Block
-        title="수사 스타일 DNA"
+        title="수사 스타일"
+        subtitle="DNA"
         description="기술 문제를 어떻게 접근하는지, 성향을 수치화해 보았습니다"
       >
         <motion.div
@@ -184,7 +185,11 @@ export default function AboutMain() {
         </motion.div>
       </Block>
 
-      <Block title="주요 수사 장비" description="다음과 같은 기술 스택과 도구를 주로 사용합니다">
+      <Block
+        title="주요 수사 장비"
+        subtitle="TECH"
+        description="다음과 같은 기술 스택과 도구를 주로 사용합니다"
+      >
         <div className={styles.techBox}>
           {techGroups.map(({ category, items }) => (
             <div key={category} className={styles.techItem}>
@@ -215,7 +220,11 @@ export default function AboutMain() {
         </div>
       </Block>
 
-      <Block title="성장 연대표" description="기술 수사관으로 성장해온 여정을 정리했습니다.">
+      <Block
+        title="성장 연대표"
+        subtitle="TIMELINE"
+        description="기술 수사관으로 성장해온 여정을 정리했습니다."
+      >
         <TimelineCards data={timeline} />
       </Block>
     </motion.section>
