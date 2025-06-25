@@ -1,11 +1,13 @@
 .footer {
   container: layout-footer / inline-size;
 
-  background-color: #121212;
-  border-block-start: 1px solid #2c2c2c;
-  padding: 1.5rem 2rem;
   font-size: 0.875rem;
   color: #aaa;
+  padding-block: 1.5rem;
+  padding-inline: 2rem;
+  margin-block-start: 5.5rem;
+  background-color: #121212;
+  border-block-start: 1px solid #2c2c2c;
 
   .inner {
     display: flex;
