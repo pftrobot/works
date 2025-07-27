@@ -56,8 +56,7 @@ export default function GuideModal({ open, onClose }: GuideModalProps) {
           as="h2"
           className={styles.title}
           charClassName={styles.titleChar}
-          threshold={0.5}
-          staggerDelay={0.04}
+          staggerDelay={0.06}
         />
 
         <TypingText
@@ -65,7 +64,7 @@ export default function GuideModal({ open, onClose }: GuideModalProps) {
           as="p"
           className={styles.description}
           charClassName={styles.descChar}
-          threshold={0.5}
+          staggerDelay={0.02}
         />
 
         <StaggerList
@@ -74,7 +73,7 @@ export default function GuideModal({ open, onClose }: GuideModalProps) {
           className={styles.guideList}
           threshold={0.3}
           staggerDelay={0.15}
-          delayChildren={0.2}
+          delayChildren={0.3}
           itemDuration={0.5}
         />
       </FadeInSection>

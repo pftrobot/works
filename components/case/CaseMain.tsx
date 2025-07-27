@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
@@ -23,6 +23,9 @@ export default function CaseMain() {
   const [filteredCases, setFilteredCases] = useState<CaseMeta[]>(caseList)
   const [animationKey, setAnimationKey] = useState(0)
   const { setAnimationDone } = useAnimationContext()
+
+  // 애니메이션을 한번만 실행시키기 위한 ref
+  const animatedCardsRef = useRef<Set<string>>(new Set())
 
   const handleFilterClick = (filter: FilterKeyword) => {
     if (filter === '전체') {
@@ -63,6 +66,17 @@ export default function CaseMain() {
       staggerDelay: 0.04,
     })
 
+    const cardId = item.id.toString()
+    const hasAnimatedBefore = animatedCardsRef.current.has(cardId)
+
+    useEffect(() => {
+      if (inView && !hasAnimatedBefore) {
+        animatedCardsRef.current.add(cardId)
+      }
+    }, [inView, hasAnimatedBefore, cardId])
+
+    const shouldAnimate = hasAnimatedBefore || inView
+
     return (
       <motion.button
         ref={ref}
@@ -70,10 +84,13 @@ export default function CaseMain() {
         type="button"
         className={styles.card}
         onClick={onClick}
-        initial={{ opacity: 0, y: 30 }}
-        animate={inView ? { opacity: 1, y: 0 } : {}}
+        initial={{
+          opacity: hasAnimatedBefore ? 1 : 0,
+          y: hasAnimatedBefore ? 0 : 30,
+        }}
+        animate={shouldAnimate ? { opacity: 1, y: 0 } : {}}
         transition={{
-          duration: 0.5,
+          duration: hasAnimatedBefore ? 0 : 0.5,
           ease: 'easeOut',
         }}
       >
@@ -89,8 +106,8 @@ export default function CaseMain() {
 
         <motion.div
           className={styles.textWrap}
-          initial="hidden"
-          animate={inView ? 'visible' : 'hidden'}
+          initial={hasAnimatedBefore ? 'visible' : 'hidden'}
+          animate={shouldAnimate ? 'visible' : 'hidden'}
           variants={animateProps.variants}
         >
           <motion.div className={styles.slug} variants={animateProps.variants}>
