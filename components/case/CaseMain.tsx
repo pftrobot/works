@@ -7,7 +7,9 @@ import { useInView } from 'react-intersection-observer'
 
 import { useAnimationContext } from '@/contexts/AnimationContext'
 import { caseList, CaseMeta } from '@/data/casesMeta'
+import { useTypingAnimation } from '@/hooks/useTypingAnimation'
 
+import { FadeInSection } from '@/components/common/FadeInSection'
 import PageTitle from '@/components/common/PageTitle'
 import CaseDetailModal from './CaseDetailModal'
 import styles from './CaseMain.module.scss'
@@ -21,27 +23,6 @@ export default function CaseMain() {
   const [filteredCases, setFilteredCases] = useState<CaseMeta[]>(caseList)
   const [animationKey, setAnimationKey] = useState(0)
   const { setAnimationDone } = useAnimationContext()
-
-  const charVariant = {
-    hidden: { opacity: 0, y: -4 },
-    visible: { opacity: 1, y: 0 },
-  }
-
-  const textParentVariant = {
-    hidden: {},
-    visible: {
-      transition: {
-        staggerChildren: 0.04,
-      },
-    },
-  }
-
-  const textToSpans = (text: string, className: string) =>
-    text.split('').map((char, index) => (
-      <motion.span key={index} className={className} variants={charVariant}>
-        {char === ' ' ? '\u00A0' : char}
-      </motion.span>
-    ))
 
   const handleFilterClick = (filter: FilterKeyword) => {
     if (filter === '전체') {
@@ -77,6 +58,10 @@ export default function CaseMain() {
 
   const CaseCard = ({ item, onClick }: { item: CaseMeta; onClick: () => void }) => {
     const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 })
+    const { textToSpans, animateProps } = useTypingAnimation({
+      threshold: 1,
+      staggerDelay: 0.04,
+    })
 
     return (
       <motion.button
@@ -106,16 +91,19 @@ export default function CaseMain() {
           className={styles.textWrap}
           initial="hidden"
           animate={inView ? 'visible' : 'hidden'}
-          variants={textParentVariant}
+          variants={animateProps.variants}
         >
-          <motion.div className={styles.slug} variants={textParentVariant}>
+          <motion.div className={styles.slug} variants={animateProps.variants}>
             {textToSpans(item.slug.toUpperCase(), styles.char)}
           </motion.div>
           <div className={styles.descArea}>
-            <motion.div className={styles.title} variants={textParentVariant}>
+            <motion.div className={styles.title} variants={animateProps.variants}>
               {textToSpans(item.title, styles.char)}
             </motion.div>
-            <motion.div className={`${styles.title} ${styles.sub}`} variants={textParentVariant}>
+            <motion.div
+              className={`${styles.title} ${styles.sub}`}
+              variants={animateProps.variants}
+            >
               {textToSpans(item.subtitle, styles.char)}
             </motion.div>
           </div>
@@ -125,30 +113,15 @@ export default function CaseMain() {
   }
 
   return (
-    <motion.main
-      className={styles.caseWrap}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.6, ease: 'easeOut' }}
-    >
+    <FadeInSection as="main" className={styles.caseWrap} duration={0.6} y={20}>
       <PageTitle>CASE LIST</PageTitle>
 
-      <motion.p
-        className={styles.description}
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 0.3, duration: 0.5 }}
-      >
+      <FadeInSection as="p" className={styles.description} delay={0.3} duration={0.5}>
         실제 기술 문제들을 사건처럼 분석하고 정리한 수사기록입니다. 사건을 선택해 수사 과정을
         따라가보세요.
-      </motion.p>
+      </FadeInSection>
 
-      <motion.div
-        className={styles.filterSection}
-        initial={{ opacity: 0, y: 10 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.4, duration: 0.5 }}
-      >
+      <FadeInSection className={styles.filterSection} delay={0.4} duration={0.5} y={10}>
         <div className={styles.filterButtons}>
           {FILTER_KEYWORDS.map((filter) => {
             const count =
@@ -172,7 +145,7 @@ export default function CaseMain() {
             )
           })}
         </div>
-      </motion.div>
+      </FadeInSection>
 
       <AnimatePresence mode="wait">
         <motion.div
@@ -190,14 +163,9 @@ export default function CaseMain() {
       </AnimatePresence>
 
       {filteredCases.length === 0 && (
-        <motion.div
-          className={styles.noResults}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ duration: 0.5 }}
-        >
+        <FadeInSection className={styles.noResults} duration={0.5}>
           <p>해당 필터에 맞는 사건이 없습니다.</p>
-        </motion.div>
+        </FadeInSection>
       )}
 
       <CaseDetailModal
@@ -206,6 +174,6 @@ export default function CaseMain() {
         onClose={() => setSelected(null)}
         caseMeta={selected}
       />
-    </motion.main>
+    </FadeInSection>
   )
 }

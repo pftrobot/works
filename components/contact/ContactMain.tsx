@@ -10,6 +10,8 @@ import { addMedal } from '@/utils/medalUtils'
 import { MedalType } from '@/types/medal'
 
 import BasicButton from '@/components/common/BasicButton'
+import { TypingText } from '@/components/common/TypingText'
+import { FadeInSection } from '@/components/common/FadeInSection'
 import styles from './ContactMain.module.scss'
 
 export default function ContactMain() {
@@ -99,68 +101,89 @@ export default function ContactMain() {
         <motion.div variants={leftVariants} className={styles.leftSection}>
           <div className={styles.heroText}>
             <h1 className={styles.mainTitle}>
-              Mission control <span className={styles.highlight}>online</span>.
+              <TypingText text="Mission control " as="span" threshold={0.1} staggerDelay={0.02} />
+              <TypingText
+                text="online"
+                as="span"
+                className={styles.highlight}
+                threshold={0.1}
+                staggerDelay={0.02}
+              />
+              <TypingText text="." as="span" threshold={0.1} staggerDelay={0.02} />
               <br />
-              Awaiting your coordinates.
+              <TypingText
+                text="Awaiting your coordinates."
+                as="span"
+                threshold={0.1}
+                staggerDelay={0.02}
+              />
             </h1>
           </div>
 
-          <div className={styles.description}>
+          <FadeInSection className={styles.description} delay={1.5} duration={0.6}>
             <p>
               전하고 싶은 이야기나 문의가 있다면 편하게 남겨 주세요. <br />
               내용을 확인하고 바로 응답드리겠습니다.
             </p>
-          </div>
+          </FadeInSection>
         </motion.div>
 
         <motion.div variants={rightVariants} className={styles.rightSection}>
-          <form onSubmit={handleSubmit} className={styles.form}>
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                name="name"
-                placeholder="Name*"
-                value={formData.name}
-                onChange={handleInputChange}
-                className={classNames(styles.input, {
-                  [styles.error]: formErrors.name,
-                })}
-              />
-              {formErrors.name && <p className={styles.errorText}>{formErrors.name}</p>}
-            </div>
+          <FadeInSection className={styles.form} delay={0.5}>
+            <form onSubmit={handleSubmit}>
+              <FadeInSection className={styles.inputGroup} delay={0.7}>
+                <input
+                  type="text"
+                  name="name"
+                  placeholder="Name*"
+                  value={formData.name}
+                  onChange={handleInputChange}
+                  className={classNames(styles.input, {
+                    [styles.error]: formErrors.name,
+                  })}
+                />
+                {formErrors.name && <p className={styles.errorText}>{formErrors.name}</p>}
+              </FadeInSection>
 
-            <div className={styles.inputGroup}>
-              <input
-                type="email"
-                name="email"
-                placeholder="Email*"
-                value={formData.email}
-                onChange={handleInputChange}
-                className={classNames(styles.input, {
-                  [styles.error]: formErrors.email,
-                })}
-              />
-              {formErrors.email && <p className={styles.errorText}>{formErrors.email}</p>}
-            </div>
+              <FadeInSection className={styles.inputGroup} delay={0.9}>
+                <input
+                  type="email"
+                  name="email"
+                  placeholder="Email*"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                  className={classNames(styles.input, {
+                    [styles.error]: formErrors.email,
+                  })}
+                />
+                {formErrors.email && <p className={styles.errorText}>{formErrors.email}</p>}
+              </FadeInSection>
 
-            <div className={styles.inputGroup}>
-              <textarea
-                name="message"
-                placeholder="Project Information*"
-                value={formData.message}
-                onChange={handleInputChange}
-                className={classNames(styles.textarea, {
-                  [styles.error]: formErrors.message,
-                })}
-                rows={6}
-              />
-              {formErrors.message && <p className={styles.errorText}>{formErrors.message}</p>}
-            </div>
+              <FadeInSection className={styles.inputGroup} delay={1.1}>
+                <textarea
+                  name="message"
+                  placeholder="Project Information*"
+                  value={formData.message}
+                  onChange={handleInputChange}
+                  className={classNames(styles.textarea, {
+                    [styles.error]: formErrors.message,
+                  })}
+                  rows={6}
+                />
+                {formErrors.message && <p className={styles.errorText}>{formErrors.message}</p>}
+              </FadeInSection>
 
-            <BasicButton variant="primary" onClick={handleSubmit} className={styles.submitButton}>
-              Send
-            </BasicButton>
-          </form>
+              <FadeInSection delay={1.3}>
+                <BasicButton
+                  variant="primary"
+                  onClick={handleSubmit}
+                  className={styles.submitButton}
+                >
+                  Send
+                </BasicButton>
+              </FadeInSection>
+            </form>
+          </FadeInSection>
         </motion.div>
       </motion.div>
     </section>

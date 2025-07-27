@@ -6,6 +6,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useAnimationContext } from '@/contexts/AnimationContext'
 import { addMedal } from '@/utils/medalUtils'
 import { MedalType } from '@/types/medal'
+import { FadeInSection } from '@/components/common/FadeInSection'
 
 import BasicButton from '@/components/common/BasicButton'
 import FingerprintScan from '@/components/home/FingerprintScan'
@@ -93,28 +94,18 @@ export default function HomeMain() {
             </motion.span>
           </h2>
 
-          <motion.p
-            className={styles.tagline}
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.8, duration: 0.8, ease: 'easeOut' }}
-          >
+          <FadeInSection as="p" className={styles.tagline} delay={0.8} duration={0.8} y={10}>
             사건 파일을 열고, 기술 수사를 시작하세요.
-          </motion.p>
+          </FadeInSection>
 
-          <motion.div
-            className={styles.actions}
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.3, duration: 0.8, ease: 'easeOut' }}
-          >
+          <FadeInSection className={styles.actions} delay={1.3} duration={0.8} y={20}>
             <BasicButton href="/case" variant="primary">
               사건 기록 열람
             </BasicButton>
             <BasicButton href="/about" variant="secondary">
               수사관 프로파일
             </BasicButton>
-          </motion.div>
+          </FadeInSection>
         </div>
       )}
 

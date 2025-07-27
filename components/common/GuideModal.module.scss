@@ -1,8 +1,6 @@
 .wrap {
   container: guide-modal / inline-size;
 
-  padding: 2rem;
-
   .title {
     font-size: 1.5rem;
     font-weight: 700;
@@ -30,6 +28,20 @@
         color: #fff;
         margin-right: 0.5rem;
       }
+    }
+  }
+
+  .listChar {
+    display: inline-block;
+    color: inherit;
+  }
+
+  .link {
+    color: #4a9eff;
+    text-decoration: underline;
+
+    &:hover {
+      color: #66b3ff;
     }
   }
 }

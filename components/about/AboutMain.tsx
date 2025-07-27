@@ -1,13 +1,15 @@
 'use client'
 
 import { useEffect, ReactNode } from 'react'
-import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
+import { useInView } from 'react-intersection-observer'
 
 import { useAnimationContext } from '@/contexts/AnimationContext'
+import { useStaggerAnimation } from '@/hooks/useStaggerAnimation'
 import { dnaList, techGroups, timeline } from '@/data/aboutData'
 
 import PageTitle from '@/components/common/PageTitle'
+import { FadeInSection } from '@/components/common/FadeInSection'
 import ProfileCard from '@/components/about/ProfileCard'
 import TimelineCards from '@/components/about/TimelineCards'
 import Block from './Block'
@@ -33,7 +35,19 @@ const iconMap: Record<string, ReactNode> = {
 export default function AboutMain() {
   const { setAnimationDone } = useAnimationContext()
   const [refProfile, inViewProfile] = useInView({ triggerOnce: true, threshold: 0.1 })
-  const [refDna, inViewDna] = useInView({ triggerOnce: true, threshold: 0.2 })
+
+  // DNA 섹션용 스태거 애니메이션
+  const {
+    ref: refDna,
+    inView: inViewDna,
+    itemVariant,
+    parentAnimateProps,
+  } = useStaggerAnimation({
+    threshold: 0.2,
+    staggerDelay: 0.15,
+    delayChildren: 0,
+    itemDuration: 0.4,
+  })
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -43,12 +57,7 @@ export default function AboutMain() {
   }, [setAnimationDone])
 
   return (
-    <motion.section
-      className={styles.aboutWrap}
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-    >
+    <FadeInSection as="section" className={styles.aboutWrap} duration={0.8} y={20}>
       <PageTitle>PROFILE</PageTitle>
 
       <motion.div
@@ -66,16 +75,7 @@ export default function AboutMain() {
         subtitle="DNA"
         description="기술 문제를 어떻게 접근하는지, 성향을 수치화해 보았습니다"
       >
-        <motion.div
-          ref={refDna}
-          className={styles.dnaWrap}
-          initial="hidden"
-          animate={inViewDna ? 'visible' : 'hidden'}
-          variants={{
-            visible: { transition: { staggerChildren: 0.15 } },
-            hidden: {},
-          }}
-        >
+        <motion.div ref={refDna} className={styles.dnaWrap} {...parentAnimateProps}>
           {dnaList.map(({ id, label, size, color }) => (
             <motion.div
               key={id}
@@ -87,19 +87,7 @@ export default function AboutMain() {
                   '--bar-size': size,
                 } as React.CSSProperties
               }
-              variants={{
-                hidden: { opacity: 0, x: -20 },
-                visible: {
-                  opacity: 1,
-                  x: 0,
-                  transition: {
-                    duration: 0.4,
-                    ease: 'easeOut',
-                  },
-                },
-              }}
-              initial="hidden"
-              animate={inViewDna ? 'visible' : 'hidden'}
+              variants={itemVariant}
             >
               <div className={styles.labelTop}>
                 <span className={styles.skillText}>{'//'} SKILL</span>
@@ -175,7 +163,7 @@ export default function AboutMain() {
                 <motion.div
                   className={styles.barFill}
                   initial={{ width: 0 }}
-                  animate={{ width: size }}
+                  animate={inViewDna ? { width: size } : { width: 0 }}
                   transition={{ duration: 0.1, ease: 'easeOut', delay: 0.6 }}
                 />
               </motion.div>
@@ -208,7 +196,7 @@ export default function AboutMain() {
                       ease: 'easeOut',
                       delay: index * 0.1,
                     }}
-                    viewport={{ once: true, amount: 0.2 }} // 한 번만 실행 + 어느 정도 보여야 실행
+                    viewport={{ once: true, amount: 0.2 }}
                   >
                     <div className={styles.toolIcon} />
                     <span className={styles.toolName}>{label}</span>
@@ -227,6 +215,6 @@ export default function AboutMain() {
       >
         <TimelineCards data={timeline} />
       </Block>
-    </motion.section>
+    </FadeInSection>
   )
 }
