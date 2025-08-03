@@ -1,7 +1,13 @@
 .header {
-  container: layout-header / inline-size;
-
   padding: 2rem;
+  margin-block-end: 2rem;
+  background-color: #141414;
+  border-bottom: 1px solid #2d2d2d;
+
+  @media (max-width: 500px) {
+    padding-block: 1.8rem;
+    padding-inline: 1.2rem;
+  }
 
   .inner {
     display: flex;
@@ -10,7 +16,7 @@
     inline-size: calc(100% - 10rem);
     margin-inline: auto;
 
-    @container layout-header (max-width: 800px) {
+    @media (max-width: 800px) {
       gap: 1.5rem;
       inline-size: 100%;
       margin-inline: 0;
@@ -58,7 +64,7 @@
       }
     }
 
-    @container layout-header (max-width: 800px) {
+    @media (max-width: 800px) {
       justify-content: center;
       flex-wrap: wrap;
 

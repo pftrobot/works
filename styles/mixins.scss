@@ -1,0 +1,32 @@
+// hover: color + underline
+@mixin linkUnderline($color: #e1e1e1, $hoverColor: #e1e1e1) {
+  position: relative;
+  transition: color 0.2s;
+
+  color: $color;
+
+  &::before {
+    position: absolute;
+    inset-block-end: 3px;
+    inset-inline-start: 0;
+    display: block;
+    inline-size: 0;
+    block-size: 1px;
+    content: '';
+    transition: width 0.2s;
+
+    background-color: $color;
+  }
+
+  @media (hover: hover) {
+    &:hover {
+      color: $hoverColor;
+
+      &::before {
+        width: 100%;
+
+        background-color: $hoverColor;
+      }
+    }
+  }
+}

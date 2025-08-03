@@ -12,8 +12,13 @@ import { MedalType } from '@/types/medal'
 import BasicButton from '@/components/common/BasicButton'
 import { TypingText } from '@/components/common/TypingText'
 import { FadeInSection } from '@/components/common/FadeInSection'
+import { StaggerList } from '@/components/common/StaggerList'
 import styles from './ContactMain.module.scss'
 
+const TEXT_ITEMS = [
+  <>전하고 싶은 이야기나 문의가 있다면 편하게 남겨 주세요.</>,
+  <>내용을 확인하고 바로 응답드리겠습니다.</>,
+]
 export default function ContactMain() {
   const { setAnimationDone } = useAnimationContext()
 
@@ -85,7 +90,7 @@ export default function ContactMain() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimationDone(true)
-    }, 800)
+    }, 700)
     return () => clearTimeout(timeout)
   }, [setAnimationDone])
 
@@ -101,13 +106,14 @@ export default function ContactMain() {
         <motion.div variants={leftVariants} className={styles.leftSection}>
           <div className={styles.heroText}>
             <h1 className={styles.mainTitle}>
-              <TypingText text="Mission control " as="span" threshold={0.1} staggerDelay={0.02} />
+              <TypingText text="Mission control " as="span" threshold={0.1} staggerDelay={0.04} />
               <TypingText
                 text="online"
                 as="span"
                 className={styles.highlight}
                 threshold={0.1}
                 staggerDelay={0.02}
+                delay={0.6}
               />
               <TypingText text="." as="span" threshold={0.1} staggerDelay={0.02} />
               <br />
@@ -120,18 +126,20 @@ export default function ContactMain() {
             </h1>
           </div>
 
-          <FadeInSection className={styles.description} delay={1.5} duration={0.6}>
-            <p>
-              전하고 싶은 이야기나 문의가 있다면 편하게 남겨 주세요. <br />
-              내용을 확인하고 바로 응답드리겠습니다.
-            </p>
-          </FadeInSection>
+          <StaggerList
+            items={TEXT_ITEMS}
+            as="div"
+            threshold={0.3}
+            staggerDelay={0.15}
+            itemDuration={0.5}
+            delayChildren={0.4}
+          />
         </motion.div>
 
         <motion.div variants={rightVariants} className={styles.rightSection}>
-          <FadeInSection className={styles.form} delay={0.5}>
+          <FadeInSection className={styles.form}>
             <form onSubmit={handleSubmit}>
-              <FadeInSection className={styles.inputGroup} delay={0.7}>
+              <FadeInSection className={styles.inputGroup} delay={0.3}>
                 <input
                   type="text"
                   name="name"
@@ -145,7 +153,7 @@ export default function ContactMain() {
                 {formErrors.name && <p className={styles.errorText}>{formErrors.name}</p>}
               </FadeInSection>
 
-              <FadeInSection className={styles.inputGroup} delay={0.9}>
+              <FadeInSection className={styles.inputGroup} delay={0.45}>
                 <input
                   type="email"
                   name="email"
@@ -159,7 +167,7 @@ export default function ContactMain() {
                 {formErrors.email && <p className={styles.errorText}>{formErrors.email}</p>}
               </FadeInSection>
 
-              <FadeInSection className={styles.inputGroup} delay={1.1}>
+              <FadeInSection className={styles.inputGroup} delay={0.6}>
                 <textarea
                   name="message"
                   placeholder="Project Information*"
@@ -173,7 +181,7 @@ export default function ContactMain() {
                 {formErrors.message && <p className={styles.errorText}>{formErrors.message}</p>}
               </FadeInSection>
 
-              <FadeInSection delay={1.3}>
+              <FadeInSection delay={0.75}>
                 <BasicButton
                   variant="primary"
                   onClick={handleSubmit}

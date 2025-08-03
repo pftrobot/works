@@ -2,6 +2,7 @@
 
 import { ReactNode, useEffect, useState } from 'react'
 import { createPortal } from 'react-dom'
+import classNames from 'classnames'
 import { IconX } from '@tabler/icons-react'
 
 import styles from './Modal.module.scss'
@@ -11,9 +12,10 @@ interface ModalProps {
   onClose: () => void
   children: ReactNode
   width?: number
+  className?: string
 }
 
-export default function Modal({ open, onClose, children, width = 480 }: ModalProps) {
+export default function Modal({ open, onClose, children, width = 480, className }: ModalProps) {
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
@@ -60,7 +62,7 @@ export default function Modal({ open, onClose, children, width = 480 }: ModalPro
   if (!mounted || !open) return null
 
   return createPortal(
-    <div className={styles.overlay} onClick={onClose}>
+    <div className={classNames(styles.overlay, className)} onClick={onClose}>
       <div className={styles.modal} style={{ width }} onClick={(e) => e.stopPropagation()}>
         <button className={styles.close} onClick={onClose}>
           <IconX size={24} stroke={1.5} color={'#ddd'} />

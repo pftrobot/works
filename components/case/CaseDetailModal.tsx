@@ -1,6 +1,8 @@
 'use client'
 
 import { useState } from 'react'
+import Link from 'next/link'
+import { motion } from 'framer-motion'
 import classNames from 'classnames'
 
 import { addMedal } from '@/utils/medalUtils'
@@ -18,6 +20,9 @@ interface Props {
   caseMeta: CaseMeta | null
 }
 
+const INITIAL_STYLE = { opacity: 0, y: 20 } as const
+const ANIMATE_STYLE = { opacity: 1, y: 0 } as const
+const DURATION = 0.6
 export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
   const [quizStep, setQuizStep] = useState<'question' | 'answer'>('question')
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
@@ -42,7 +47,9 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
     setConfirmVisible(false)
   }
 
-  if (quizStep === 'answer' && selectedOption === quiz.answer) {
+  const isCorrectAnswer = selectedOption === quiz.answer
+
+  if (quizStep === 'answer' && isCorrectAnswer) {
     const stored = localStorage.getItem('case_medal_track')
     const solvedIds = stored ? (JSON.parse(stored) as Array<string | number>) : []
     if (!solvedIds.includes(caseMeta.id)) {
@@ -61,7 +68,12 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
 
         <div className={styles.rightColumn}>
           {quizStep === 'question' ? (
-            <>
+            <motion.div
+              key="question"
+              initial={INITIAL_STYLE}
+              animate={ANIMATE_STYLE}
+              transition={{ duration: DURATION }}
+            >
               <p className={styles.question}>Q. {quiz.question}</p>
               <ul className={styles.options}>
                 {quiz.options.map((opt, idx) => (
@@ -72,39 +84,81 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
                   </li>
                 ))}
               </ul>
-            </>
+            </motion.div>
           ) : (
-            <div
+            <motion.div
+              key="answer"
               className={classNames(styles.answerWrap, {
-                [styles.correct]: selectedOption === quiz.answer,
+                [styles.correct]: isCorrectAnswer,
               })}
+              initial={INITIAL_STYLE}
+              animate={ANIMATE_STYLE}
+              transition={{ duration: DURATION }}
             >
-              {selectedOption === quiz.answer ? (
-                <p className={styles.answerCorrect}>
-                  정답입니다! <br />
-                  메달을 획득했습니다
-                </p>
-              ) : (
-                <p className={styles.answerWrong}>
-                  오답입니다 <br />
-                  다시 도전해보세요
-                </p>
-              )}
+              <motion.div
+                initial={INITIAL_STYLE}
+                animate={ANIMATE_STYLE}
+                transition={{ duration: DURATION }}
+              >
+                {isCorrectAnswer ? (
+                  <p className={styles.answerCorrect}>
+                    정답입니다! <br />
+                    메달을 획득했습니다
+                    <Link className={styles.goMedal} href={'/medal'}>
+                      메달함
+                    </Link>
+                  </p>
+                ) : (
+                  <p className={styles.answerWrong}>
+                    오답입니다 <br />
+                    다시 도전해보세요
+                  </p>
+                )}
+              </motion.div>
 
-              <button className={styles.backBtn} onClick={handleBackToQuestion}>
+              <motion.button
+                className={styles.backBtn}
+                onClick={handleBackToQuestion}
+                initial={INITIAL_STYLE}
+                animate={ANIMATE_STYLE}
+                transition={{ duration: DURATION - 0.2, delay: 0.15 }}
+              >
                 질문 다시 보기
-              </button>
+              </motion.button>
 
-              <p className={styles.description}>{description}</p>
+              {isCorrectAnswer && (
+                <>
+                  <motion.div
+                    initial={INITIAL_STYLE}
+                    animate={ANIMATE_STYLE}
+                    transition={{ duration: DURATION, delay: 0.25 }}
+                  >
+                    <p className={styles.description}>{description}</p>
+                  </motion.div>
 
-              {tech && tech.length > 0 && <TechTagList tech={tech} />}
+                  {((tech && tech.length > 0) || link) && (
+                    <motion.div
+                      initial={INITIAL_STYLE}
+                      animate={ANIMATE_STYLE}
+                      transition={{ duration: DURATION, delay: 0.35 }}
+                    >
+                      {tech && tech.length > 0 && <TechTagList tech={tech} />}
 
-              {link && (
-                <a href={link} target="_blank" rel="noopener noreferrer" className={styles.link}>
-                  자세히 보기
-                </a>
+                      {link && (
+                        <a
+                          href={link}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className={styles.link}
+                        >
+                          자세히 보기
+                        </a>
+                      )}
+                    </motion.div>
+                  )}
+                </>
               )}
-            </div>
+            </motion.div>
           )}
         </div>
       </div>
@@ -113,7 +167,7 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
         open={confirmVisible}
         onConfirm={confirmBack}
         onCancel={() => setConfirmVisible(false)}
-        message="정답을 다시 선택하시겠습니까?"
+        message={isCorrectAnswer ? '질문을 다시 보시겠습니까?' : '정답을 다시 선택하시겠습니까?'}
       />
     </Modal>
   )

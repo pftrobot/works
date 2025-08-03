@@ -2,16 +2,27 @@
 
 import { useEffect, useState } from 'react'
 import Link from 'next/link'
-import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import { motion } from 'framer-motion'
+import classNames from 'classnames'
 
 import { useAnimationContext } from '@/contexts/AnimationContext'
 import { getMedalCount, getMedalSources } from '@/utils/medalUtils'
 
 import PageTitle from '@/components/common/PageTitle'
+import { TypingText } from '@/components/common/TypingText'
+import { StaggerList } from '@/components/common/StaggerList'
 import styles from './MedalMain.module.scss'
-import classNames from 'classnames'
 
+const GUIDE_ITEMS = [
+  <>
+    <Link href="/case">사건 목록</Link>을 탐색해보세요.
+  </>,
+  <>
+    <Link href="/contact">제보</Link>를 남기면 수사에 기여한 것으로 인정돼요.
+  </>,
+  <>사이트 곳곳에 숨겨진 단서를 찾아보세요. 예상치 못한 보상이 기다리고 있어요.</>,
+]
 export default function MedalMain() {
   const { setAnimationDone } = useAnimationContext()
   const [alias, setAlias] = useState('수사 손님')
@@ -37,7 +48,7 @@ export default function MedalMain() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimationDone(true)
-    }, 800)
+    }, 600)
     return () => clearTimeout(timeout)
   }, [setAnimationDone])
 
@@ -57,16 +68,33 @@ export default function MedalMain() {
         animate={inViewInfo ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6 }}
       >
-        <p className={styles.title}>당신의 메달함</p>
-        <p className={styles.subtitle}>{alias}님, 수사관님께 남긴 흔적입니다.</p>
+        <p className={styles.title}>나의 메달함</p>
+        <TypingText
+          text={`${alias}님, 수사관님께 남긴 흔적입니다.`}
+          as={'p'}
+          className={styles.subtitle}
+          staggerDelay={0.02}
+        />
         <div className={styles.infoList}>
           <div className={styles.infoItem}>
-            <strong>랭크</strong>
-            <span>{rank}</span>
+            <TypingText text={'랭크'} as={'strong'} staggerDelay={0.06} delay={0.1} />
+            <TypingText
+              text={rank}
+              as={'span'}
+              className={styles.char}
+              staggerDelay={0.06}
+              delay={0.1}
+            />
           </div>
           <div className={classNames(styles.infoItem, styles.medal)}>
-            <strong>획득 메달</strong>
-            <span>{medals}개</span>
+            <TypingText text={'획득 메달'} as={'strong'} staggerDelay={0.06} delay={0.2} />
+            <TypingText
+              text={`${medals}개`}
+              as={'span'}
+              className={styles.char}
+              staggerDelay={0.06}
+              delay={0.2}
+            />
           </div>
         </div>
       </motion.div>
@@ -100,15 +128,13 @@ export default function MedalMain() {
         transition={{ duration: 0.5 }}
       >
         <h3>메달 수집 방법</h3>
-        <ul>
-          <li>
-            <Link href="/case">사건 목록</Link>을 탐색해보세요.
-          </li>
-          <li>
-            <Link href="/contact">제보</Link>를 남기면 수사에 기여한 것으로 인정돼요.
-          </li>
-          <li>사이트 곳곳에 숨겨진 단서를 찾아보세요. 예상치 못한 보상이 기다리고 있어요.</li>
-        </ul>
+        <StaggerList
+          items={GUIDE_ITEMS}
+          as="ul"
+          threshold={0.3}
+          staggerDelay={0.15}
+          itemDuration={0.5}
+        />
       </motion.div>
     </motion.section>
   )

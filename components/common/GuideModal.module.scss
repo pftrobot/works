@@ -1,3 +1,5 @@
+@use "../../styles/mixins" as *;
+
 .wrap {
   container: guide-modal / inline-size;
 
@@ -37,12 +39,9 @@
   }
 
   .link {
-    color: #4a9eff;
-    text-decoration: underline;
-
-    &:hover {
-      color: #66b3ff;
-    }
+    font-weight: 600;
+    padding-block-end: 4px;
+    @include linkUnderline(#4a9eff, #4a9eff);
   }
 }
 

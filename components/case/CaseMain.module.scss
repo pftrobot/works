@@ -8,6 +8,14 @@
   padding-block-end: 5rem;
   margin-inline: auto;
 
+  @media (max-width: 800px) {
+    inline-size: calc(100% - 4rem);
+  }
+
+  @media (max-width: 500px) {
+    inline-size: calc(100% - 2.4rem);
+  }
+
   .description {
     font-size: 1.125rem;
     color: #ffffff50;
@@ -98,9 +106,8 @@
 
   .caseGrid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(30rem, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(22.5rem, 1fr));
     gap: 6.125rem 4.125rem;
-    margin-block-start: 2.5rem;
 
     .card {
       display: flex;
@@ -174,6 +181,7 @@
             font-size: 1.125rem;
             font-weight: 400;
             color: #fff;
+            padding-inline-end: 0.5rem;
 
             &.sub {
               color: #e53838;
@@ -197,30 +205,6 @@
       .char {
         display: inline-block;
         white-space: pre;
-      }
-    }
-  }
-
-  @container container-width (max-width: 900px) {
-    .caseGrid {
-      gap: 3rem 2rem;
-
-      .card {
-        .textWrap {
-          min-block-size: 8rem;
-
-          .slug {
-            font-size: 1.5rem;
-          }
-
-          .title {
-            font-size: 0.75rem;
-          }
-        }
-
-        .thumbnail {
-          aspect-ratio: 4 / 3;
-        }
       }
     }
   }

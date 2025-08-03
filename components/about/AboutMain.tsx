@@ -36,7 +36,6 @@ export default function AboutMain() {
   const { setAnimationDone } = useAnimationContext()
   const [refProfile, inViewProfile] = useInView({ triggerOnce: true, threshold: 0.1 })
 
-  // DNA 섹션용 스태거 애니메이션
   const {
     ref: refDna,
     inView: inViewDna,
@@ -52,7 +51,7 @@ export default function AboutMain() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimationDone(true)
-    }, 800)
+    }, 600)
     return () => clearTimeout(timeout)
   }, [setAnimationDone])
 

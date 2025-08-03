@@ -20,10 +20,9 @@ export default function GuideModal({ open, onClose }: GuideModalProps) {
 
   const guideItems = [
     <>
-      이곳은 기술 문제를 해결해온 과정을 사건처럼 정리한 기록 공간입니다.
-      <br />
+      이곳은 기술 문제를 해결해온 과정을 사건처럼 정리한 기록 공간입니다. <br />
       <Link href="/case" className={styles.link}>
-        [사건 목록 보기]
+        [ 사건 목록 보기 ]
       </Link>
     </>,
     '관심 있는 주제만 골라서 볼 수 있도록 태그 필터를 지원합니다.',
@@ -33,7 +32,7 @@ export default function GuideModal({ open, onClose }: GuideModalProps) {
     <>
       지금까지 모은 기록과 인정은{' '}
       <Link href="/medal" className={styles.link}>
-        [나의 메달함]
+        나의 메달함
       </Link>
       에서 확인할 수 있습니다.
     </>,
@@ -64,7 +63,7 @@ export default function GuideModal({ open, onClose }: GuideModalProps) {
           as="p"
           className={styles.description}
           charClassName={styles.descChar}
-          staggerDelay={0.02}
+          staggerDelay={0.03}
         />
 
         <StaggerList
@@ -73,7 +72,7 @@ export default function GuideModal({ open, onClose }: GuideModalProps) {
           className={styles.guideList}
           threshold={0.3}
           staggerDelay={0.15}
-          delayChildren={0.3}
+          delayChildren={0.7}
           itemDuration={0.5}
         />
       </FadeInSection>
