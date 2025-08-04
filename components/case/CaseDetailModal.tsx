@@ -7,7 +7,7 @@ import classNames from 'classnames'
 
 import { addMedal } from '@/utils/medalUtils'
 import { MedalType } from '@/types/medal'
-import { CaseMeta } from '@/data/casesMeta'
+import { CaseMeta } from '@/lib/supabase'
 
 import Modal from '@/components/common/Modal'
 import ConfirmModal from '@/components/common/ConfirmModal'
@@ -49,7 +49,7 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
 
   const isCorrectAnswer = selectedOption === quiz.answer
 
-  if (quizStep === 'answer' && isCorrectAnswer) {
+  if (typeof window !== 'undefined' && quizStep === 'answer' && isCorrectAnswer) {
     const stored = localStorage.getItem('case_medal_track')
     const solvedIds = stored ? (JSON.parse(stored) as Array<string | number>) : []
     if (!solvedIds.includes(caseMeta.id)) {

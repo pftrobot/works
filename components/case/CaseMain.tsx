@@ -6,7 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
 
 import { useAnimationContext } from '@/contexts/AnimationContext'
-import { caseList, CaseMeta } from '@/data/casesMeta'
+import { useCaseStore, FILTER_KEYWORDS, FilterKeyword } from '@/stores/caseStore'
+import { CaseMeta } from '@/lib/supabase'
+import { getCaseThumbnailUrlViaAPI } from '@/lib/supabaseStorage'
 import { useTypingAnimation } from '@/hooks/useTypingAnimation'
 
 import { FadeInSection } from '@/components/common/FadeInSection'
@@ -14,15 +16,13 @@ import PageTitle from '@/components/common/PageTitle'
 import CaseDetailModal from './CaseDetailModal'
 import styles from './CaseMain.module.scss'
 
-const FILTER_KEYWORDS = ['전체', '렌더링', '인증', '인터랙션', 'SSR', '데이터', '컴포넌트'] as const
-type FilterKeyword = (typeof FILTER_KEYWORDS)[number]
-
 export default function CaseMain() {
   const [selected, setSelected] = useState<CaseMeta | null>(null)
-  const [activeFilters, setActiveFilters] = useState<FilterKeyword[]>([])
-  const [filteredCases, setFilteredCases] = useState<CaseMeta[]>(caseList)
   const [animationKey, setAnimationKey] = useState(0)
   const { setAnimationDone } = useAnimationContext()
+
+  const { cases, filteredCases, activeFilters, isLoading, error, fetchCases, setActiveFilters } =
+    useCaseStore()
 
   // 애니메이션을 한번만 실행시키기 위한 ref
   const animatedCardsRef = useRef<Set<string>>(new Set())
@@ -30,7 +30,6 @@ export default function CaseMain() {
   const handleFilterClick = (filter: FilterKeyword) => {
     if (filter === '전체') {
       setActiveFilters([])
-      setFilteredCases(caseList)
       setAnimationKey((prev) => prev + 1)
       return
     }
@@ -40,17 +39,12 @@ export default function CaseMain() {
       : [...activeFilters, filter]
 
     setActiveFilters(newFilters)
-
-    if (newFilters.length === 0) {
-      setFilteredCases(caseList)
-    } else {
-      const filtered = caseList.filter((caseItem) =>
-        newFilters.every((filter) => caseItem.tech.some((tech) => tech.includes(filter))),
-      )
-      setFilteredCases(filtered)
-    }
     setAnimationKey((prev) => prev + 1)
   }
+
+  useEffect(() => {
+    fetchCases()
+  }, [fetchCases])
 
   useEffect(() => {
     const timeout = setTimeout(() => {
@@ -96,11 +90,15 @@ export default function CaseMain() {
       >
         <div className={styles.thumbnail}>
           <Image
-            src={item.thumbnail}
+            src={getCaseThumbnailUrlViaAPI(item.thumbnail)}
             alt={item.title}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
             className={styles.image}
+            onError={(e) => {
+              const target = e.target as HTMLImageElement
+              target.src = '/imgs/bg/OBJ02.png'
+            }}
           />
         </div>
 
@@ -129,68 +127,95 @@ export default function CaseMain() {
     )
   }
 
-  return (
-    <FadeInSection as="main" className={styles.caseWrap} duration={0.6} y={20}>
-      <PageTitle>CASE LIST</PageTitle>
-
-      <FadeInSection as="p" className={styles.description} delay={0.3} duration={0.5}>
-        실제 기술 문제들을 사건처럼 분석하고 정리한 수사기록입니다. 사건을 선택해 수사 과정을
-        따라가보세요.
-      </FadeInSection>
-
-      <FadeInSection className={styles.filterSection} delay={0.4} duration={0.5} y={10}>
-        <div className={styles.filterButtons}>
-          {FILTER_KEYWORDS.map((filter) => {
-            const count =
-              filter === '전체'
-                ? caseList.length
-                : caseList.filter((caseItem) => caseItem.tech.some((tech) => tech.includes(filter)))
-                    .length
-            const isActive =
-              filter === '전체' ? activeFilters.length === 0 : activeFilters.includes(filter)
-            return (
-              <motion.button
-                key={filter}
-                type="button"
-                className={`${styles.filterButton} ${isActive ? styles.active : ''}`}
-                onClick={() => handleFilterClick(filter)}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                {`${filter} (${count})`}
-              </motion.button>
-            )
-          })}
+  if (isLoading) {
+    return (
+      <FadeInSection as="main" className={styles.caseWrap} duration={0.6} y={20}>
+        <PageTitle>CASE LIST</PageTitle>
+        <div className={styles.loading}>
+          <p>사건을 조사하는 중...</p>
         </div>
       </FadeInSection>
+    )
+  }
 
-      <AnimatePresence mode="wait">
-        <motion.div
-          key={animationKey}
-          className={styles.caseGrid}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {filteredCases.map((item) => (
-            <CaseCard key={item.id} item={item} onClick={() => setSelected(item)} />
-          ))}
-        </motion.div>
-      </AnimatePresence>
+  if (error) {
+    return (
+      <FadeInSection as="main" className={styles.caseWrap} duration={0.6} y={20}>
+        <PageTitle>CASE LIST</PageTitle>
+        <div className={styles.error}>
+          <p>사건을 불러오는데 실패했습니다: {error}</p>
+          <button onClick={fetchCases} className={styles.retryButton}>
+            다시 시도
+          </button>
+        </div>
+      </FadeInSection>
+    )
+  }
 
-      {filteredCases.length === 0 && (
-        <FadeInSection className={styles.noResults} duration={0.5}>
-          <p>해당 필터에 맞는 사건이 없습니다.</p>
+  return (
+    <AnimatePresence mode="wait">
+      <FadeInSection as="main" className={styles.caseWrap} duration={0.6} y={20}>
+        <PageTitle>CASE LIST</PageTitle>
+
+        <FadeInSection as="p" className={styles.description} delay={0.3} duration={0.5}>
+          실제 기술 문제들을 사건처럼 분석하고 정리한 수사기록입니다. 사건을 선택해 수사 과정을
+          따라가보세요.
         </FadeInSection>
-      )}
 
-      <CaseDetailModal
-        key={selected?.id}
-        open={Boolean(selected)}
-        onClose={() => setSelected(null)}
-        caseMeta={selected}
-      />
-    </FadeInSection>
+        <FadeInSection className={styles.filterSection} delay={0.4} duration={0.5} y={10}>
+          <div className={styles.filterButtons}>
+            {FILTER_KEYWORDS.map((filter) => {
+              const count =
+                filter === '전체'
+                  ? cases.length
+                  : cases.filter((caseItem) => caseItem.tech.some((tech) => tech.includes(filter)))
+                      .length
+              const isActive =
+                filter === '전체' ? activeFilters.length === 0 : activeFilters.includes(filter)
+              return (
+                <motion.button
+                  key={filter}
+                  type="button"
+                  className={`${styles.filterButton} ${isActive ? styles.active : ''}`}
+                  onClick={() => handleFilterClick(filter)}
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                >
+                  {`${filter} (${count})`}
+                </motion.button>
+              )
+            })}
+          </div>
+        </FadeInSection>
+
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={animationKey}
+            className={styles.caseGrid}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.3 }}
+          >
+            {filteredCases.map((item) => (
+              <CaseCard key={item.id} item={item} onClick={() => setSelected(item)} />
+            ))}
+          </motion.div>
+        </AnimatePresence>
+
+        {filteredCases.length === 0 && !isLoading && (
+          <FadeInSection className={styles.noResults} duration={0.5}>
+            <p>해당 필터에 맞는 사건이 없습니다.</p>
+          </FadeInSection>
+        )}
+
+        <CaseDetailModal
+          key={selected?.id}
+          open={Boolean(selected)}
+          onClose={() => setSelected(null)}
+          caseMeta={selected}
+        />
+      </FadeInSection>
+    </AnimatePresence>
   )
 }
