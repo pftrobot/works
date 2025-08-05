@@ -11,7 +11,7 @@ import { CaseMeta } from '@/lib/supabase'
 import { getCaseThumbnailUrlViaAPI } from '@/lib/supabaseStorage'
 import { useTypingAnimation } from '@/hooks/useTypingAnimation'
 
-import { FadeInSection } from '@/components/common/FadeInSection'
+import { FadeInView } from '@/components/common/FadeInView'
 import PageTitle from '@/components/common/PageTitle'
 import CaseDetailModal from './CaseDetailModal'
 import styles from './CaseMain.module.scss'
@@ -129,18 +129,18 @@ export default function CaseMain() {
 
   if (isLoading) {
     return (
-      <FadeInSection as="main" className={styles.caseWrap} duration={0.6} y={20}>
+      <FadeInView as="main" className={styles.caseWrap} duration={0.6} y={20}>
         <PageTitle>CASE LIST</PageTitle>
         <div className={styles.loading}>
           <p>사건을 조사하는 중...</p>
         </div>
-      </FadeInSection>
+      </FadeInView>
     )
   }
 
   if (error) {
     return (
-      <FadeInSection as="main" className={styles.caseWrap} duration={0.6} y={20}>
+      <FadeInView as="main" className={styles.caseWrap} duration={0.6} y={20}>
         <PageTitle>CASE LIST</PageTitle>
         <div className={styles.error}>
           <p>사건을 불러오는데 실패했습니다: {error}</p>
@@ -148,21 +148,21 @@ export default function CaseMain() {
             다시 시도
           </button>
         </div>
-      </FadeInSection>
+      </FadeInView>
     )
   }
 
   return (
     <AnimatePresence mode="wait">
-      <FadeInSection as="main" className={styles.caseWrap} duration={0.6} y={20}>
+      <FadeInView as="main" className={styles.caseWrap} duration={0.6} y={20}>
         <PageTitle>CASE LIST</PageTitle>
 
-        <FadeInSection as="p" className={styles.description} delay={0.3} duration={0.5}>
+        <FadeInView as="p" className={styles.description} delay={0.3} duration={0.5}>
           실제 기술 문제들을 사건처럼 분석하고 정리한 수사기록입니다. 사건을 선택해 수사 과정을
           따라가보세요.
-        </FadeInSection>
+        </FadeInView>
 
-        <FadeInSection className={styles.filterSection} delay={0.4} duration={0.5} y={10}>
+        <FadeInView className={styles.filterSection} delay={0.4} duration={0.5} y={10}>
           <div className={styles.filterButtons}>
             {FILTER_KEYWORDS.map((filter) => {
               const count =
@@ -186,7 +186,7 @@ export default function CaseMain() {
               )
             })}
           </div>
-        </FadeInSection>
+        </FadeInView>
 
         <AnimatePresence mode="wait">
           <motion.div
@@ -204,9 +204,9 @@ export default function CaseMain() {
         </AnimatePresence>
 
         {filteredCases.length === 0 && !isLoading && (
-          <FadeInSection className={styles.noResults} duration={0.5}>
+          <FadeInView className={styles.noResults} duration={0.5}>
             <p>해당 필터에 맞는 사건이 없습니다.</p>
-          </FadeInSection>
+          </FadeInView>
         )}
 
         <CaseDetailModal
@@ -215,7 +215,7 @@ export default function CaseMain() {
           onClose={() => setSelected(null)}
           caseMeta={selected}
         />
-      </FadeInSection>
+      </FadeInView>
     </AnimatePresence>
   )
 }

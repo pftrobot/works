@@ -9,7 +9,7 @@ import { useStaggerAnimation } from '@/hooks/useStaggerAnimation'
 import { dnaList, techGroups, timeline } from '@/data/aboutData'
 
 import PageTitle from '@/components/common/PageTitle'
-import { FadeInSection } from '@/components/common/FadeInSection'
+import { FadeInView } from '@/components/common/FadeInView'
 import ProfileCard from '@/components/about/ProfileCard'
 import TimelineCards from '@/components/about/TimelineCards'
 import Block from './Block'
@@ -56,7 +56,7 @@ export default function AboutMain() {
   }, [setAnimationDone])
 
   return (
-    <FadeInSection as="section" className={styles.aboutWrap} duration={0.8} y={20}>
+    <FadeInView as="section" className={styles.aboutWrap} duration={0.8} y={20}>
       <PageTitle>PROFILE</PageTitle>
 
       <motion.div
@@ -214,6 +214,6 @@ export default function AboutMain() {
       >
         <TimelineCards data={timeline} />
       </Block>
-    </FadeInSection>
+    </FadeInView>
   )
 }

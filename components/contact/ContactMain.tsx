@@ -11,7 +11,7 @@ import { MedalType } from '@/types/medal'
 
 import BasicButton from '@/components/common/BasicButton'
 import { TypingText } from '@/components/common/TypingText'
-import { FadeInSection } from '@/components/common/FadeInSection'
+import { FadeInView } from '@/components/common/FadeInView'
 import { StaggerList } from '@/components/common/StaggerList'
 import styles from './ContactMain.module.scss'
 
@@ -137,9 +137,9 @@ export default function ContactMain() {
         </motion.div>
 
         <motion.div variants={rightVariants} className={styles.rightSection}>
-          <FadeInSection className={styles.form}>
+          <FadeInView className={styles.form}>
             <form onSubmit={handleSubmit}>
-              <FadeInSection className={styles.inputGroup} delay={0.3}>
+              <FadeInView className={styles.inputGroup} delay={0.3}>
                 <input
                   type="text"
                   name="name"
@@ -151,9 +151,9 @@ export default function ContactMain() {
                   })}
                 />
                 {formErrors.name && <p className={styles.errorText}>{formErrors.name}</p>}
-              </FadeInSection>
+              </FadeInView>
 
-              <FadeInSection className={styles.inputGroup} delay={0.45}>
+              <FadeInView className={styles.inputGroup} delay={0.45}>
                 <input
                   type="email"
                   name="email"
@@ -165,9 +165,9 @@ export default function ContactMain() {
                   })}
                 />
                 {formErrors.email && <p className={styles.errorText}>{formErrors.email}</p>}
-              </FadeInSection>
+              </FadeInView>
 
-              <FadeInSection className={styles.inputGroup} delay={0.6}>
+              <FadeInView className={styles.inputGroup} delay={0.6}>
                 <textarea
                   name="message"
                   placeholder="Project Information*"
@@ -179,9 +179,9 @@ export default function ContactMain() {
                   rows={6}
                 />
                 {formErrors.message && <p className={styles.errorText}>{formErrors.message}</p>}
-              </FadeInSection>
+              </FadeInView>
 
-              <FadeInSection delay={0.75}>
+              <FadeInView delay={0.75}>
                 <BasicButton
                   variant="primary"
                   onClick={handleSubmit}
@@ -189,9 +189,9 @@ export default function ContactMain() {
                 >
                   Send
                 </BasicButton>
-              </FadeInSection>
+              </FadeInView>
             </form>
-          </FadeInSection>
+          </FadeInView>
         </motion.div>
       </motion.div>
     </section>

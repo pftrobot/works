@@ -7,7 +7,7 @@ import { useAnimationContext } from '@/contexts/AnimationContext'
 import Modal from '@/components/common/Modal'
 import { TypingText } from '@/components/common/TypingText'
 import { StaggerList } from '@/components/common/StaggerList'
-import { FadeInSection } from '@/components/common/FadeInSection'
+import { FadeInView } from '@/components/common/FadeInView'
 import styles from './GuideModal.module.scss'
 
 interface GuideModalProps {
@@ -49,7 +49,7 @@ export default function GuideModal({ open, onClose }: GuideModalProps) {
 
   return (
     <Modal open={open} onClose={onClose} width={600}>
-      <FadeInSection className={styles.wrap} duration={0.6} y={20}>
+      <FadeInView className={styles.wrap} duration={0.6} y={20}>
         <TypingText
           text="관람 가이드"
           as="h2"
@@ -75,7 +75,7 @@ export default function GuideModal({ open, onClose }: GuideModalProps) {
           delayChildren={0.7}
           itemDuration={0.5}
         />
-      </FadeInSection>
+      </FadeInView>
     </Modal>
   )
 }
