@@ -19,7 +19,7 @@
   transition: all 0.3s ease;
 
   &:focus-within {
-    border-color: var(--color-primary);
+    border-color: #ffffff99;
     background-color: #ffffff14;
     box-shadow: 0 0 0 0.1875rem #dfccdd1a;
   }
@@ -43,7 +43,7 @@
   font-size: 1rem;
   font-weight: 400;
   padding-block: 1rem;
-  padding-inline: 3.125rem 3rem;
+  padding-inline: 1.5rem 3rem;
   background-color: transparent;
   border: none;
   outline: none;
@@ -55,7 +55,7 @@
 
 .clearButton {
   position: absolute;
-  right: 0.75rem;
+  right: 3.75rem;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -74,6 +74,30 @@
 
   &:active {
     transform: scale(0.95);
+  }
+}
+
+.searchButton {
+  position: absolute;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  cursor: pointer;
+  padding: 0.5rem;
+  background-color: transparent;
+  border: none;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #ffffff3a;
+    transform: -1px;
+  }
+
+  &:active {
+    transform: translateY(0) scale(0.95);
   }
 }
 

@@ -10,19 +10,13 @@ import styles from './CaseSearch.module.scss'
 interface CaseSearchProps {
   cases: CaseMeta[]
   activeFilters: string[]
-  debouncedSearchQuery?: string
   onSearchChange?: (filteredCases: CaseMeta[]) => void
 }
 
-export default function CaseSearch({
-  cases,
-  activeFilters,
-  debouncedSearchQuery: externalDebouncedQuery,
-  onSearchChange,
-}: CaseSearchProps) {
+export default function CaseSearch({ cases, activeFilters, onSearchChange }: CaseSearchProps) {
   const {
     searchQuery,
-    debouncedSearchQuery,
+    finalQuery,
     showAutocomplete,
     selectedSuggestionIndex,
     searchSuggestions,
@@ -33,6 +27,7 @@ export default function CaseSearch({
     handleSearchClear,
     handleSuggestionClick,
     handleKeyDown,
+    handleSearchSubmit,
     setShowAutocomplete,
   } = useCaseSearch({ cases, activeFilters })
 
@@ -42,17 +37,14 @@ export default function CaseSearch({
     }
   }, [searchFilteredCases, onSearchChange])
 
-  const currentDebouncedQuery = externalDebouncedQuery ?? debouncedSearchQuery
-
   return (
     <div className={styles.searchSection}>
       <div className={styles.searchInputWrapper}>
         <div className={styles.searchInputContainer}>
-          <IconSearch className={styles.searchIcon} size={20} />
           <input
             ref={searchInputRef}
             type="text"
-            placeholder="사건 제목, 기술스택으로 검색"
+            placeholder="사건 제목으로 검색"
             value={searchQuery}
             onChange={handleSearchChange}
             onKeyDown={handleKeyDown}
@@ -69,6 +61,14 @@ export default function CaseSearch({
               <IconX size={16} />
             </button>
           )}
+          <button
+            type="button"
+            onClick={handleSearchSubmit}
+            className={styles.searchButton}
+            aria-label="검색하기"
+          >
+            <IconSearch size={16} />
+          </button>
         </div>
 
         <AnimatePresence>
@@ -100,13 +100,11 @@ export default function CaseSearch({
         </AnimatePresence>
       </div>
 
-      {(currentDebouncedQuery || activeFilters.length > 0) && (
+      {(finalQuery || activeFilters.length > 0) && (
         <div className={styles.resultsCount}>
           <p>
             {searchFilteredCases.length}개의 사건이 발견되었습니다
-            {currentDebouncedQuery && (
-              <span className={styles.searchTerm}>&quot;{currentDebouncedQuery}&quot;</span>
-            )}
+            {finalQuery && <span className={styles.searchTerm}>&quot;{finalQuery}&quot;</span>}
           </p>
         </div>
       )}

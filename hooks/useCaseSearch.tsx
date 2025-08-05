@@ -9,7 +9,8 @@ interface UseCaseSearchProps {
 
 export function useCaseSearch({ cases, activeFilters }: UseCaseSearchProps) {
   const [searchQuery, setSearchQuery] = useState('')
-  const [debouncedSearchQuery, setDebouncedSearchQuery] = useState('')
+  const [finalQuery, setFinalQuery] = useState('') // 실제 검색에 사용되는 쿼리
+  const [autoCompleteQuery, setAutoCompleteQuery] = useState('') // 자동완성 추천용 쿼리
   const [showAutocomplete, setShowAutocomplete] = useState(false)
   const [selectedSuggestionIndex, setSelectedSuggestionIndex] = useState(-1)
 
@@ -19,7 +20,7 @@ export function useCaseSearch({ cases, activeFilters }: UseCaseSearchProps) {
   const debouncedSetSearchQuery = useMemo(
     () =>
       debounce({ delay: 300 }, (query: string) => {
-        setDebouncedSearchQuery(query)
+        setAutoCompleteQuery(query)
       }),
     [],
   )
@@ -28,35 +29,7 @@ export function useCaseSearch({ cases, activeFilters }: UseCaseSearchProps) {
     debouncedSetSearchQuery(searchQuery)
   }, [searchQuery, debouncedSetSearchQuery])
 
-  const searchSuggestions = useMemo(() => {
-    if (!debouncedSearchQuery.trim()) return []
-
-    const query = debouncedSearchQuery.toLowerCase()
-    const suggestions = new Set<string>()
-
-    cases.forEach((caseItem) => {
-      if (caseItem.title.toLowerCase().includes(query)) {
-        suggestions.add(caseItem.title)
-      }
-
-      if (caseItem.subtitle.toLowerCase().includes(query)) {
-        suggestions.add(caseItem.subtitle)
-      }
-
-      caseItem.tech.forEach((tech) => {
-        if (tech.toLowerCase().includes(query)) {
-          suggestions.add(tech)
-        }
-      })
-
-      if (caseItem.slug.toLowerCase().includes(query)) {
-        suggestions.add(caseItem.slug)
-      }
-    })
-
-    return Array.from(suggestions).slice(0, 8) // limit: 8
-  }, [cases, debouncedSearchQuery])
-
+  // 스택 필터 + 최종 검색어 기반 필터링
   const searchFilteredCases = useMemo(() => {
     let filtered = cases
 
@@ -66,19 +39,50 @@ export function useCaseSearch({ cases, activeFilters }: UseCaseSearchProps) {
       )
     }
 
-    if (debouncedSearchQuery.trim()) {
-      const query = debouncedSearchQuery.toLowerCase()
+    if (finalQuery.trim()) {
+      const query = finalQuery.toLowerCase()
       filtered = filtered.filter(
         (caseItem) =>
           caseItem.title.toLowerCase().includes(query) ||
-          caseItem.subtitle.toLowerCase().includes(query) ||
-          caseItem.slug.toLowerCase().includes(query) ||
-          caseItem.tech.some((tech) => tech.toLowerCase().includes(query)),
+          caseItem.subtitle.toLowerCase().includes(query),
       )
     }
 
     return filtered
-  }, [cases, activeFilters, debouncedSearchQuery])
+  }, [cases, activeFilters, finalQuery])
+
+  const generateSuggestions = useCallback(
+    (query: string) => {
+      if (!query.trim()) return []
+
+      const searchTerm = query.toLowerCase()
+      const suggestions = new Set<string>()
+
+      // 실제 매칭되는 케이스들 먼저 찾기 (제목, 부제목)
+      const matchingCases = cases.filter(
+        (caseItem) =>
+          caseItem.title.toLowerCase().includes(searchTerm) ||
+          caseItem.subtitle.toLowerCase().includes(searchTerm),
+      )
+
+      // 매칭되는 케이스들에서 실제로 매칭되는 텍스트만 추출
+      matchingCases.forEach((caseItem) => {
+        if (caseItem.title.toLowerCase().includes(searchTerm)) {
+          suggestions.add(caseItem.title)
+        }
+        if (caseItem.subtitle.toLowerCase().includes(searchTerm)) {
+          suggestions.add(caseItem.subtitle)
+        }
+      })
+
+      return Array.from(suggestions).slice(0, 8)
+    },
+    [cases],
+  )
+
+  const searchSuggestions = useMemo(() => {
+    return generateSuggestions(autoCompleteQuery)
+  }, [generateSuggestions, autoCompleteQuery])
 
   const handleSearchChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value
@@ -89,7 +93,8 @@ export function useCaseSearch({ cases, activeFilters }: UseCaseSearchProps) {
 
   const handleSearchClear = useCallback(() => {
     setSearchQuery('')
-    setDebouncedSearchQuery('')
+    setFinalQuery('')
+    setAutoCompleteQuery('')
     setShowAutocomplete(false)
     setSelectedSuggestionIndex(-1)
     searchInputRef.current?.focus()
@@ -97,14 +102,27 @@ export function useCaseSearch({ cases, activeFilters }: UseCaseSearchProps) {
 
   const handleSuggestionClick = useCallback((suggestion: string) => {
     setSearchQuery(suggestion)
+    setFinalQuery(suggestion)
     setShowAutocomplete(false)
     setSelectedSuggestionIndex(-1)
     searchInputRef.current?.blur()
   }, [])
 
+  const handleSearchSubmit = useCallback(() => {
+    setFinalQuery(searchQuery.trim())
+    setShowAutocomplete(false)
+    setSelectedSuggestionIndex(-1)
+  }, [searchQuery])
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
-      if (!showAutocomplete || searchSuggestions.length === 0) return
+      if (!showAutocomplete || searchSuggestions.length === 0) {
+        if (e.key === 'Enter') {
+          e.preventDefault()
+          handleSearchSubmit()
+        }
+        return
+      }
 
       switch (e.key) {
         case 'ArrowDown':
@@ -119,6 +137,8 @@ export function useCaseSearch({ cases, activeFilters }: UseCaseSearchProps) {
           e.preventDefault()
           if (selectedSuggestionIndex >= 0) {
             handleSuggestionClick(searchSuggestions[selectedSuggestionIndex])
+          } else {
+            handleSearchSubmit()
           }
           break
         case 'Escape':
@@ -127,12 +147,19 @@ export function useCaseSearch({ cases, activeFilters }: UseCaseSearchProps) {
           break
       }
     },
-    [showAutocomplete, searchSuggestions, selectedSuggestionIndex, handleSuggestionClick],
+    [
+      showAutocomplete,
+      searchSuggestions,
+      selectedSuggestionIndex,
+      handleSuggestionClick,
+      handleSearchSubmit,
+    ],
   )
 
   const resetSearch = useCallback(() => {
     setSearchQuery('')
-    setDebouncedSearchQuery('')
+    setFinalQuery('')
+    setAutoCompleteQuery('')
     setShowAutocomplete(false)
     setSelectedSuggestionIndex(-1)
   }, [])
@@ -155,7 +182,8 @@ export function useCaseSearch({ cases, activeFilters }: UseCaseSearchProps) {
 
   return {
     searchQuery,
-    debouncedSearchQuery,
+    finalQuery,
+    autoCompleteQuery,
     showAutocomplete,
     selectedSuggestionIndex,
     searchSuggestions,
@@ -168,6 +196,7 @@ export function useCaseSearch({ cases, activeFilters }: UseCaseSearchProps) {
     handleSearchClear,
     handleSuggestionClick,
     handleKeyDown,
+    handleSearchSubmit,
     resetSearch,
     setShowAutocomplete,
   }
