@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
+import { useEffect, useState, useRef, useCallback } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
@@ -14,15 +14,16 @@ import { useTypingAnimation } from '@/hooks/useTypingAnimation'
 import { FadeInView } from '@/components/common/FadeInView'
 import PageTitle from '@/components/common/PageTitle'
 import CaseDetailModal from './CaseDetailModal'
+import CaseSearch from './CaseSearch'
 import styles from './CaseMain.module.scss'
 
 export default function CaseMain() {
   const [selected, setSelected] = useState<CaseMeta | null>(null)
   const [animationKey, setAnimationKey] = useState(0)
+  const [filteredCases, setFilteredCases] = useState<CaseMeta[]>([])
   const { setAnimationDone } = useAnimationContext()
 
-  const { cases, filteredCases, activeFilters, isLoading, error, fetchCases, setActiveFilters } =
-    useCaseStore()
+  const { cases, activeFilters, isLoading, error, fetchCases, setActiveFilters } = useCaseStore()
 
   // 애니메이션을 한번만 실행시키기 위한 ref
   const animatedCardsRef = useRef<Set<string>>(new Set())
@@ -41,6 +42,14 @@ export default function CaseMain() {
     setActiveFilters(newFilters)
     setAnimationKey((prev) => prev + 1)
   }
+
+  const handleSearchChange = useCallback((searchResults: CaseMeta[]) => {
+    setFilteredCases(searchResults)
+  }, [])
+
+  const handleResetAll = useCallback(() => {
+    setActiveFilters([])
+  }, [setActiveFilters])
 
   useEffect(() => {
     fetchCases()
@@ -162,6 +171,14 @@ export default function CaseMain() {
           따라가보세요.
         </FadeInView>
 
+        <FadeInView className={styles.searchWrapper} delay={0.35} duration={0.5} y={10}>
+          <CaseSearch
+            cases={cases}
+            activeFilters={activeFilters}
+            onSearchChange={handleSearchChange}
+          />
+        </FadeInView>
+
         <FadeInView className={styles.filterSection} delay={0.4} duration={0.5} y={10}>
           <div className={styles.filterButtons}>
             {FILTER_KEYWORDS.map((filter) => {
@@ -188,6 +205,12 @@ export default function CaseMain() {
           </div>
         </FadeInView>
 
+        {(filteredCases.length !== cases.length || activeFilters.length > 0) && (
+          <FadeInView className={styles.resultsCount} delay={0.45} duration={0.5}>
+            <p>{filteredCases.length}개의 사건이 발견되었습니다</p>
+          </FadeInView>
+        )}
+
         <AnimatePresence mode="wait">
           <motion.div
             key={animationKey}
@@ -205,7 +228,16 @@ export default function CaseMain() {
 
         {filteredCases.length === 0 && !isLoading && (
           <FadeInView className={styles.noResults} duration={0.5}>
-            <p>해당 필터에 맞는 사건이 없습니다.</p>
+            <p>
+              {activeFilters.length > 0
+                ? '검색 조건에 맞는 사건이 없습니다.'
+                : '해당 필터에 맞는 사건이 없습니다.'}
+            </p>
+            {activeFilters.length > 0 && (
+              <button onClick={handleResetAll} className={styles.resetButton}>
+                검색 초기화
+              </button>
+            )}
           </FadeInView>
         )}
 

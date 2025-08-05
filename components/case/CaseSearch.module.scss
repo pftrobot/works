@@ -1,0 +1,148 @@
+.searchSection {
+  margin-block-end: 2rem;
+}
+
+.searchInputWrapper {
+  position: relative;
+  max-width: 37.5rem;
+  margin-inline: auto;
+}
+
+.searchInputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: #ffffff0d;
+  border: 1px solid #ffffff1a;
+  border-radius: 0.75rem;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+
+  &:focus-within {
+    border-color: var(--color-primary);
+    background-color: #ffffff14;
+    box-shadow: 0 0 0 0.1875rem #dfccdd1a;
+  }
+
+  &:hover {
+    border-color: #ffffff33;
+  }
+}
+
+.searchIcon {
+  position: absolute;
+  left: 1rem;
+  color: #ffffff99;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.searchInput {
+  width: 100%;
+  color: white;
+  font-size: 1rem;
+  font-weight: 400;
+  padding-block: 1rem;
+  padding-inline: 3.125rem 3rem;
+  background-color: transparent;
+  border: none;
+  outline: none;
+
+  &::placeholder {
+    color: #ffffff80;
+  }
+}
+
+.clearButton {
+  position: absolute;
+  right: 0.75rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffffb3;
+  cursor: pointer;
+  padding: 0.5rem;
+  background-color: #ffffff1a;
+  border: none;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background-color: #ffffff33;
+    color: white;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
+}
+
+.autocompleteDropdown {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  left: 0;
+  right: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  max-height: 18.75rem;
+  background-color: #0f0f0ff2;
+  backdrop-filter: blur(20px);
+  border: 1px solid #ffffff1a;
+  border-radius: 0.75rem;
+  box-shadow: 0 0.625rem 2.5rem #0000004d;
+  z-index: 100;
+}
+
+.suggestionItem {
+  display: flex;
+  align-items: center;
+  gap: 0.625rem;
+  width: 100%;
+  color: #ffffffcc;
+  font-size: 0.875rem;
+  text-align: left;
+  cursor: pointer;
+  padding-block: 0.75rem;
+  padding-inline: 1rem;
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #ffffff0d;
+  transition: all 0.2s ease;
+
+  &:nth-last-of-type(1) {
+    border-bottom: none;
+  }
+
+  &:hover,
+  &.selected {
+    background-color: #dfccdd1a;
+    color: #fff;
+  }
+
+  &:active {
+    background-color: #dfccdd3a;
+  }
+}
+
+.suggestionIcon {
+  color: #ffffff66;
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.resultsCount {
+  text-align: center;
+  margin-block-start: 1.5rem;
+
+  p {
+    color: #ffffffb3;
+    font-size: 0.875rem;
+    margin: 0;
+  }
+
+  .searchTerm {
+    color: #f5c064;
+    font-weight: 600;
+    margin-inline-start: 0.25rem;
+  }
+}
