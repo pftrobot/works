@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { supabase, CaseMeta } from '@/lib/supabase'
+import { supabase, CaseMeta } from 'lib/supabase'
 
 interface CaseState {
   cases: CaseMeta[]

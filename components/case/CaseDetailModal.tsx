@@ -5,13 +5,13 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import classNames from 'classnames'
 
-import { addMedal } from '@/utils/medalUtils'
-import { MedalType } from '@/types/medal'
-import { CaseMeta } from '@/lib/supabase'
+import { addMedal } from 'utils/medalUtils'
+import { MedalType } from 'types/medal'
+import { CaseMeta } from 'lib/supabase'
 
-import Modal from '@/components/common/Modal'
-import ConfirmModal from '@/components/common/ConfirmModal'
-import TechTagList from '@/components/common/TechTagList'
+import Modal from 'components/common/Modal'
+import ConfirmModal from 'components/common/ConfirmModal'
+import TechTagList from 'components/common/TechTagList'
 import styles from './CaseDetailModal.module.scss'
 
 interface Props {

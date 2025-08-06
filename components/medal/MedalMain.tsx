@@ -6,12 +6,12 @@ import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
 import classNames from 'classnames'
 
-import { useAnimationContext } from '@/contexts/AnimationContext'
-import { getMedalCount, getMedalSources } from '@/utils/medalUtils'
+import { useAnimationContext } from 'contexts/AnimationContext'
+import { getMedalCount, getMedalSources } from 'utils/medalUtils'
 
-import PageTitle from '@/components/common/PageTitle'
-import { TypingText } from '@/components/common/TypingText'
-import { StaggerList } from '@/components/common/StaggerList'
+import PageTitle from 'components/common/PageTitle'
+import { TypingText } from 'components/common/TypingText'
+import { StaggerList } from 'components/common/StaggerList'
 import styles from './MedalMain.module.scss'
 
 const GUIDE_ITEMS = [

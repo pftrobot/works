@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { TypingText } from '@/components/common/TypingText'
+import { TypingText } from 'components/common/TypingText'
 import styles from './Profile.module.scss'
 
 export default function ProfileCard() {

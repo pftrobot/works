@@ -2,7 +2,7 @@
 
 import { ReactNode } from 'react'
 import { motion } from 'framer-motion'
-import { useTypingAnimation } from '@/hooks/useTypingAnimation'
+import { useTypingAnimation } from 'hooks/useTypingAnimation'
 
 interface TypingTextProps {
   text: string

@@ -1,7 +1,7 @@
 'use client'
 
 import { ReactNode } from 'react'
-import { ScrollFadeInSection } from '@/hooks/useScrollFadeIn'
+import { ScrollFadeInSection } from 'hooks/useScrollFadeIn'
 
 interface Props {
   title: string

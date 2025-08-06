@@ -3,14 +3,14 @@
 import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
-import { useAnimationContext } from '@/contexts/AnimationContext'
-import { addMedal } from '@/utils/medalUtils'
-import { MedalType } from '@/types/medal'
-import { FadeInView } from '@/components/common/FadeInView'
+import { useAnimationContext } from 'contexts/AnimationContext'
+import { addMedal } from 'utils/medalUtils'
+import { MedalType } from 'types/medal'
+import { FadeInView } from 'components/common/FadeInView'
 
-import BasicButton from '@/components/common/BasicButton'
-import FingerprintScan from '@/components/home/FingerprintScan'
-import GuideNotice from '@/components/home/GuideNotice'
+import BasicButton from 'components/common/BasicButton'
+import FingerprintScan from 'components/home/FingerprintScan'
+import GuideNotice from 'components/home/GuideNotice'
 import styles from './HomeMain.module.scss'
 
 export default function HomeMain() {

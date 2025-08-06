@@ -2,12 +2,12 @@ import type { ReactNode } from 'react'
 import { JetBrains_Mono, Orbitron } from 'next/font/google'
 import localFont from 'next/font/local'
 
-import { AnimationProvider } from '@/contexts/AnimationContext'
-import { ModalProvider } from '@/contexts/ModalContext'
-import LayoutContent from '@/components/common/LayoutContent'
+import { AnimationProvider } from 'contexts/AnimationContext'
+import { ModalProvider } from 'contexts/ModalContext'
+import LayoutContent from 'components/common/LayoutContent'
 
 import './globals.scss'
-import styles from '@/components/common/LayoutContent.module.scss'
+import styles from 'components/common/LayoutContent.module.scss'
 
 const monoFont = JetBrains_Mono({ subsets: ['latin'], variable: '--font-mono' })
 

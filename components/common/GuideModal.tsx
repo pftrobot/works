@@ -3,11 +3,11 @@
 import { useEffect } from 'react'
 import Link from 'next/link'
 
-import { useAnimationContext } from '@/contexts/AnimationContext'
-import Modal from '@/components/common/Modal'
-import { TypingText } from '@/components/common/TypingText'
-import { StaggerList } from '@/components/common/StaggerList'
-import { FadeInView } from '@/components/common/FadeInView'
+import { useAnimationContext } from 'contexts/AnimationContext'
+import Modal from 'components/common/Modal'
+import { TypingText } from 'components/common/TypingText'
+import { StaggerList } from 'components/common/StaggerList'
+import { FadeInView } from 'components/common/FadeInView'
 import styles from './GuideModal.module.scss'
 
 interface GuideModalProps {

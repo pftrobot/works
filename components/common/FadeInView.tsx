@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useFadeInAnimation } from '@/hooks/useFadeInAnimation'
+import { useFadeInAnimation } from 'hooks/useFadeInAnimation'
 
 interface FadeInViewProps {
   children: React.ReactNode

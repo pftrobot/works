@@ -1,7 +1,7 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import { useStaggerAnimation } from '@/hooks/useStaggerAnimation'
+import { useStaggerAnimation } from 'hooks/useStaggerAnimation'
 import styles from './TechTagList.module.scss'
 
 interface Props {

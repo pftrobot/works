@@ -2,8 +2,8 @@ import React from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { IconSearch, IconX } from '@tabler/icons-react'
 
-import { useCaseSearch } from '@/hooks/useCaseSearch'
-import { CaseMeta } from '@/lib/supabase'
+import { useCaseSearch } from 'hooks/useCaseSearch'
+import { CaseMeta } from 'lib/supabase'
 
 import styles from './CaseSearch.module.scss'
 

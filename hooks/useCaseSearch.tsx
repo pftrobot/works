@@ -1,6 +1,6 @@
 import { useState, useRef, useMemo, useCallback, useEffect } from 'react'
 import { debounce } from 'radash'
-import { CaseMeta } from '@/lib/supabase'
+import { CaseMeta } from 'lib/supabase'
 
 interface UseCaseSearchProps {
   cases: CaseMeta[]

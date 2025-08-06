@@ -5,14 +5,14 @@ import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
 import classNames from 'classnames'
 
-import { useAnimationContext } from '@/contexts/AnimationContext'
-import { addMedal } from '@/utils/medalUtils'
-import { MedalType } from '@/types/medal'
+import { useAnimationContext } from 'contexts/AnimationContext'
+import { addMedal } from 'utils/medalUtils'
+import { MedalType } from 'types/medal'
 
-import BasicButton from '@/components/common/BasicButton'
-import { TypingText } from '@/components/common/TypingText'
-import { FadeInView } from '@/components/common/FadeInView'
-import { StaggerList } from '@/components/common/StaggerList'
+import BasicButton from 'components/common/BasicButton'
+import { TypingText } from 'components/common/TypingText'
+import { FadeInView } from 'components/common/FadeInView'
+import { StaggerList } from 'components/common/StaggerList'
 import styles from './ContactMain.module.scss'
 
 const TEXT_ITEMS = [

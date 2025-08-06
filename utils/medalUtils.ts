@@ -1,4 +1,4 @@
-import { MedalType } from '@/types/medal'
+import { MedalType } from 'types/medal'
 
 const MEDAL_KEY = 'medal_count'
 const CASE_TRACK_KEY = 'medal_case_ids'

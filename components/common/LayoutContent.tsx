@@ -3,11 +3,11 @@
 import { ReactNode } from 'react'
 import { motion } from 'framer-motion'
 
-import { useAnimationContext } from '@/contexts/AnimationContext'
+import { useAnimationContext } from 'contexts/AnimationContext'
 
-import Header from '@/components/common/Header'
-import Footer from '@/components/common/Footer'
-import styles from '@/components/common/LayoutContent.module.scss'
+import Header from 'components/common/Header'
+import Footer from 'components/common/Footer'
+import styles from 'components/common/LayoutContent.module.scss'
 
 export default function LayoutContent({ children }: { children: ReactNode }) {
   const { animationDone } = useAnimationContext()
