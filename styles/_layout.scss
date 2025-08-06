@@ -1,0 +1,84 @@
+@use "sass:map";
+
+$media-breakpoints: (
+  'mobile': 480px,
+  'tablet': 768px,
+  'desktop': 1024px,
+  'wide': 1280px,
+);
+
+$container-breakpoints: (
+  'xs': 320px,
+  's': 480px,
+  'sm': 500px,
+  'md': 600px,
+  'lg': 768px,
+  'xl': 800px,
+  'xxl': 900px,
+  'xxxl': 1000px,
+);
+
+/* CONTAINER SIZE */
+$container-desktop: calc(100% - 10rem);
+$container-tablet: calc(100% - 4rem);
+$container-mobile-lg: calc(100% - 2.4rem);
+$container-mobile: calc(100% - 2rem);
+
+/* RADIUS */
+$radius-sm: 0.25rem;
+$radius-base: 0.5rem;
+$radius-md: 0.625rem;
+$radius-lg: 0.75rem;
+$radius-xl: 1.25rem;
+$radius-full: 50%;
+
+/* Z-INDEX */
+$z-below: -1;
+$z-base: 1;
+$z-dropdown: 100;
+$z-modal: 999;
+$z-notification: 9999;
+
+/* TRANSITION */
+$transition-fast: 0.2s ease;
+$transition-base: 0.3s ease;
+$transition-slow: 0.6s ease;
+$transition-bounce: cubic-bezier(0.22, 1, 0.36, 1);
+
+@function mediaBreakpoint($size) {
+  @return map.get($media-breakpoints, $size);
+}
+
+@function containerBreakpoint($size) {
+  @return map.get($container-breakpoints, $size);
+}
+
+@function radius($size) {
+  @return map.get((
+    'sm': $radius-sm,
+    'base': $radius-base,
+    'md': $radius-md,
+    'lg': $radius-lg,
+    'xl': $radius-xl,
+    'full': $radius-full
+  ), $size);
+}
+
+@function container($size) {
+  @return map.get((
+    'desktop': $container-desktop,
+    'tablet': $container-tablet,
+    'mobile-lg': $container-mobile-lg,
+    'mobile': $container-mobile
+  ), $size);
+}
+
+@function z-index($layer) {
+  @return map.get((
+    'below': $z-below,
+    'base': $z-base,
+    'dropdown': $z-dropdown,
+    'modal': $z-modal,
+    'notification': $z-notification
+  ), $layer);
+}

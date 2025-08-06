@@ -1,3 +1,127 @@
+@use './colors' as *;
+@use './typography' as *;
+@use './spacing' as *;
+@use './layout' as *;
+
+/*
+* MEDIA QUERY
+*/
+@mixin respondTo($breakpoint) {
+  @media (min-width: mediaBreakpoint($breakpoint)) {
+    @content;
+  }
+}
+
+@mixin respondFrom($breakpoint) {
+  @media (max-width: mediaBreakpoint($breakpoint) - 1px) {
+    @content;
+  }
+}
+
+/*
+* CONTAINER QUERY
+*/
+@mixin containerQuery($size, $container-name: null) {
+  @if $container-name {
+    @container #{$container-name} (max-width: #{containerBreakpoint($size)}) {
+      @content;
+    }
+  } @else {
+    @container (max-width: #{containerBreakpoint($size)}) {
+      @content;
+    }
+  }
+}
+
+/*
+* CONTAINER
+*/
+@mixin container($size: 'desktop') {
+  inline-size: container($size);
+  margin-inline: auto;
+
+  @if $size == 'desktop' {
+    @include respondFrom('wide') {
+      inline-size: container('mobile');
+    }
+  }
+}
+
+/*
+* TEXT
+*/
+@mixin textStyle($size, $weight: 'normal', $leading: 'normal', $tracking: normal) {
+  font-size: textSize($size);
+  font-weight: fontWeight($weight);
+  line-height: lineHeight($leading);
+  letter-spacing: letterSpacing($tracking);
+}
+
+/*
+* LAYOUT
+*/
+@mixin flex($direction: row, $align: stretch, $justify: flex-start, $gap: 0, $wrap: nowrap) {
+  display: flex;
+  flex-direction: $direction;
+  align-items: $align;
+  justify-content: $justify;
+  flex-wrap: $wrap;
+  @if $gap > 0 {
+    gap: space($gap);
+  }
+}
+
+@mixin grid($columns, $gap: 6) {
+  display: grid;
+  grid-template-columns: repeat($columns, 1fr);
+  gap: space($gap);
+}
+
+@mixin grid-auto-fit($min-size: 20rem, $gap: 6) {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax($min-size, 1fr));
+  gap: space($gap);
+}
+
+/*
+* COMPONENT
+*/
+@mixin card($padding: 6, $bg: '#161616') {
+  background-color: #161616;
+  border: 1px solid #2c2c2c;
+  border-radius: radius('lg');
+  padding: space(6);
+}
+
+@mixin input-base {
+  width: 100%;
+  color: color('text', 'text');
+  @include textStyle('base', 'light');
+  padding: space(4) space(2);
+  outline: none;
+  background: transparent;
+  border: none;
+  border-bottom: 1px solid #2c2c2c;
+  transition: all $transition-base;
+
+  &::placeholder {
+    font-weight: fontWeight('light');
+    color: color('text', 'muted');
+  }
+
+  &:focus {
+    border-color: color('key', 'accent');
+  }
+
+  &.error {
+    color: white;
+    border-color: color('semantic', 'error');
+  }
+}
+
+/*
+* ANIMATION
+*/
 // hover: color + underline
 @mixin linkUnderline($color: #e1e1e1, $hoverColor: #e1e1e1) {
   position: relative;
@@ -28,5 +152,23 @@
         background-color: $hoverColor;
       }
     }
+  }
+}
+
+@mixin fadeSlideUp($duration: 0.6s, $delay: 0s) {
+  opacity: 0;
+  transform: translateY(space(6));
+  animation: fadeSlideUp $duration ease forwards;
+  animation-delay: $delay;
+}
+
+@keyframes fadeSlideUp {
+  0% {
+    opacity: 0;
+    transform: translateY(space(6));
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
   }
 }

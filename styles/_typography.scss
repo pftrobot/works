@@ -1,0 +1,100 @@
+@use "sass:map";
+
+/* FONT FAMILY */
+$font-family-sans: var(--font-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-family-display: var(--font-title), sans-serif;
+$font-family-mono: var(--font-mono), monospace;
+
+/* FONT SIZE */
+$text-2xs: 0.6875rem;
+$text-xs: 0.75rem;
+$text-sm: 0.8125rem;
+$text-base-sm: 0.875rem;
+$text-base: 1rem;
+$text-lg: 1.125rem;
+$text-xl: 1.25rem;
+$text-2xl: 1.5rem;
+$text-3xl: 1.75rem;
+$text-4xl: 2.25rem;
+$text-5xl: 2.8rem;
+$text-6xl: 3rem;
+
+/* FONT WEIGHT */
+$font-light: 300;
+$font-normal: 400;
+$font-medium: 500;
+$font-semibold: 600;
+$font-bold: 700;
+
+/* LINE HEIGHT */
+$leading-none: 1;
+$leading-tight: 1.2;
+$leading-normal: 1.5;
+$leading-relaxed: 1.6;
+$leading-loose: 1.7;
+$leading-extra-loose: 1.75;
+
+/* LETTER SPACING */
+$tracking-tighter: -0.36px;
+$tracking-tight: -0.32px;
+$tracking-normal: 0;
+$tracking-wide: 0.05em;
+$tracking-wider: 0.075rem;
+$tracking-widest: 0.15rem;
+
+// Typography MAP
+$typography: (
+  'sizes': (
+    '2xs': $text-2xs,
+    'xs': $text-xs,
+    'sm': $text-sm,
+    'baseSm': $text-base-sm,
+    'base': $text-base,
+    'lg': $text-lg,
+    'xl': $text-xl,
+    '2xl': $text-2xl,
+    '3xl': $text-3xl,
+    '4xl': $text-4xl,
+    '5xl': $text-5xl,
+    '6xl': $text-6xl
+  ),
+  'weights': (
+    'light': $font-light,
+    'normal': $font-normal,
+    'medium': $font-medium,
+    'semibold': $font-semibold,
+    'bold': $font-bold
+  ),
+  'leading': (
+    'none': $leading-none,
+    'tight': $leading-tight,
+    'normal': $leading-normal,
+    'relaxed': $leading-relaxed,
+    'loose': $leading-loose,
+    'extra-loose': $leading-extra-loose
+  ),
+  'spacing': (
+    'tighter': $tracking-tighter,
+    'tight': $tracking-tight,
+    'normal': $tracking-normal,
+    'wide': $tracking-wide,
+    'wider': $tracking-wider,
+    'widest': $tracking-widest,
+  )
+);
+
+@function textSize($size) {
+  @return map.get(map.get($typography, 'sizes'), $size);
+}
+
+@function fontWeight($weight) {
+  @return map.get(map.get($typography, 'weights'), $weight);
+}
+
+@function lineHeight($height) {
+  @return map.get(map.get($typography, 'leading'), $height);
+}
+
+@function letterSpacing($spacing) {
+  @return map.get(map.get($typography, 'spacing'), $spacing);
+}

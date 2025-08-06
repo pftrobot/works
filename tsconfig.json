@@ -23,7 +23,9 @@
       }
     ],
     "paths": {
-      "@/*": ["./*"]
+      "@/*": ["./*"],
+      "@styles/*": ["./styles/*"],
+      "@mixins": ["./styles/mixins.scss"]
     },
     "forceConsistentCasingInFileNames": true,
     "verbatimModuleSyntax": false
