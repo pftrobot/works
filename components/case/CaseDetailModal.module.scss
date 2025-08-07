@@ -1,79 +1,70 @@
-@use "../../styles/mixins" as *;
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
 
 .modalWrap {
   container: case-detail-container / inline-size;
-
-  display: flex;
-  gap: 2.75rem;
+  @include flex(row, stretch, flex-start, 15);
 
   .leftColumn {
-    display: flex;
-    flex-direction: column;
+    @include flex(column, stretch, flex-start, 0);
     inline-size: 21rem;
 
     .title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #fff;
-      margin-block-end: 0.5rem;
-      opacity: 0;
-      animation: fadeSlideUp 0.6s ease forwards;
-      animation-delay: 0.1s;
+      font-size: $text-2xl;
+      font-weight: $font-bold;
+      color: color('text', 'white');
+      margin-block-end: space(3);
+      @include fadeSlideUp(0.6s, 0.1s);
     }
 
     .subtitle {
-      font-size: 1.125rem;
-      color: #e53838;
-      margin-block-end: 2.75rem;
-      opacity: 0;
-      animation: fadeSlideUp 0.6s ease forwards;
-      animation-delay: 0.2s;
+      font-size: $text-lg;
+      color: color('semantic', 'error');
+      margin-block-end: space(15);
+      @include fadeSlideUp(0.6s, 0.2s);
     }
 
     .summary {
-      font-size: 1rem;
+      font-size: $text-base;
       color: #ababab;
-      line-height: 1.75;
-      letter-spacing: -0.32px;
-      opacity: 0;
-      animation: fadeSlideUp 0.6s ease forwards;
-      animation-delay: 0.3s;
+      line-height: $leading-extra-loose;
+      letter-spacing: $tracking-tight;
+      @include fadeSlideUp(0.6s, 0.3s);
     }
   }
 
   .rightColumn {
     flex: 1;
-    display: flex;
-    flex-direction: column;
-    padding-block-start: 0.375rem;
+    @include flex(column, stretch, flex-start, 0);
+    padding-block-start: space(2);
 
     .question {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #fffdd8;
-      margin-block-end: 2rem;
-      opacity: 0;
-      animation: fadeSlideUp 0.6s ease forwards;
-      animation-delay: 0.4s;
+      font-size: $text-base;
+      font-weight: $font-semibold;
+      color: color('text', 'accent');
+      margin-block-end: space(12);
+      @include fadeSlideUp(0.6s, 0.4s);
     }
 
     .options {
-      display: flex;
-      flex-direction: column;
-      gap: 0.75rem;
+      @include flex(column, stretch, flex-start, 5);
 
       button {
         display: block;
-        color: #fff;
+        font-size: $text-base-sm;
+        color: color('text', 'white');
         text-align: start;
-        padding-block: 0.625rem;
-        padding-inline: 1.25rem;
+        padding-block: space(4);
+        padding-inline: space(8);
         opacity: 0;
         background-color: #1e1e1e;
         border: 1px solid #1e1e1e;
-        border-radius: 0.5rem;
+        border-radius: radius('base');
         cursor: pointer;
-        transition: border-color 0.2s;
+        transition: border-color $transition-fast;
         animation: fadeSlideUp 0.6s ease forwards;
 
         &:hover {
@@ -95,40 +86,38 @@
       }
 
       .answerCorrect {
-        display: flex;
-        flex-direction: column;
-        align-items: flex-start;
+        @include flex(column, flex-start, flex-start, 0);
         color: #005eff;
-        margin-block-end: 2.75rem;
+        margin-block-end: space(12);
 
         .goMedal {
           display: inline-block;
-          margin-block-start: 0.5rem;
-          transition: color 0.2s;
+          margin-block-start: space(3);
+          transition: color $transition-fast;
 
           @include linkUnderline(#fce897a6, #fce897);
         }
       }
 
-
       .answerWrong {
-        color: #e53838;
-        margin-block-end: 3.75rem;
+        color: color('semantic', 'error');
+        margin-block-end: space(18);
       }
 
       .description {
-        font-size: 0.875rem;
-        color: #fff;
-        line-height: 1.7;
-        letter-spacing: -0.28px;
-        margin-block-start: 1rem;
+        font-size: $text-base-sm;
+        color: color('text', 'basic');
+        line-height: $leading-loose;
+        //letter-spacing: -0.28px;
+        letter-spacing: $tracking-tight;
+        margin-block-start: space(6);
       }
 
       .link {
         display: inline-block;
-        font-size: 0.875rem;
-        color: #58a6ff;
-        margin-block-start: 1rem;
+        font-size: $text-base-sm;
+        color: color('semantic', 'info');
+        margin-block-start: space(6);
 
         &:hover {
           color: #80c4ff;
@@ -136,7 +125,7 @@
       }
 
       .backBtn {
-        font-size: 1rem;
+        font-size: $text-base;
         cursor: pointer;
         background-color: transparent;
 
@@ -156,61 +145,52 @@
   }
 }
 
-@container case-detail-container (max-width: 900px) {
-  .leftColumn {
-    .title {
-      font-size: 1.5rem;
-    }
+@include containerQuery('md') {
+  .modalWrap {
+    .leftColumn {
+      .title {
+        font-size: $text-2xl;
+      }
 
-    .subtitle {
-      font-size: 0.875rem;
-    }
+      .subtitle {
+        font-size: $text-base-sm;
+      }
 
-    .summary {
-      font-size: 0.8125rem;
-    }
-  }
-
-  .rightColumn {
-    padding-block-start: 1.6rem;
-
-    .question {
-      font-size: 0.875rem;
-    }
-
-    .options {
-      gap: 0.5rem;
-
-      button {
-        font-size: 0.875rem;
-        padding-block: 0.625rem;
-        padding-inline: 0.75rem;
+      .summary {
+        font-size: $text-sm;
       }
     }
 
-    .answerWrap {
-      .description {
-        font-size: 0.8125rem;
+    .rightColumn {
+      padding-block-start: 1.6rem;
+
+      .question {
+        font-size: $text-base-sm;
       }
 
-      .link {
-        font-size: 0.8125rem;
+      .options {
+        gap: space(3);
+
+        button {
+          font-size: $text-base-sm;
+          padding-block: space(4);
+          padding-inline: space(5);
+        }
       }
 
-      .backBtn {
-        font-size: 0.8125rem;
+      .answerWrap {
+        .description {
+          font-size: $text-sm;
+        }
+
+        .link {
+          font-size: $text-sm;
+        }
+
+        .backBtn {
+          font-size: $text-sm;
+        }
       }
     }
-  }
-}
-
-@keyframes fadeSlideUp {
-  0% {
-    opacity: 0;
-    transform: translateY(1rem);
-  }
-  100% {
-    opacity: 1;
-    transform: translateY(0);
   }
 }

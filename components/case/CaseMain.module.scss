@@ -1,91 +1,90 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
 .caseWrap {
   $keyColor: #ff4d4d;
-  $keyTextColor: #fff2bf;
 
   container: container-width / inline-size;
+  @include container('desktop');
+  padding-block-end: space(24);
 
-  inline-size: calc(100% - 10rem);
-  padding-block-end: 5rem;
-  margin-inline: auto;
-
-  @media (max-width: 800px) {
-    inline-size: calc(100% - 4rem);
+  @include respondFrom('xl') {
+    inline-size: container('tablet');
   }
 
-  @media (max-width: 500px) {
-    inline-size: calc(100% - 2.4rem);
+  @include respondFrom('sm') {
+    inline-size: container('mobile-lg');
   }
 
   .description {
-    font-size: 1.125rem;
-    color: #ffffff50;
+    font-size: $text-lg;
+    color: color('text', 'muted');
     margin-block-end: 4.5rem;
   }
 
   .filterSection {
-    margin-block-end: 2.5rem;
+    margin-block-end: space(14);
 
     .filterButtons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1.125rem;
+      @include flex(row, stretch, flex-start, 7, wrap);
 
       .filterButton {
-        color: #999;
-        font-size: 0.875rem;
-        font-weight: 600;
-        padding-block: 0.625rem;
-        padding-inline: 1.25rem;
-        border-radius: 1.25rem;
-        background-color: #323232;
+        font-size: $text-base-sm;
+        font-weight: $font-semibold;
+        color: color('text', 'dark-gray');
+        padding-block: space(4);
+        padding-inline: space(8);
+        border-radius: radius('xl');
+        background-color: color('background', 'input');
         border: 1px solid transparent;
-        transition: all 0.2s ease;
+        transition: all $transition-fast;
         cursor: pointer;
 
         @media (hover: hover) {
           &:hover {
-            color: #fff;
+            color: color('text', 'basic');
             background-color: #525252;
           }
         }
 
         &.active {
-          color: #f5c064;
-          border-color: #c5a46a;
-          background-color: #323232;
+          color: color('key', 'primary-deep');
+          border-color: color('key', 'primary-dim');
+          background-color: color('background', 'input');
         }
       }
     }
 
     .filterStatus {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-block: 0.75rem;
-      padding-inline: 1rem;
+      @include flex(row, center, space-between);
+      padding-block: space(5);
+      padding-inline: space(6);
       background-color: #f8f9fa;
-      border-radius: 0.5rem;
-      border-left: 3px solid #333;
+      border-radius: radius('base');
+      border-inline-start: 3px solid #333;
 
       .filterText {
-        font-size: 0.875rem;
-        font-weight: 500;
+        font-size: $text-base-sm;
+        font-weight: $font-medium;
         color: #333;
       }
 
       .clearFilter {
+        font-size: $text-xs;
         color: #666;
-        font-size: 0.75rem;
-        padding-block: 0.25rem;
-        padding-inline: 0.75rem;
+        padding-block: space(1);
+        padding-inline: space(5);
         background-color: transparent;
         border: 1px solid #666;
-        border-radius: 4px;
+        border-radius: radius('sm');
         cursor: pointer;
-        transition: all 0.2s ease;
+        transition: all $transition-fast;
 
         &:hover {
-          color: #fff;
+          color: white;
           background-color: #666;
         }
       }
@@ -95,28 +94,26 @@
   .noResults {
     text-align: center;
     color: #666;
-    padding-block: 3rem;
-    padding-inline: 1rem;
+    padding-block: space(16);
+    padding-inline: space(6);
 
     p {
-      font-size: 1.125rem;
+      font-size: $text-lg;
       margin: 0;
     }
   }
 
   .caseGrid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(22.5rem, 1fr));
+    @include grid-auto-fit(22.5rem, 0);
     gap: 6.125rem 4.125rem;
 
     .card {
-      display: flex;
-      flex-direction: column;
+      @include flex(column, stretch, flex-start, 0);
       padding: 0;
       border: none;
       background-color: transparent;
       cursor: pointer;
-      transition: transform 0.2s ease;
+      transition: transform $transition-fast;
 
       &:hover {
         .thumbnail {
@@ -133,9 +130,9 @@
         position: relative;
         overflow: hidden;
         aspect-ratio: 16 / 9;
-        border: 1px solid #c5a46a;
-        border-radius: 0.625rem;
-        transition: border 0.6s ease;
+        border: 1px solid color('key', 'primary-dim');
+        border-radius: radius('md');
+        transition: border $transition-slow;
 
         img {
           inline-size: 100%;
@@ -145,20 +142,18 @@
           filter: sepia(90%) grayscale(10%);
           transform: scale(1);
           transition:
-                  filter 1.2s cubic-bezier(0.22, 1, 0.36, 1),
-                  transform 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+                  filter 1.2s $transition-bounce,
+                  transform 1.2s $transition-bounce;
         }
       }
 
       .textWrap {
         position: relative;
         min-block-size: 9rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
+        @include flex(column, stretch, space-between);
         text-align: left;
-        padding-block-start: 1.125rem;
-        padding-block-end: 1.125rem;
+        padding-block-start: space(7);
+        padding-block-end: space(7);
 
         .animatedText {
           display: inline-block;
@@ -166,25 +161,24 @@
         }
 
         .slug {
-          font-size: 1.75rem;
-          font-weight: 600;
-          color: $keyTextColor;
+          font-size: $text-3xl;
+          font-weight: $font-semibold;
+          color: color('text', 'title');
           text-transform: uppercase;
           letter-spacing: -0.1rem;
         }
 
         .descArea {
-          display: flex;
-          justify-content: space-between;
+          @include flex(row, stretch, space-between);
 
           .title {
-            font-size: 1.125rem;
-            font-weight: 400;
-            color: #fff;
-            padding-inline-end: 0.5rem;
+            font-size: $text-lg;
+            font-weight: $font-normal;
+            color: color('text', 'white');
+            padding-inline-end: space(3);
 
             &.sub {
-              color: #e53838;
+              color: color('semantic', 'error');
             }
           }
 
@@ -194,9 +188,9 @@
             inset-inline-start: 0;
             inset-inline-end: 0;
             display: block;
+            content: '';
             inline-size: 100%;
             block-size: 1px;
-            content: '';
             background-color: $keyColor;
           }
         }
@@ -211,32 +205,29 @@
 
   .loading,
   .error {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    min-height: 200px;
+    @include flex(column, center, center);
+    min-block-size: 200px;
     text-align: center;
 
     p {
-      font-size: 1.1rem;
+      font-size: $text-lg;
       color: #ddd;
-      margin-bottom: 1rem;
+      margin-block-end: space(6);
     }
   }
 
   .retryButton {
-    padding: 0.75rem 1.5rem;
-    background: purple;
+    font-size: $text-base;
     color: white;
+    padding: space(5) space(9);
+    background-color: purple;
     border: none;
-    border-radius: 6px;
+    border-radius: radius('base');
     cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.2s;
+    transition: background-color $transition-fast;
 
     &:hover {
-      background: palevioletred;
+      background-color: palevioletred;
     }
   }
 }

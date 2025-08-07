@@ -15,6 +15,7 @@ $space-10: 1.75rem;       // 28px
 $space-11: 1.875rem;      // 30px
 $space-12: 2rem;          // 32px
 $space-14: 2.5rem;        // 40px
+$space-15: 2.75rem;        // 44px
 $space-16: 3rem;          // 48px
 $space-17: 3.5rem;        // 56px
 $space-18: 3.75rem;       // 60px
@@ -39,6 +40,7 @@ $spacing: (
   11: $space-11,
   12: $space-12,
   14: $space-14,
+  15: $space-15,
   16: $space-16,
   17: $space-17,
   18: $space-18,
@@ -48,6 +50,9 @@ $spacing: (
   32: $space-32
 );
 
+/*
+* HELPER
+*/
 @function space($size) {
   @return map.get($spacing, $size);
 }

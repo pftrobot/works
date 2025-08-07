@@ -1,23 +1,29 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
 .guideNotice {
   container-name: guide-notice-container / inline-size;
 
   position: fixed;
-  top: 2rem;
-  left: 50%;
+  inset-block-start: space(12);
+  inset-inline-start: 50%;
+  font-size: $text-base-sm;
+  color: color('semantic', 'warning');
+  padding: space(5) space(9);
   transform: translateX(-50%);
-  background: #1a1a1a;
-  color: #ffa94d;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  font-size: 0.875rem;
-  z-index: 999;
-  box-shadow: 0 0 0.5rem rgba(255, 169, 77, 0.2);
-  border: 1px solid #ffa94d;
+  background-color: #1a1a1a;
+  border-radius: radius('base');
+  box-shadow: 0 0 0.5rem rgba(255, 169, 77, 0.1);
+  border: 1px solid color('semantic', 'warning');
+  z-index: zIndex('notification');
 }
 
-@container guide-notice-container (max-width: 500px) {
+@include containerQuery('sm') {
   .guideNotice {
-    font-size: 0.75rem;
-    padding: 0.5rem 1rem;
+    font-size: $text-xs;
+    padding: space(3) space(6);
   }
 }

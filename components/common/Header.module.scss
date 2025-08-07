@@ -1,41 +1,42 @@
-.header {
-  padding: 2rem;
-  margin-block-end: 2rem;
-  background-color: #141414;
-  border-bottom: 1px solid #2d2d2d;
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
 
-  @media (max-width: 500px) {
+.header {
+  padding: space(12);
+  margin-block-end: space(12);
+  background-color: #141414;
+  border-block-end: 1px solid #2d2d2d;
+
+  @include respondFrom('sm') {
     padding-block: 1.8rem;
     padding-inline: 1.2rem;
   }
 
   .inner {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    inline-size: calc(100% - 10rem);
-    margin-inline: auto;
+    @include flex(row, center, space-between);
+    @include container('desktop');
 
-    @media (max-width: 800px) {
-      gap: 1.5rem;
+    @include respondFrom('xl') {
+      gap: space(9);
       inline-size: 100%;
       margin-inline: 0;
     }
   }
 
   .logo {
-    display: flex;
-    align-items: center;
-    font-size: 1rem;
-    font-weight: 600;
-    letter-spacing: 0.075rem;
-    text-decoration: none;
+    @include flex(row, center, flex-start);
+    font-size: $text-base;
+    font-weight: $font-semibold;
     color: #ddd;
+    letter-spacing: $tracking-wider;
+    text-decoration: none;
   }
 
   .nav {
-    display: flex;
-    gap: 1.5rem;
+    @include flex(row, stretch, flex-start, 9);
 
     .icon {
       display: none;
@@ -46,25 +47,23 @@
     }
 
     a {
-      display: flex;
-      align-items: center;
-      font-size: 1rem;
+      @include flex(row, center, flex-start, 2);
+      font-size: $text-base;
       color: #bbb;
       text-decoration: none;
-      gap: 0.375rem;
-      transition: color 0.2s;
+      transition: color $transition-fast;
 
       &:hover {
-        color: #fff;
+        color: color('text', 'basic');
       }
 
-      .active {
-        font-weight: 600;
-        color: #2970ff;
+      &.active {
+        font-weight: $font-semibold;
+        color: color('key', 'primary-deep');
       }
     }
 
-    @media (max-width: 800px) {
+    @include respondFrom('xl') {
       justify-content: center;
       flex-wrap: wrap;
 
@@ -77,7 +76,7 @@
       }
 
       a {
-        font-size: 0.875rem;
+        font-size: $text-base-sm;
       }
     }
   }

@@ -1,34 +1,38 @@
-@use "../../styles/mixins" as *;
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
 
 .wrap {
   container: guide-modal / inline-size;
 
   .title {
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #fff;
-    margin-bottom: 1rem;
+    font-size: $text-2xl;
+    font-weight: $font-bold;
+    color: color('text', 'white');
+    margin-block-end: space(6);
   }
 
   .description {
-    font-size: 0.9375rem;
-    color: #ccc;
-    margin-bottom: 1.5rem;
-    line-height: 1.6;
+    font-size: $text-base-s;
+    color: color('text', 'gray');
+    line-height: $leading-relaxed;
+    margin-block-end: space(9);
   }
 
   .guideList {
     list-style: disc;
-    padding-left: 1.25rem;
+    padding-inline-start: space(8);
 
     li {
-      font-size: 0.875rem;
-      color: #ccc;
-      margin-bottom: 0.625rem;
+      font-size: $text-base-sm;
+      color: color('text', 'gray');
+      margin-block-end: space(4);
 
       strong {
-        color: #fff;
-        margin-right: 0.5rem;
+        color: color('text', 'basic');
+        margin-inline-end: space(3);
       }
     }
   }
@@ -39,24 +43,26 @@
   }
 
   .link {
-    font-weight: 600;
+    font-weight: $font-semibold;
     padding-block-end: 4px;
     @include linkUnderline(#4a9eff, #4a9eff);
   }
 }
 
-@container guide-modal (max-width: 480px) {
-  .title {
-    font-size: 1.125rem;
-  }
+@include containerQuery('s') {
+  .wrap {
+    .title {
+      font-size: $text-lg;
+    }
 
-  .description {
-    font-size: 0.8125rem;
-  }
+    .description {
+      font-size: $text-sm;
+    }
 
-  .guideList {
-    li {
-      font-size: 0.75rem;
+    .guideList {
+      li {
+        font-size: $text-xs;
+      }
     }
   }
 }

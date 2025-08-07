@@ -45,6 +45,9 @@ $transition-base: 0.3s ease;
 $transition-slow: 0.6s ease;
 $transition-bounce: cubic-bezier(0.22, 1, 0.36, 1);
 
+/*
+* HELPER
+*/
 @function mediaBreakpoint($size) {
   @return map.get($media-breakpoints, $size);
 }
@@ -73,7 +76,7 @@ $transition-bounce: cubic-bezier(0.22, 1, 0.36, 1);
   ), $size);
 }
 
-@function z-index($layer) {
+@function zIndex($layer) {
   @return map.get((
     'below': $z-below,
     'base': $z-base,

@@ -1,15 +1,21 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
 .title {
   container: page-title / inline-size;
 
-  font-family: var(--font-title), sans-serif;
-  font-size: 1.25rem;
-  font-weight: 700;
-  color: #fff2bf;
-  padding-block-end: 1.125rem;
-  margin-block-end: 1.125rem;
+  font-family: $font-family-title;
+  font-size: $text-xl;
+  font-weight: $font-bold;
+  color: color('text', 'title');
+  padding-block-end: space(7);
+  margin-block-end: space(7);
   border-block-end: 1px solid #464646;
 
-  @container page-title (max-width: 500px) {
-    font-size: 1.5rem;
+  @include containerQuery('sm') {
+    font-size: $text-2xl;
   }
 }

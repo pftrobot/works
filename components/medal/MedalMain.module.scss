@@ -1,77 +1,75 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
 .medalWrap {
+  $bgColor: #161616;
+
   container: medal-container / inline-size;
 
-  inline-size: calc(100% - 10rem);
-  margin-inline: auto;
+  @include container('desktop');
 
-  @media (max-width: 1000px){
-    inline-size: calc(100% - 2rem);
+  @include respondFrom('xxl') {
+    inline-size: container('mobile');
   }
 
   .infoBox {
     position: relative;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 1rem;
+    @include flex(column, center, center, 6);
     text-align: center;
     padding-block-start: 2.875rem;
     padding-block-end: 6.75rem;
     margin-block-start: 3.125rem;
-    margin-block-end: 4rem;
-    background-color: #161616;
-    border-radius: 0.5rem;
+    margin-block-end: space(20);
+    background-color: $bgColor;
+    border-radius: radius('base');
 
     .title {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: #fff2bf;
-      line-height: 1;
+      @include textStyle('2xl', 'bold', 'none');
+      color: color('text', 'title');
     }
 
     .subtitle {
-      font-size: 1.125rem;
-      color: #fff;
-      line-height: 1;
+      @include textStyle('lg', 'normal', 'none');
+      color: color('text', 'basic');
     }
 
-    .infoList{
+    .infoList {
       position: absolute;
       inset-block-end: -3.875rem;
-      display: flex;
-      justify-content: center;
-      gap: 1rem;
+      @include flex(row, stretch, center, 6);
       inline-size: 100%;
 
       .infoItem {
         position: relative;
         inline-size: max(20.125rem, 40%);
         text-align: center;
-        padding-block: 1.875rem;
-        padding-inline: 1rem;
-        background-color: #161616;
+        padding-block: space(11);
+        padding-inline: space(6);
+        background-color: $bgColor;
         border: 1px solid #c5a46a50;
-        border-radius: 0.75rem;
+        border-radius: radius('lg');
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 
         strong {
           display: block;
-          font-size: 1.125rem;
-          color: #ffffff50;
+          font-size: $text-lg;
+          color: color('text', 'muted');
         }
 
         .char {
-          font-size: 1.5rem;
-          font-weight: 600;
-          color: #fff;
-          margin-block-start: 0.5rem;
+          color: color('text', 'basic');
+          font-size: $text-2xl;
+          font-weight: $font-semibold;
+          margin-block-start: space(3);
         }
 
         &.medal::before {
           position: absolute;
           inset-block-start: -2rem;
-          inset-inline-end: 1.5rem;
+          inset-inline-end: space(9);
           display: block;
           content: '';
           inline-size: 4.75rem;
@@ -80,98 +78,87 @@
         }
       }
 
-      @container medal-container (max-width: 600px) {
-        flex-direction: column;
-        align-items: center;
-        gap: 1rem;
+      @include containerQuery('md') {
+        @include flex(column, center, center, 6);
       }
     }
   }
 
   .medalList {
-    display: flex;
-    flex-wrap: wrap;
+    @include flex(row, stretch, center, 6, wrap);
     place-content: center;
-    gap: 1rem;
-    padding-block-start: 2.5rem;
+    padding-block-start: space(14);
 
     .medalItem {
-      display: flex;
-      flex-direction: column;
+      @include flex(column, stretch, center);
       place-content: center;
       min-inline-size: 8.5rem;
       min-block-size: 6rem;
-      font-size: 1rem;
-      font-weight: 600;
-      color: #fff;
+      color: color('text', 'basic');
+      font-size: $text-base;
+      font-weight: $font-semibold;
       text-align: center;
-      padding: 1rem;
-      background: #161616;
+      padding: space(6);
+      background-color: $bgColor;
       border: 1px solid #c5a46a50;
-      border-radius: 0.5rem;
+      border-radius: radius('base');
 
       p {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        gap: 0.5rem;
+        @include flex(row, center, center, 3);
 
         &::before {
           display: block;
           content: '';
-          inline-size: 1rem;
-          block-size: 2rem;
+          inline-size: space(6);
+          block-size: space(12);
           background: url('/imgs/medal.png') no-repeat center / contain;
         }
       }
 
       span {
         display: block;
-        color: #c5a46a;
-        line-height: 1;
-        margin-block-start: 0.5rem;
+        color: color('key', 'primary-dim');
+        line-height: $leading-none;
+        margin-block-start: space(3);
       }
     }
 
-    @container medal-container (max-width: 600px) {
+    @include containerQuery('md') {
       grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
     }
   }
 
   .hintBox {
-    color: #ccc;
-    padding: 1.875rem;
-    margin-top: 5.25rem;
+    color: color('text', 'gray');
+    padding: space(11);
+    margin-block-start: 5.25rem;
     background-color: #2d2d2d;
     border: 1px solid #333;
-    border-radius: 0.5rem;
+    border-radius: radius('base');
 
     h3 {
-      font-size: 1.5rem;
-      color: #fff2bf;
+      color: color('text', 'title');
+      font-size: $text-2xl;
     }
 
     ul {
-      margin-block-start: 1.5rem;
-      padding-left: 1.25rem;
+      margin-block-start: space(9);
+      padding-inline-start: space(8);
 
       li {
         list-style: disc;
-        font-size: 1.125rem;
-        font-weight: 400;
-        color: #ffffff80;
-        line-height: 1.5;
-        letter-spacing: -0.36px;
-        margin-block-end: 0.5rem;
+        @include textStyle('lg', 'normal', 'normal', $tracking-tighter);
+        color: color('text', 'secondary');
+        margin-block-end: space(3);
       }
     }
 
-    @container medal-container (max-width: 600px) {
-      padding: 1rem;
-      font-size: 0.8rem;
+    @include containerQuery('md') {
+      padding: space(6);
+      font-size: $text-sm;
 
       h3 {
-        font-size: 0.9rem;
+        font-size: $text-base-sm;
       }
     }
   }

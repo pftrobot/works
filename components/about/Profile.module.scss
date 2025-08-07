@@ -1,31 +1,32 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
 .profileWrap {
   container: profile-card / inline-size;
-
-  display: flex;
-  align-items: center;
+  @include flex(row, center, flex-start, 0);
   gap: 2.625rem;
-  padding: 3rem;
-  margin-block-start: 3.75rem;
-  border: 1px solid #c5a46a50;
-  border-radius: 0.75rem;
+  padding: space(16);
+  margin-block-start: space(18);
   background-color: #161616;
+  border: 1px solid #c5a46a50;
+  border-radius: radius('lg');
 
-  @container profile-card (max-width: 600px) {
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem;
-    gap: 2rem;
+  @include containerQuery('md') {
+    @include flex(column, center, center, 12);
   }
 
   .imageBox {
     flex-shrink: 0;
+    overflow: hidden;
     inline-size: 8.75rem;
     block-size: 8.75rem;
-    border-radius: 50%;
+    border-radius: radius('full');
     background-color: #efefef;
-    overflow: hidden;
 
-    @container profile-card (max-width: 600px) {
+    @include containerQuery('md') {
       inline-size: 6rem;
       block-size: 6rem;
     }
@@ -41,55 +42,56 @@
   .info {
     flex: 1;
 
-    @container profile-card (max-width: 600px) {
+    @include containerQuery('md') {
       text-align: center;
     }
 
     .title {
-      font-size: 1.5rem;
-      font-weight: 600;
-      margin-block-end: 0.5rem;
+      font-size: $text-2xl;
+      font-weight: $font-semibold;
+      color: color('text', 'basic');
+      margin-block-end: space(3);
 
-      @container profile-card (max-width: 600px) {
-        font-size: 1.25rem;
+      @include containerQuery('md') {
+        font-size: $text-xl;
       }
 
       .char {
-        font-size: 1.125rem;
-        font-weight: 400;
-        color: #ffffff50;
-        margin-inline-start: 0.5rem;
+        font-size: $text-lg;
+        font-weight: $font-normal;
+        color: color('text', 'muted');
+        margin-inline-start: space(3);
 
-        @container profile-card (max-width: 600px) {
-          font-size: 1rem;
+        @include containerQuery('md') {
+          font-size: $text-base;
         }
       }
     }
 
     .description {
-      font-size: 0.875rem;
-      color: #ffffff80;
-      line-height: 1.6;
-      letter-spacing: -0.36px;
-      margin-block: 0.5rem 1.875rem;
+      font-size: $text-base-sm;
+      color: color('text', 'secondary');
+      line-height: $leading-relaxed;
+      letter-spacing: $tracking-tighter;
+      margin-block: space(3) space(11);
 
-      @container profile-card (max-width: 600px) {
-        font-size: 0.8125rem;
-        margin-block: 0.5rem 1.25rem;
+      @include containerQuery('md') {
+        font-size: $text-sm;
+        margin-block: space(3) space(8);
       }
     }
 
     .meta {
-      font-size: 1rem;
-      font-weight: 600;
-      color: #fff;
+      font-size: $text-base;
+      font-weight: $font-semibold;
+      color: color('text', 'white');
 
-      @container profile-card (max-width: 600px) {
-        font-size: 0.9375rem;
+      @include containerQuery('md') {
+        font-size: $text-base-s;
       }
 
       strong {
-        color: #c5a46a;
+        color: color('key', 'primary-dim');
       }
     }
   }

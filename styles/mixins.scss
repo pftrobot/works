@@ -34,7 +34,7 @@
 }
 
 /*
-* CONTAINER
+* CONTAINER SIZE
 */
 @mixin container($size: 'desktop') {
   inline-size: container($size);
@@ -48,9 +48,9 @@
 }
 
 /*
-* TEXT
+* TEXT STYLE
 */
-@mixin textStyle($size, $weight: 'normal', $leading: 'normal', $tracking: normal) {
+@mixin textStyle($size, $weight: 'normal', $leading: 'normal', $tracking: 'normal') {
   font-size: textSize($size);
   font-weight: fontWeight($weight);
   line-height: lineHeight($leading);
@@ -58,7 +58,7 @@
 }
 
 /*
-* LAYOUT
+* LAYOUT - FLEX, GRID
 */
 @mixin flex($direction: row, $align: stretch, $justify: flex-start, $gap: 0, $wrap: nowrap) {
   display: flex;
@@ -86,13 +86,6 @@
 /*
 * COMPONENT
 */
-@mixin card($padding: 6, $bg: '#161616') {
-  background-color: #161616;
-  border: 1px solid #2c2c2c;
-  border-radius: radius('lg');
-  padding: space(6);
-}
-
 @mixin input-base {
   width: 100%;
   color: color('text', 'text');
@@ -101,7 +94,7 @@
   outline: none;
   background: transparent;
   border: none;
-  border-bottom: 1px solid #2c2c2c;
+  border-block-end: 1px solid #2c2c2c;
   transition: all $transition-base;
 
   &::placeholder {
@@ -110,7 +103,7 @@
   }
 
   &:focus {
-    border-color: color('key', 'accent');
+    border-color: color('key', 'primary-deep');
   }
 
   &.error {
@@ -120,7 +113,7 @@
 }
 
 /*
-* ANIMATION
+* INTERACTION
 */
 // hover: color + underline
 @mixin linkUnderline($color: #e1e1e1, $hoverColor: #e1e1e1) {

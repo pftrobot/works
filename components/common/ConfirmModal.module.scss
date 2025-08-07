@@ -1,22 +1,26 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
 .message {
-  font-size: 14px;
-  margin-bottom: 20px;
-  color: #ccc;
+  font-size: $text-base-sm;
+  color: color('text', 'gray');
+  margin-block-end: space(12);
 }
 
 .buttonGroup {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
+  @include flex(row, stretch, flex-end, 2);
 }
 
 .confirmButton {
-  font-size: 13px;
-  padding: 4px 12px;
-  background-color: #2970ff;
-  color: #fff;
+  font-size: $text-base-sm;
+  color: color('text', 'white');
+  padding: space(1) space(6);
+  background-color: color('key', 'blue');
   border: none;
-  border-radius: 4px;
+  border-radius: radius('sm');
   cursor: pointer;
 
   &:hover {
@@ -25,12 +29,12 @@
 }
 
 .cancelButton {
-  font-size: 13px;
-  padding: 4px 12px;
+  color: color('text', 'dark-gray');
+  font-size: $text-base-sm;
+  padding: space(1) space(6);
   background: transparent;
-  color: #999;
   border: 1px solid #555;
-  border-radius: 4px;
+  border-radius: radius('sm');
   cursor: pointer;
 
   &:hover {

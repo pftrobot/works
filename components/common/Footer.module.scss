@@ -1,79 +1,80 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
 .footer {
   container: layout-footer / inline-size;
 
-  font-size: 0.875rem;
-  color: #aaa;
-  padding-block: 1.5rem;
-  padding-inline: 2rem;
-  margin-block-start: 5.5rem;
-  background-color: #121212;
+  font-size: $text-base-sm;
+  color: color('text', 'light-gray');
+  padding-block: space(9);
+  padding-inline: space(12);
+  margin-block-start: space(28);
+  background-color: color('background', 'footer');
   border-block-start: 1px solid #2c2c2c;
 
   .inner {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 0.75rem;
-    inline-size: calc(100% - 10rem);
-    margin-inline: auto;
+    @include flex(column, center, center, 5);
+    @include container('desktop');
     text-align: center;
 
-    @container layout-footer (max-width: 800px) {
-      font-size: 0.75rem;
-      gap: 0.5rem;
+    @include containerQuery('xl') {
+      gap: space(3);
+      font-size: $text-xs;
     }
   }
 
   .links {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    gap: 1rem;
-    font-size: 0.875rem;
+    @include flex(row, center, center, 6, wrap);
+    font-size: $text-base-sm;
 
     a {
       color: #bbb;
-      transition: color 0.2s;
+      transition: color $transition-fast;
 
       &:hover {
-        color: #fff;
+        color: color('text', 'basic');
       }
     }
 
     button {
       padding-block: 1px;
-      padding-inline: 8px;
+      padding-inline: space(3);
       background-color: #444;
       border: none;
-      border-radius: 4px;
-      transition: background-color 0.2s;
+      border-radius: radius('sm');
+      transition: background-color $transition-fast;
 
-      @media (hover: hover){
+      @media (hover: hover) {
         &:hover {
           background-color: #555;
         }
       }
     }
 
-    @container layout-footer (max-width: 800px) {
+    @include containerQuery('xl') {
       a, button {
-        font-size: 0.75rem;
+        font-size: $text-xs;
       }
     }
   }
 }
 
-@container layout-footer (max-width: 800px) {
-  .inner {
-    font-size: 0.75rem;
-    gap: 0.5rem;
-  }
+@include containerQuery('xl') {
+  .footer {
+    .inner {
+      gap: space(3);
+      font-size: $text-xs;
+    }
 
-  .links {
-    justify-content: center;
+    .links {
+      justify-content: center;
 
-    a {
-      font-size: 0.75rem;
+      a {
+        font-size: $text-xs;
+      }
     }
   }
 }

@@ -1,10 +1,10 @@
 @use "sass:map";
 
 /* KEY COLOR */
-$key-primary: #2970ff;
-$key-accent: #f5ca64;
-$key-accent-dim: #c5a46a;
-$key-text: #fff2bf;
+$key-primary: #f5c064;
+$key-primary-deep: #f5ca64;
+$key-primary-dim: #c5a46a;
+$key-blue: #2970ff;
 
 $semantic-error: #e53838;
 $semantic-warning: #ffa94d;
@@ -14,15 +14,14 @@ $semantic-info: #58a6ff;
 $bg-body: #1b1b1b;
 $bg-footer: #121212;
 $bg-input: #323232;
-$bg-accent: #f5c064;
 
 /* TEXT COLOR */
-$text-primary: #e0e0e0;
+$text-basic: #e0e0e0;
 $text-secondary: #ffffff80;
-$text-subtitle: #f5f5f5;
-$text-muted: #ffffff50;
-$text-key: #f5c064;
 $text-accent: #fffdd8;
+$text-muted: #ffffff50;
+$text-title: #fff2bf;
+$text-subtitle: #f5f5f5;
 $text-white: #fff;
 $text-bright-gray: #eee;
 $text-gray: #ccc;
@@ -31,17 +30,13 @@ $text-dark-gray: #999;
 $text-deep-gray: #323232;
 $text-black: #111;
 
-/* BORDER COLOR */
-$border-input: #ffffff1a;
-$border-input-focus: #ffffff99;
-
 // Color Map
 $colors: (
   'key': (
     'primary': $key-primary,
-    'accent': $key-accent,
-    'accent-dim': $key-accent-dim,
-    'text': $key-text
+    'primary-deep': $key-primary-deep,
+    'primary-dim': $key-primary-dim,
+    'blue': $key-blue
   ),
   'semantic': (
     'error': $semantic-error,
@@ -52,15 +47,14 @@ $colors: (
     'body': $bg-body,
     'footer': $bg-footer,
     'input': $bg-input,
-    'accent': $bg-accent
   ),
   'text': (
-    'primary': $text-primary,
+    'basic': $text-basic,
     'secondary': $text-secondary,
-    'subtitle': $text-subtitle,
-    'muted': $text-muted,
-    'key': $text-key,
     'accent': $text-accent,
+    'muted': $text-muted,
+    'title': $text-title,
+    'subtitle': $text-subtitle,
     'white': $text-white,
     'bright-gray': $text-bright-gray,
     'gray': $text-gray,
@@ -68,13 +62,12 @@ $colors: (
     'dark-gray': $text-dark-gray,
     'deep-gray': $text-deep-gray,
     'black': $text-black,
-  ),
-  'border': (
-    'input': $border-input,
-    'input-focus': $border-input-focus
   )
 );
 
+/*
+* HELPER
+*/
 @function color($category, $variant) {
   @return map.get(map.get($colors, $category), $variant);
 }

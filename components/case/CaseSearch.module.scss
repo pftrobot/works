@@ -1,5 +1,14 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
+$borderInput: #ffffff1a;
+$borderInputFocus: #ffffff99;
+
 .searchSection {
-  margin-block-end: 2rem;
+  margin-block-end: space(12);
 }
 
 .searchInputWrapper {
@@ -10,16 +19,15 @@
 
 .searchInputContainer {
   position: relative;
-  display: flex;
-  align-items: center;
+  @include flex(row, center, flex-start);
   background-color: #ffffff0d;
-  border: 1px solid #ffffff1a;
-  border-radius: 0.75rem;
+  border: 1px solid $borderInput;
+  border-radius: radius('lg');
   backdrop-filter: blur(10px);
-  transition: all 0.3s ease;
+  transition: all $transition-base;
 
   &:focus-within {
-    border-color: #ffffff99;
+    border-color: $borderInputFocus;
     background-color: #ffffff14;
     box-shadow: 0 0 0 0.1875rem #dfccdd1a;
   }
@@ -31,45 +39,43 @@
 
 .searchIcon {
   position: absolute;
-  left: 1rem;
-  color: #ffffff99;
+  inset-inline-start: space(6);
+  color: $borderInputFocus;
   pointer-events: none;
-  z-index: 1;
+  z-index: zIndex('base');
 }
 
 .searchInput {
   width: 100%;
+  font-size: $text-base;
+  font-weight: $font-normal;
   color: white;
-  font-size: 1rem;
-  font-weight: 400;
-  padding-block: 1rem;
-  padding-inline: 1.5rem 3rem;
+  padding-block: space(6);
+  padding-inline: space(9) space(16);
   background-color: transparent;
   border: none;
   outline: none;
 
   &::placeholder {
-    color: #ffffff80;
+    color: color('text', 'secondary');
   }
 }
 
 .clearButton {
   position: absolute;
-  right: 3.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  inset-inline-end: 3.75rem;
+  @include flex(row, center, center);
   color: #ffffffb3;
   cursor: pointer;
-  padding: 0.5rem;
-  background-color: #ffffff1a;
+  padding: space(3);
+  background-color: $borderInput;
   border: none;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
+  border-radius: radius('base');
+  transition: all $transition-fast;
 
   &:hover {
     background-color: #ffffff33;
-    color: white;
+    color: color('text', 'white');
   }
 
   &:active {
@@ -79,21 +85,19 @@
 
 .searchButton {
   position: absolute;
-  right: 0.75rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #fff;
+  inset-inline-end: space(5);
+  @include flex(row, center, center);
+  color: color('text', 'basic');
   cursor: pointer;
-  padding: 0.5rem;
+  padding: space(3);
   background-color: transparent;
   border: none;
-  border-radius: 0.5rem;
-  transition: all 0.2s ease;
+  border-radius: radius('base');
+  transition: all $transition-fast;
 
   &:hover {
     background-color: #ffffff3a;
-    transform: -1px;
+    transform: translateY(-1px);
   }
 
   &:active {
@@ -103,44 +107,42 @@
 
 .autocompleteDropdown {
   position: absolute;
-  top: calc(100% + 0.5rem);
-  left: 0;
-  right: 0;
+  inset-block-start: calc(100% + #{space(3)});
+  inset-inline-start: 0;
+  inset-inline-end: 0;
   overflow-x: hidden;
   overflow-y: auto;
   max-height: 18.75rem;
   background-color: #0f0f0ff2;
   backdrop-filter: blur(20px);
-  border: 1px solid #ffffff1a;
-  border-radius: 0.75rem;
+  border: 1px solid $borderInput;
+  border-radius: radius('lg');
   box-shadow: 0 0.625rem 2.5rem #0000004d;
-  z-index: 100;
+  z-index: zIndex('dropdown');
 }
 
 .suggestionItem {
-  display: flex;
-  align-items: center;
-  gap: 0.625rem;
-  width: 100%;
+  @include flex(row, center, flex-start, 4);
+  inline-size: 100%;
+  font-size: $text-base-sm;
   color: #ffffffcc;
-  font-size: 0.875rem;
   text-align: left;
   cursor: pointer;
-  padding-block: 0.75rem;
-  padding-inline: 1rem;
+  padding-block: space(5);
+  padding-inline: space(6);
   background-color: transparent;
   border: none;
-  border-bottom: 1px solid #ffffff0d;
-  transition: all 0.2s ease;
+  border-block-end: 1px solid #ffffff0d;
+  transition: all $transition-fast;
 
   &:nth-last-of-type(1) {
-    border-bottom: none;
+    border-block-end: none;
   }
 
   &:hover,
   &.selected {
+    color: color('text', 'basic');
     background-color: #dfccdd1a;
-    color: #fff;
   }
 
   &:active {
@@ -149,24 +151,24 @@
 }
 
 .suggestionIcon {
-  color: #ffffff66;
   flex-shrink: 0;
-  transition: color 0.2s ease;
+  color: #ffffff66;
+  transition: color $transition-fast;
 }
 
 .resultsCount {
   text-align: center;
-  margin-block-start: 1.5rem;
+  margin-block-start: space(9);
 
   p {
+    font-size: $text-base-sm;
     color: #ffffffb3;
-    font-size: 0.875rem;
     margin: 0;
   }
 
   .searchTerm {
-    color: #f5c064;
-    font-weight: 600;
-    margin-inline-start: 0.25rem;
+    font-weight: $font-semibold;
+    color: color('key', 'primary-deep');
+    margin-inline-start: space(1);
   }
 }

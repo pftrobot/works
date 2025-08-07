@@ -1,90 +1,85 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
 .contactWrap {
   container: contact-container / inline-size;
 
   position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  inline-size: calc(100% - 10rem);
-  padding-block: 4rem;
-  margin-inline: auto;
+  @include flex(row, center, center);
+  @include container('desktop');
+  padding-block: space(20);
 
   &::before {
     display: block;
     content: '';
     position: absolute;
-    bottom: 0;
-    left: 10%;
+    inset-block-end: 0;
+    inset-inline-start: 10%;
     inline-size: max(50%, 500px);
     aspect-ratio: 1;
     background: url('/imgs/bg/handcuffs.png') no-repeat;
     background-size: 100% auto;
     mix-blend-mode: exclusion;
-    z-index: -1;
+    z-index: zIndex('below');
   }
 
   .inner {
     position: relative;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
+    @include grid(2, 20);
     align-items: center;
-    gap: 4rem;
     margin-inline: auto;
-    z-index: 1;
+    z-index: zIndex('base');
 
-    @container contact-container (max-width: 768px) {
-      grid-template-columns: 1fr;
-      gap: 3rem;
+    @include containerQuery('xl') {
+      @include grid(1, 16);
     }
   }
 }
 
 .leftSection {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  @include flex(column, stretch, flex-start, 12);
 
   .mainTitle {
-    font-size: 3rem;
-    font-weight: 600;
-    color: #fff;
-    line-height: 1.2;
+    @include textStyle('6xl', 'semibold', 'tight');
+    color: color('text', 'white');
 
-    @container contact-container (max-width: 768px) {
-      font-size: 2.25rem;
+    @include containerQuery('xl') {
+      font-size: $text-4xl;
     }
 
     .highlight {
-      color: #f5c064;
-      font-weight: 700;
+      font-weight: $font-bold;
+      color: color('key', 'primary');
     }
   }
 
   .description p {
-    font-size: 1.1rem;
-    color: #aaa;
-    line-height: 1.7;
+    font-size: $text-lg;
+    color: color('text', 'light-gray');
+    line-height: $leading-loose;
 
-    @container contact-container (max-width: 768px) {
-      font-size: 1rem;
+    @include containerQuery('xl') {
+      font-size: $text-base;
     }
   }
 }
 
 .rightSection {
   padding-block: 3.125rem;
-  padding-inline: 2.5rem;
+  padding-inline: space(14);
   background-color: #161616;
-  border-radius: 20px;
+  border-radius: 1.5rem;
 
-  @container contact-container (max-width: 768px) {
-    padding-block: 2rem;
-    padding-inline: 2rem;
+  @include containerQuery('xl') {
+    padding-block: space(12);
+    padding-inline: space(12);
   }
 
   .form {
-    display: flex;
-    flex-direction: column;
+    @include flex(column, stretch, flex-start, 0);
     gap: 2.125rem;
 
     .inputGroup {
@@ -92,69 +87,66 @@
 
       .input,
       .textarea {
-        width: 100%;
-        color: #ffffff;
-        font-size: 1rem;
-        font-weight: 300;
-        padding-block: 0.625rem;
-        padding-inline: 0.375rem;
-        outline: none;
-        background: transparent;
-        border: none;
-        border-bottom: 1px solid #2c2c2c;
-        transition: all 0.3s ease;
+        @include input-base;
+        padding-block: space(4);
+        padding-inline: space(2);
+        border-block-end: 1px solid #2c2c2c;
+        transition: all $transition-base;
 
         &::placeholder {
-          font-weight: 300;
-          color: #ffffff50;
+          font-weight: $font-light;
+          color: color('text', 'muted');
         }
 
         &:focus {
-          border-color: #f5c063;
+          border-color: color('key', 'primary-deep');
         }
 
-        &.error{
-          color: #fff;
+        &.error {
+          color: color('text', 'basic');
           border-color: #ff4d4f;
         }
       }
 
       .textarea {
-        min-height: 120px;
+        min-block-size: 120px;
         font-family: inherit;
-        line-height: 1.5;
-        padding-top: 1rem;
-        padding-bottom: 1rem;
+        line-height: $leading-normal;
+        padding-block-start: space(6);
+        padding-block-end: space(6);
         background-color: #d9d9d902;
         resize: none;
       }
 
-      .errorText{
-        font-size: 0.875rem;
+      .errorText {
+        font-size: $text-base-sm;
         color: #ff4d4f;
-        margin-block-start: 0.5rem;
+        margin-block-start: space(3);
       }
     }
 
     .submitButton {
-      inline-size:100%;
-      font-size: 0.875rem;
-      font-weight: 500;
-      color: #f5c064;
-      padding-block: 0.625rem;
-      background: #323232;
-      border: 1px solid #c5a46a;
-      border-radius: 4px;
+      inline-size: 100%;
+      font-size: $text-base-sm;
+      font-weight: $font-medium;
+      color: color('key', 'primary');
+      letter-spacing: $tracking-wider;
+      padding-block: space(4);
+      background-color: color('background', 'input');
+      border: 1px solid color('key', 'primary-dim');
+      border-radius: radius('sm');
       cursor: pointer;
-      transition: background 0.2s;
+      transition: background $transition-fast;
 
-      &:hover {
-        color: #323232;
-        background: #f5c064;
+      @media (hover: hover) {
+        &:hover {
+          color: color('text', 'deep-gray');
+          background-color: color('key', 'primary');
+        }
       }
 
-      @container contact-container (max-width: 768px) {
-        font-size: 0.625rem;
+      @include containerQuery('xl') {
+        font-size: $text-3xs;
       }
     }
   }

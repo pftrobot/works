@@ -1,31 +1,48 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
 .button {
-  display: inline-block;
-  padding: 0.75rem 1.75rem;
-  font-size: 0.95rem;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  border-radius: 4px;
-  transition: all 0.2s linear;
-  border: 1px solid transparent;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: $font-family-basic;
+  font-size: $text-base-s;
+  font-weight: $font-medium;
+  cursor: pointer;
   text-align: center;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: $tracking-wide;
+  padding: space(5) space(10);
+  border: none;
+  border-radius: radius('sm');
+  transition: all $transition-fast;
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
 }
 
 .primary {
-  background-color: transparent;
   color: #e0a600;
+  background-color: transparent;
   border: 1px solid #e0a600;
 
   &:hover {
-    color: #111;
-    font-weight: bold;
+    font-weight: $font-bold;
+    color: color('text', 'black');
     background-color: #d69f00;
     border-color: #d69f00;
   }
 }
 
 .secondary {
+  color: color('text', 'light-gray');
   background-color: transparent;
-  color: #aaa;
   border: 1px solid #444;
 
   &:hover {

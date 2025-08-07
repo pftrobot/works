@@ -1,68 +1,67 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
 .home {
   container: home-container / inline-size;
 
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
+  @include flex(column, center, center);
   min-block-size: calc(100vh - 12rem);
   text-align: center;
 
   .intro {
-    margin-block-end: 3rem;
+    margin-block-end: space(16);
   }
 
   .headline {
     position: relative;
-    font-family: var(--font-mono), sans-serif;
-    font-size: 2.8rem;
-    font-weight: 700;
-    margin-block-end: .4rem;
+    font-family: $font-family-mono;
+    font-size: $text-5xl;
+    font-weight: $font-bold;
+    margin-block-end: 0.4rem;
 
-    @container home-container (max-width: 600px){
-      font-size: 2rem;
+    @include containerQuery('md') {
+      font-size: $text-4xl;
     }
   }
 
   .cursor {
-    font-weight: 400;
-    color: #2970ff;
+    font-weight: $font-normal;
+    color: color('key', 'blue');
     margin-inline-start: 0.125rem;
   }
 
   .tagline {
-    font-size: 1rem;
+    font-size: $text-base;
     color: #a0a0a0;
-    line-height: 1.6;
+    line-height: $leading-relaxed;
     max-inline-size: 40rem;
     margin-block: 0;
     margin-inline: auto;
 
-    @container home-container (max-width: 600px){
-      font-size: 0.875rem;
+    @include containerQuery('md') {
+      font-size: $text-base-sm;
     }
   }
 
   .actions {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 2rem;
+    @include flex(row, center, center, 12, wrap);
     margin-block-start: 2.4rem;
 
     > a {
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      font-size: 0.95rem;
+      @include flex(row, center, center);
+      font-size: $text-base-s;
       color: #ddd;
+      //letter-spacing: 0.0625rem;
+      letter-spacing: $tracking-wider;
       text-transform: uppercase;
-      letter-spacing: 0.0625rem;
-      padding-block: 0.75rem;
-      padding-inline: 1.75rem;
+      padding-block: space(5);
+      padding-inline: space(10);
       border: 1px solid #333;
-      border-radius: 0.25rem;
+      border-radius: radius('sm');
       background-color: #111;
       transition: all 0.25s ease;
 
@@ -70,20 +69,20 @@
         background-color: #1e1e1e;
         border-color: #555;
         transform: translateY(-0.125rem);
-        box-shadow: 0 0 0.5rem #ffffff08;
+        box-shadow: 0 0 space(3) #ffffff08;
       }
 
-      @container home-container (max-width: 600px){
+      @include containerQuery('md') {
         font-size: 0;
 
         &::before {
           content: '';
           display: inline-block;
-          width: 1.25rem;
-          height: 1.25rem;
+          inline-size: space(8);
+          block-size: space(8);
           background-repeat: no-repeat;
           background-size: contain;
-          margin-inline-end: 0.5rem;
+          margin-inline-end: space(3);
         }
       }
     }
@@ -91,17 +90,17 @@
 
   .hiddenBtn {
     position: fixed;
-    bottom: 0;
-    right: 0;
-    font-size: 0.75rem;
+    inset-block-end: 0;
+    inset-inline-end: 0;
+    font-size: $text-xs;
     color: #666;
-    background: none;
+    padding: space(1) space(3);
+    background-color: transparent;
     border: 1px dashed #444;
-    padding: 0.25rem 0.5rem;
-    border-radius: 0.25rem;
+    border-radius: radius('sm');
 
     &:hover {
-      color: #fff;
+      color: color('text', 'basic');
       border-color: #888;
     }
   }
@@ -109,32 +108,32 @@
 
 .fingerprintWrap {
   position: relative;
-  width: 20rem;
-  height: 24rem;
+  inline-size: 20rem;
+  block-size: 24rem;
   margin: 0 auto;
 
   svg {
-    width: 100%;
-    height: 100%;
-    stroke: #2970ff;
+    inline-size: 100%;
+    block-size: 100%;
+    stroke: color('key', 'blue');
     fill: none;
   }
 
   .fingerprintInner {
     position: absolute;
     inset: 0;
-    padding-block-end: 2rem;
+    padding-block-end: space(12);
   }
 
   .scanText {
     position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    font-size: 1rem;
-    color: #888;
-    font-weight: 500;
-    letter-spacing: 0.05rem;
+    inset-block-end: 0;
+    inset-inline-start: 0;
+    inset-inline-end: 0;
+    font-size: $text-base;
+    font-weight: $font-medium;
+    color: color('text', 'darker-gray');
     text-align: center;
+    letter-spacing: $tracking-wide;
   }
 }

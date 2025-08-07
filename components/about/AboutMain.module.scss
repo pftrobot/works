@@ -1,83 +1,75 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
 .aboutWrap {
   container: about-container / inline-size;
 
-  inline-size: calc(100% - 10rem);
-  margin-inline: auto;
-  z-index: 1;
-
-  @media (max-width: 1000px){
-    inline-size: calc(100% - 2rem);
-  }
+  @include container('desktop');
+  z-index: zIndex('base');
 
   > * {
     position: relative;
-    z-index: 1;
+    z-index: zIndex('base');
   }
 
   section {
-    margin-block-end: 6.25rem;
+    margin-block-end: space(32);
 
     h2 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      color: #f5f5f5;
-      line-height: 1;
-      margin-block-end: 0.625rem;
+      color: color('text', 'subtitle');
+      @include textStyle('2xl', 'semibold', 'none');
+      margin-block-end: space(4);
 
-      span{
-        font-family: var(--font-title), sans-serif;
-        font-weight: 700;
-        color: #fff2bf;
-        margin-inline-start: 1.25rem;
+      span {
+        color: color('text', 'title');
+        font-family: $font-family-title;
+        font-weight: $font-bold;
+        margin-inline-start: space(8);
       }
     }
 
     > p {
-      font-size: 1.125rem;
-      font-weight: 400;
-      color: #ffffff50;
-      margin-block-end: 1.5rem;
+      color: color('text', 'muted');
+      font-size: $text-lg;
+      font-weight: $font-normal;
+      margin-block-end: space(9);
     }
   }
 }
 
 .profileSection {
-  margin-block-end: 2.5rem;
+  margin-block-end: space(14);
 }
 
 .dnaWrap {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  @include grid(2, 0);
   gap: 2.4rem 12rem;
-  margin-block-start: 2rem;
+  margin-block-start: space(12);
 
   .dnaItem {
-    display: flex;
-    flex-direction: column;
-    gap: 0.375rem;
+    @include flex(column, stretch, flex-start, 2);
     position: relative;
 
     .labelTop {
       position: relative;
-      display: flex;
-      align-items: flex-end;
-      justify-content: space-between;
+      @include flex(row, flex-end, space-between);
 
       .skillText {
-        font-size: 0.875rem;
-        font-weight: 600;
         color: #6d6d6d;
+        font-size: $text-base-sm;
+        font-weight: $font-semibold;
         text-transform: uppercase;
-        letter-spacing: 0.05em;
+        letter-spacing: $tracking-wide;
         white-space: nowrap;
-        text-indent: 1rem;
+        text-indent: space(6);
         z-index: 2;
       }
 
       .iconShape {
-        display: flex;
-        align-items: center;
-        justify-content: center;
+        @include flex(row, center, center);
         inline-size: 2.4rem;
         block-size: 2.4rem;
         margin-inline-end: -1.25rem;
@@ -89,18 +81,16 @@
         svg {
           width: 1.2rem;
           height: 1.2rem;
-          color: #ccc;
+          color: color('text', 'gray');
         }
       }
     }
 
     .labelLine {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding-inline: 1rem;
-      block-size: 2.6rem;
       position: relative;
+      @include flex(row, center, space-between);
+      block-size: 2.6rem;
+      padding-inline: space(6);
 
       .parallelogramMain {
         position: absolute;
@@ -109,7 +99,7 @@
         inline-size: 70%;
         background: var(--para-color);
         clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0% 100%);
-        z-index: 1;
+        z-index: zIndex('base');
       }
 
       .parallelogramSmall1 {
@@ -120,7 +110,7 @@
         background: var(--para-color);
         opacity: 0.55;
         clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0% 100%);
-        z-index: 1;
+        z-index: zIndex('base');
       }
 
       .parallelogramSmall2 {
@@ -131,7 +121,7 @@
         background: var(--para-color);
         opacity: 0.3;
         clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0% 100%);
-        z-index: 1;
+        z-index: zIndex('base');
       }
 
       .parallelogramSmall3 {
@@ -142,54 +132,54 @@
         background: var(--para-color);
         opacity: 0.15;
         clip-path: polygon(12px 0, 100% 0, calc(100% - 12px) 100%, 0% 100%);
-        z-index: 1;
+        z-index: zIndex('base');
       }
 
       .labelText {
         position: relative;
         inline-size: 100%;
-        font-size: 1rem;
-        font-weight: 600;
-        color: #eee;
+        color: color('text', 'bright-gray');
+        font-size: $text-base;
+        font-weight: $font-semibold;
         text-transform: uppercase;
         text-indent: 0.2rem;
-        letter-spacing: 0.05em;
+        letter-spacing: $tracking-wide;
         z-index: 2;
       }
     }
 
     .barLine {
+      position: relative;
       block-size: 3px;
       background: #ddd;
-      position: relative;
 
       .barFill {
         inline-size: var(--bar-size);
         block-size: 100%;
         background-color: var(--bar-color);
-        transition: inline-size 0.4s ease;
+        transition: inline-size $transition-slow;
       }
     }
 
     .percentage {
-      font-size: 0.75rem;
-      color: #ccc;
+      color: color('text', 'gray');
+      font-size: $text-xs;
       text-align: end;
-      letter-spacing: 0.15rem;
+      letter-spacing: $tracking-widest;
       margin-inline-end: 14px;
     }
   }
 
-  @media (max-width: 600px) {
+  @include respondFrom('md') {
     grid-template-columns: 1fr;
 
     .dnaItem {
       .labelLine {
         block-size: 2.5rem;
-        padding-inline: 0.75rem;
+        padding-inline: space(5);
 
         .labelText {
-          font-size: 0.8125rem;
+          font-size: $text-sm;
         }
 
         .iconShape {
@@ -199,42 +189,40 @@
       }
 
       .percentage {
-        font-size: 0.6875rem;
+        font-size: $text-2xs;
       }
     }
   }
 }
 
 .techBox {
-  display: grid;
-  gap: 2.5rem;
+  @include grid(1, 14);
 
   .techItem {
-    padding-block: 1.5rem;
-    padding-inline: 1.875rem;
+    padding-block: space(9);
+    padding-inline: space(11);
     background: #161616;
     border: solid 1px #c5a46a50;
-    border-radius: 0.5rem;
+    border-radius: radius('base');
 
     h4 {
-      font-size: 1.125rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-      color: #f5c064;
+      color: color('key', 'primary');
+      font-size: $text-lg;
+      font-weight: $font-semibold;
+      margin-block-end: space(3);
     }
 
     .toolBox {
       position: relative;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem 0.75rem;
+      @include flex(row, flex-end, flex-start, 0, wrap);
+      gap: space(6) space(5);
       padding-inline-start: 2.8rem;
-      padding-block-start: 1.25rem;
+      padding-block-start: space(8);
 
       &::before {
         position: absolute;
         inset-block-start: 0;
-        inset-inline-start: 1.75rem;
+        inset-inline-start: space(10);
         display: inline-block;
         content: "";
         inline-size: 1px;
@@ -244,23 +232,21 @@
     }
 
     .toolItem {
-      display: flex;
-      align-items: center;
+      @include flex(row, center, flex-start, 3);
       align-self: flex-end;
-      gap: 0.5rem;
-      padding: 0.5rem 0.75rem;
+      color: color('text', 'bright-gray');
+      font-size: $text-base-sm;
+      padding: space(3) space(5);
       background: #252525;
-      border-radius: 0.5rem;
-      font-size: 0.875rem;
-      color: #eee;
-      transition: background 0.2s ease;
+      border-radius: radius('base');
+      transition: background $transition-fast;
       transform-style: preserve-3d;
       backface-visibility: hidden;
       perspective: 800px;
 
       &.highlight {
-        background-color: #f5ca64;
-        color: #000;
+        background-color: color('key', 'primary-deep');
+        color: color('text', 'black');
 
         .toolIcon {
           background: #000;
@@ -268,9 +254,9 @@
       }
 
       .toolIcon {
-        width: 1.25rem;
-        height: 1.25rem;
-        background-color: #f5ca64;
+        inline-size: space(8);
+        block-size: space(8);
+        background-color: color('key', 'primary-deep');
         border-radius: 0.2rem;
       }
     }
@@ -278,50 +264,50 @@
 }
 
 .caseList {
-  margin-block-start: 1.75rem;
+  margin-block-start: space(10);
   padding-inline-start: 0;
   list-style: none;
 
   li {
-    padding-block: 1.25rem;
-    padding-inline: 1.5rem;
-    margin-block-end: 1.25rem;
+    padding-block: space(8);
+    padding-inline: space(9);
+    margin-block-end: space(8);
     border: 1px solid #3a3a3a;
-    border-radius: 0.625rem;
+    border-radius: radius('md');
     background-color: #1e1e1e;
-    transition: background-color 0.3s ease;
+    transition: background-color $transition-base;
 
     &:hover {
       background-color: #2a2a2a;
     }
 
     strong {
-      font-size: 1rem;
-      color: #f0f0f0;
+      color: color('text', 'basic');
+      font-size: $text-base;
     }
 
     p {
-      font-size: 0.875rem;
-      color: #bbb;
-      margin-block: 0.625rem;
+      color: color('text', 'light-gray');
+      font-size: $text-base-sm;
+      margin-block: space(4);
     }
 
     small {
-      font-size: 0.75rem;
-      color: #888;
+      color: color('text', 'darker-gray');
+      font-size: $text-xs;
     }
   }
 }
 
 .caseMore {
-  margin-block-start: 1.25rem;
   text-align: end;
+  margin-block-start: space(8);
 
   a {
-    font-size: 0.875rem;
-    color: #58a6ff;
+    color: color('semantic', 'info');
+    font-size: $text-base-sm;
     text-decoration: none;
-    transition: color 0.2s;
+    transition: color $transition-fast;
 
     &:hover {
       color: #80c4ff;
@@ -330,83 +316,80 @@
 }
 
 .timeline {
-  display: flex;
-  flex-direction: column;
-  gap: 2rem;
+  @include flex(column, stretch, flex-start, 12);
   position: relative;
-  padding-inline: 1rem;
+  padding-inline: space(6);
 
   &::before {
     content: '';
     position: absolute;
-    left: 50%;
-    top: 0;
-    bottom: 0;
-    width: 2px;
-    background: #333;
+    inset-inline-start: 50%;
+    inset-block-start: 0;
+    inset-block-end: 0;
+    inline-size: 2px;
+    background-color: #333;
     transform: translateX(-50%);
   }
 
   .timelineItem {
-    display: flex;
-    justify-content: flex-start;
+    @include flex(row, stretch, flex-start);
 
     &.right {
       justify-content: flex-end;
     }
 
     .logLine {
+      position: relative;
+      max-width: 80%;
+      color: color('text', 'gray');
+      font-size: $text-base-sm;
+      line-break: $leading-relaxed;
       background: #1f1f1f;
       border: 1px solid #444;
-      border-radius: 0.5rem;
-      padding: 1rem 1.25rem;
-      max-width: 80%;
-      position: relative;
-      color: #ccc;
-      font-size: 0.875rem;
-      line-height: 1.6;
+      border-radius: radius('base');
+      padding: space(6) space(8);
 
       .year {
         display: block;
-        font-size: 0.8125rem;
-        color: #999;
-        margin-bottom: 0.5rem;
+        color: color('text', 'dark-gray');
+        font-size: $text-sm;
+        margin-block-end: space(3);
       }
 
       &::before {
         content: '';
         position: absolute;
-        top: 1rem;
-        width: 0.75rem;
-        height: 0.75rem;
-        background: #ffa94d;
-        border-radius: 50%;
+        inset-block-start: space(6);
+        inline-size: space(5);
+        block-size: space(5);
+        background-color: color('semantic', 'warning');
+        border-radius: radius('full');
       }
 
       &.left::before {
-        left: -1.2rem;
+        inset-inline-start: -1.2rem;
       }
 
       &.right::before {
-        right: -1.2rem;
+        inset-inline-end: -1.2rem;
       }
     }
   }
 }
 
 .guideList {
-  margin-block: 1.5rem;
-  padding-inline-start: 1.5rem;
+  padding-inline-start: space(9);
+  margin-block: space(9);
   list-style: disc;
 
   li {
-    font-size: 0.875rem;
-    color: #ccc;
-    margin-block-end: 0.625rem;
+    color: color('text', 'gray');
+    font-size: $text-base-sm;
+    margin-block-end: space(4);
 
     strong {
-      margin-inline-end: 0.375rem;
-      color: #fff;
+      color: color('text', 'basic');
+      margin-inline-end: space(2);
     }
   }
 }
@@ -414,57 +397,57 @@
 @container about-container (max-width: 600px) {
   .dnaWrap {
     grid-template-columns: 1fr;
-    gap: 1.5rem 2rem;
+    gap: space(9) space(12);
 
     .dnaItem {
       .labelTop {
         .skillText {
-          font-size: 0.75rem;
+          font-size: $text-xs;
         }
 
         .iconShape {
-          inline-size: 1.5rem;
-          block-size: 1.5rem;
+          inline-size: space(9);
+          block-size: space(9);
 
           svg {
-            width: 0.875rem;
-            height: 0.875rem;
+            inline-size: space(6);
+            block-size: space(6);
           }
         }
       }
 
       .labelLine {
         block-size: 2.2rem;
-        padding-inline: 0.75rem;
+        padding-inline: space(5);
 
         .labelText {
-          font-size: 0.8125rem;
+          font-size: $text-sm;
         }
       }
 
       .percentage {
-        font-size: 0.6875rem;
+        font-size: $text-2xs;
       }
     }
   }
 
   .techBox {
-    gap: 1.25rem;
+    gap: space(8);
 
     .techItem {
-      padding: 1rem;
+      padding: space(6);
 
       h4 {
-        font-size: 0.875rem;
+        font-size: $text-base-sm;
       }
 
       .toolItem {
-        font-size: 0.75rem;
-        padding: 0.375rem 0.5rem;
+        font-size: $text-xs;
+        padding: space(2) space(3);
 
         .toolIcon {
-          width: 1rem;
-          height: 1rem;
+          inline-size: space(6);
+          block-size: space(6);
         }
       }
     }

@@ -1,23 +1,25 @@
 @use "sass:map";
 
 /* FONT FAMILY */
-$font-family-sans: var(--font-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-$font-family-display: var(--font-title), sans-serif;
+$font-family-basic: var(--font-body), -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+$font-family-title: var(--font-title), sans-serif;
 $font-family-mono: var(--font-mono), monospace;
 
 /* FONT SIZE */
-$text-2xs: 0.6875rem;
-$text-xs: 0.75rem;
-$text-sm: 0.8125rem;
-$text-base-sm: 0.875rem;
-$text-base: 1rem;
-$text-lg: 1.125rem;
-$text-xl: 1.25rem;
-$text-2xl: 1.5rem;
-$text-3xl: 1.75rem;
-$text-4xl: 2.25rem;
-$text-5xl: 2.8rem;
-$text-6xl: 3rem;
+$text-3xs: 0.625rem;     // 10px
+$text-2xs: 0.6875rem;    // 11px
+$text-xs: 0.75rem;       // 12px
+$text-sm: 0.8125rem;     // 13px
+$text-base-sm: 0.875rem; // 14px
+$text-base-s: 0.9375rem; // 15px
+$text-base: 1rem;        // 16px
+$text-lg: 1.125rem;      // 18px
+$text-xl: 1.25rem;       // 20px
+$text-2xl: 1.5rem;       // 24px
+$text-3xl: 1.75rem;      // 28px
+$text-4xl: 2.25rem;      // 36px
+$text-5xl: 2.75rem;      // 44px
+$text-6xl: 3rem;         // 48px
 
 /* FONT WEIGHT */
 $font-light: 300;
@@ -33,6 +35,7 @@ $leading-normal: 1.5;
 $leading-relaxed: 1.6;
 $leading-loose: 1.7;
 $leading-extra-loose: 1.75;
+$leading-double: 2;
 
 /* LETTER SPACING */
 $tracking-tighter: -0.36px;
@@ -44,11 +47,13 @@ $tracking-widest: 0.15rem;
 
 // Typography MAP
 $typography: (
-  'sizes': (
+  'size': (
+    '3xs': $text-3xs,
     '2xs': $text-2xs,
     'xs': $text-xs,
     'sm': $text-sm,
     'baseSm': $text-base-sm,
+    'baseS': $text-base-s,
     'base': $text-base,
     'lg': $text-lg,
     'xl': $text-xl,
@@ -58,7 +63,7 @@ $typography: (
     '5xl': $text-5xl,
     '6xl': $text-6xl
   ),
-  'weights': (
+  'weight': (
     'light': $font-light,
     'normal': $font-normal,
     'medium': $font-medium,
@@ -71,9 +76,10 @@ $typography: (
     'normal': $leading-normal,
     'relaxed': $leading-relaxed,
     'loose': $leading-loose,
-    'extra-loose': $leading-extra-loose
+    'extra-loose': $leading-extra-loose,
+    'double': $leading-double,
   ),
-  'spacing': (
+  'tracking': (
     'tighter': $tracking-tighter,
     'tight': $tracking-tight,
     'normal': $tracking-normal,
@@ -84,17 +90,17 @@ $typography: (
 );
 
 @function textSize($size) {
-  @return map.get(map.get($typography, 'sizes'), $size);
+  @return map.get(map.get($typography, 'size'), $size);
 }
 
 @function fontWeight($weight) {
-  @return map.get(map.get($typography, 'weights'), $weight);
+  @return map.get(map.get($typography, 'weight'), $weight);
 }
 
-@function lineHeight($height) {
-  @return map.get(map.get($typography, 'leading'), $height);
+@function lineHeight($leading) {
+  @return map.get(map.get($typography, 'leading'), $leading);
 }
 
-@function letterSpacing($spacing) {
-  @return map.get(map.get($typography, 'spacing'), $spacing);
+@function letterSpacing($tracking) {
+  @return map.get(map.get($typography, 'tracking'), $tracking);
 }

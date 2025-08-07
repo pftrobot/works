@@ -1,48 +1,46 @@
+@use "@styles/layout" as *;
+@use "@styles/colors" as *;
+@use "@styles/typography" as *;
+@use "@styles/spacing" as *;
+@use "@mixins" as *;
+
 .timelineWrap {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.5rem;
-  justify-content: center;
-  margin-top: 2rem;
+  @include flex(row, stretch, center, 9, wrap);
+  margin-block-start: space(12);
 
   .card {
     container: timeline-card / inline-size;
 
+    inline-size: clamp(260px, 40%, 320px);
+    color: color('text', 'basic');
     background-color: #1f1f1f;
     border: 1px solid #444;
-    border-radius: 0.75rem;
-    padding: 1.25rem;
-    width: clamp(260px, 40%, 320px);
-    color: #eee;
+    border-radius: radius('lg');
+    padding: space(8);
     box-shadow: 0 0 0.5rem rgba(255, 169, 77, 0.1);
-    transition: transform 0.3s ease;
-
-    &:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 0 0.75rem rgba(255, 169, 77, 0.2);
-    }
+    transition: transform $transition-base;
 
     .year {
-      font-size: 0.875rem;
-      color: #ffa94d;
-      margin-bottom: 0.5rem;
+      font-size: $text-base-sm;
+      color: color('semantic', 'warning');
+      margin-block-end: space(3);
     }
 
     .text {
-      font-size: 0.9375rem;
-      color: #ccc;
-      line-height: 1.6;
+      font-size: $text-base-s;
+      color: color('text', 'gray');
+      line-height: $leading-relaxed;
     }
 
-    @container timeline-card (max-width: 600px) {
-      padding: 1rem;
+    @include containerQuery('md') {
+      padding: space(6);
 
       .year {
-        font-size: 0.75rem;
+        font-size: $text-xs;
       }
 
       .text {
-        font-size: 0.8125rem;
+        font-size: $text-sm;
       }
     }
   }
