@@ -50,11 +50,11 @@
 /*
 * TEXT STYLE
 */
-@mixin textStyle($size, $weight: 'normal', $leading: 'normal', $tracking: 'normal') {
-  font-size: textSize($size);
-  font-weight: fontWeight($weight);
-  line-height: lineHeight($leading);
-  letter-spacing: letterSpacing($tracking);
+@mixin textStyle($size, $weight: 400, $leading: 1.5, $tracking: 0) {
+  font-size: $size;
+  font-weight: $weight;
+  line-height: $leading;
+  letter-spacing: $tracking;
 }
 
 /*
@@ -98,7 +98,7 @@
   transition: all $transition-base;
 
   &::placeholder {
-    font-weight: fontWeight('light');
+    font-weight: $font-light;
     color: color('text', 'muted');
   }
 

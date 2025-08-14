@@ -88,19 +88,3 @@ $typography: (
     'widest': $tracking-widest,
   )
 );
-
-@function textSize($size) {
-  @return map.get(map.get($typography, 'size'), $size);
-}
-
-@function fontWeight($weight) {
-  @return map.get(map.get($typography, 'weight'), $weight);
-}
-
-@function lineHeight($leading) {
-  @return map.get(map.get($typography, 'leading'), $leading);
-}
-
-@function letterSpacing($tracking) {
-  @return map.get(map.get($typography, 'tracking'), $tracking);
-}

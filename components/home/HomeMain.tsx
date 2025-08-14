@@ -9,7 +9,7 @@ import { MedalType } from 'types/medal'
 import { FadeInView } from 'components/common/FadeInView'
 
 import BasicButton from 'components/common/BasicButton'
-import FingerprintScan from 'components/home/FingerprintScan'
+import CubeScanner from 'components/home/CubeScanner'
 import GuideNotice from 'components/home/GuideNotice'
 import styles from './HomeMain.module.scss'
 
@@ -17,7 +17,7 @@ export default function HomeMain() {
   const [phase, setPhase] = useState<'scan' | 'typing' | 'done'>('scan')
   const [displayedText, setDisplayedText] = useState('')
   const [scanText, setScanText] = useState('')
-  const [showFingerprint, setShowFingerprint] = useState(false)
+  const [showScanner, setShowScanner] = useState(false)
   const fullText = 'ACCESS GRANTED'
   const typingSpeed = 100
   const { setAnimationDone, animationDone } = useAnimationContext()
@@ -37,12 +37,12 @@ export default function HomeMain() {
     if (phase === 'scan') {
       let i = 0
       const interval = setInterval(() => {
-        if (i <= '지문 인식 중...'.length) {
-          setScanText('지문 인식 중...'.slice(0, i))
+        if (i <= '시스템 스캔 중...'.length) {
+          setScanText('시스템 스캔 중...'.slice(0, i))
           i++
         } else {
           clearInterval(interval)
-          setTimeout(() => setShowFingerprint(true), 300)
+          setTimeout(() => setShowScanner(true), 300)
         }
       }, 80)
       return () => clearInterval(interval)
@@ -74,7 +74,7 @@ export default function HomeMain() {
         {phase === 'scan' && (
           <motion.div className={styles.fingerprintWrap}>
             <div className={styles.fingerprintInner}>
-              {showFingerprint && <FingerprintScan onScanComplete={() => setPhase('typing')} />}
+              {showScanner && <CubeScanner onScanComplete={() => setPhase('typing')} />}
               {scanText && <p className={styles.scanText}>{scanText}</p>}
             </div>
           </motion.div>
