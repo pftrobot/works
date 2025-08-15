@@ -20,7 +20,7 @@
 
     h2 {
       color: color('text', 'subtitle');
-      @include textStyle('2xl', 'semibold', 'none');
+      @include textStyle($text-2xl, $font-semibold, $leading-none);
       margin-block-end: space(4);
 
       span {

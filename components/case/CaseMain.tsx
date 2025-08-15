@@ -17,6 +17,9 @@ import CaseDetailModal from './CaseDetailModal'
 import CaseSearch from './CaseSearch'
 import styles from './CaseMain.module.scss'
 
+const BASIC_DURATION = 0.5
+const SHOW_GNB = 800
+
 export default function CaseMain() {
   const [selected, setSelected] = useState<CaseMeta | null>(null)
   const [animationKey, setAnimationKey] = useState(0)
@@ -58,7 +61,7 @@ export default function CaseMain() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimationDone(true)
-    }, 800)
+    }, SHOW_GNB)
     return () => clearTimeout(timeout)
   }, [setAnimationDone])
 
@@ -93,7 +96,7 @@ export default function CaseMain() {
         }}
         animate={shouldAnimate ? { opacity: 1, y: 0 } : {}}
         transition={{
-          duration: hasAnimatedBefore ? 0 : 0.5,
+          duration: hasAnimatedBefore ? 0 : BASIC_DURATION,
           ease: 'easeOut',
         }}
       >
@@ -136,117 +139,118 @@ export default function CaseMain() {
     )
   }
 
-  if (isLoading) {
-    return (
-      <FadeInView as="main" className={styles.caseWrap} duration={0.6} y={20}>
-        <PageTitle>CASE LIST</PageTitle>
-        <div className={styles.loading}>
-          <p>사건을 조사하는 중...</p>
-        </div>
-      </FadeInView>
-    )
-  }
-
-  if (error) {
-    return (
-      <FadeInView as="main" className={styles.caseWrap} duration={0.6} y={20}>
-        <PageTitle>CASE LIST</PageTitle>
-        <div className={styles.error}>
-          <p>사건을 불러오는데 실패했습니다: {error}</p>
-          <button onClick={fetchCases} className={styles.retryButton}>
-            다시 시도
-          </button>
-        </div>
-      </FadeInView>
-    )
-  }
-
   return (
     <AnimatePresence mode="wait">
       <FadeInView as="main" className={styles.caseWrap} duration={0.6} y={20}>
         <PageTitle>CASE LIST</PageTitle>
 
-        <FadeInView as="p" className={styles.description} delay={0.3} duration={0.5}>
-          실제 기술 문제들을 사건처럼 분석하고 정리한 수사기록입니다. 사건을 선택해 수사 과정을
-          따라가보세요.
-        </FadeInView>
-
-        <FadeInView className={styles.searchWrapper} delay={0.35} duration={0.5} y={10}>
-          <CaseSearch
-            cases={cases}
-            activeFilters={activeFilters}
-            onSearchChange={handleSearchChange}
-          />
-        </FadeInView>
-
-        <FadeInView className={styles.filterSection} delay={0.4} duration={0.5} y={10}>
-          <div className={styles.filterButtons}>
-            {FILTER_KEYWORDS.map((filter) => {
-              const count =
-                filter === '전체'
-                  ? cases.length
-                  : cases.filter((caseItem) => caseItem.tech.some((tech) => tech.includes(filter)))
-                      .length
-              const isActive =
-                filter === '전체' ? activeFilters.length === 0 : activeFilters.includes(filter)
-              return (
-                <motion.button
-                  key={filter}
-                  type="button"
-                  className={`${styles.filterButton} ${isActive ? styles.active : ''}`}
-                  onClick={() => handleFilterClick(filter)}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {`${filter} (${count})`}
-                </motion.button>
-              )
-            })}
+        {isLoading ? (
+          <div className={styles.loading}>
+            <p>사건을 조사하는 중...</p>
           </div>
-        </FadeInView>
+        ) : error ? (
+          <div className={styles.error}>
+            <p>사건을 불러오는데 실패했습니다: {error}</p>
+            <button onClick={fetchCases} className={styles.retryButton}>
+              다시 시도
+            </button>
+          </div>
+        ) : (
+          <>
+            <FadeInView as="p" className={styles.description} delay={0.3} duration={BASIC_DURATION}>
+              실제 기술 문제들을 사건처럼 분석하고 정리한 수사기록입니다. 사건을 선택해 수사 과정을
+              따라가보세요.
+            </FadeInView>
 
-        {(filteredCases.length !== cases.length || activeFilters.length > 0) && (
-          <FadeInView className={styles.resultsCount} delay={0.45} duration={0.5}>
-            <p>{filteredCases.length}개의 사건이 발견되었습니다</p>
-          </FadeInView>
-        )}
+            <FadeInView
+              className={styles.searchWrapper}
+              delay={0.35}
+              duration={BASIC_DURATION}
+              y={10}
+            >
+              <CaseSearch
+                cases={cases}
+                activeFilters={activeFilters}
+                onSearchChange={handleSearchChange}
+              />
+            </FadeInView>
 
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={animationKey}
-            className={styles.caseGrid}
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.3 }}
-          >
-            {filteredCases.map((item) => (
-              <CaseCard key={item.id} item={item} onClick={() => setSelected(item)} />
-            ))}
-          </motion.div>
-        </AnimatePresence>
+            <FadeInView
+              className={styles.filterSection}
+              delay={0.4}
+              duration={BASIC_DURATION}
+              y={10}
+            >
+              <div className={styles.filterButtons}>
+                {FILTER_KEYWORDS.map((filter) => {
+                  const count =
+                    filter === '전체'
+                      ? cases.length
+                      : cases.filter((caseItem) =>
+                          caseItem.tech.some((tech) => tech.includes(filter)),
+                        ).length
+                  const isActive =
+                    filter === '전체' ? activeFilters.length === 0 : activeFilters.includes(filter)
+                  return (
+                    <motion.button
+                      key={filter}
+                      type="button"
+                      className={`${styles.filterButton} ${isActive ? styles.active : ''}`}
+                      onClick={() => handleFilterClick(filter)}
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                    >
+                      {`${filter} (${count})`}
+                    </motion.button>
+                  )
+                })}
+              </div>
+            </FadeInView>
 
-        {filteredCases.length === 0 && !isLoading && (
-          <FadeInView className={styles.noResults} duration={0.5}>
-            <p>
-              {activeFilters.length > 0
-                ? '검색 조건에 맞는 사건이 없습니다.'
-                : '해당 필터에 맞는 사건이 없습니다.'}
-            </p>
-            {activeFilters.length > 0 && (
-              <button onClick={handleResetAll} className={styles.resetButton}>
-                검색 초기화
-              </button>
+            {(filteredCases.length !== cases.length || activeFilters.length > 0) && (
+              <FadeInView className={styles.resultsCount} delay={0.45} duration={BASIC_DURATION}>
+                <p>{filteredCases.length}개의 사건이 발견되었습니다</p>
+              </FadeInView>
             )}
-          </FadeInView>
-        )}
 
-        <CaseDetailModal
-          key={selected?.id}
-          open={Boolean(selected)}
-          onClose={() => setSelected(null)}
-          caseMeta={selected}
-        />
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={animationKey}
+                className={styles.caseGrid}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.3 }}
+              >
+                {filteredCases.map((item) => (
+                  <CaseCard key={item.id} item={item} onClick={() => setSelected(item)} />
+                ))}
+              </motion.div>
+            </AnimatePresence>
+
+            {filteredCases.length === 0 && !isLoading && (
+              <FadeInView className={styles.noResults} duration={BASIC_DURATION}>
+                <p>
+                  {activeFilters.length > 0
+                    ? '검색 조건에 맞는 사건이 없습니다.'
+                    : '해당 필터에 맞는 사건이 없습니다.'}
+                </p>
+                {activeFilters.length > 0 && (
+                  <button onClick={handleResetAll} className={styles.resetButton}>
+                    검색 초기화
+                  </button>
+                )}
+              </FadeInView>
+            )}
+
+            <CaseDetailModal
+              key={selected?.id}
+              open={Boolean(selected)}
+              onClose={() => setSelected(null)}
+              caseMeta={selected}
+            />
+          </>
+        )}
       </FadeInView>
     </AnimatePresence>
   )

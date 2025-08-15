@@ -1,4 +1,5 @@
 @use "sass:map";
+@use './spacing' as *;
 
 $media-breakpoints: (
   'mobile': 480px,
@@ -18,11 +19,15 @@ $container-breakpoints: (
   'xxxl': 1000px,
 );
 
-/* CONTAINER SIZE */
+/* SIZE */
 $container-desktop: calc(100% - 10rem);
 $container-tablet: calc(100% - 4rem);
 $container-mobile-lg: calc(100% - 2.4rem);
 $container-mobile: calc(100% - 2rem);
+
+$header-block-size: 90px;
+$footer-margin-block: $space-32;
+
 
 /* RADIUS */
 $radius-sm: 0.25rem;
@@ -36,6 +41,7 @@ $radius-full: 50%;
 $z-below: -1;
 $z-base: 1;
 $z-dropdown: 100;
+$z-header: 500;
 $z-modal: 999;
 $z-notification: 9999;
 

@@ -10,6 +10,7 @@
   container: medal-container / inline-size;
 
   @include container('desktop');
+  margin-block-end: $footer-margin-block;
 
   @include respondFrom('xxl') {
     inline-size: container('mobile');
@@ -27,12 +28,12 @@
     border-radius: radius('base');
 
     .title {
-      @include textStyle('2xl', 'bold', 'none');
+      @include textStyle($text-2xl, $font-bold, $leading-none);
       color: color('text', 'title');
     }
 
     .subtitle {
-      @include textStyle('lg', 'normal', 'none');
+      @include textStyle($text-lg, $font-normal, $leading-none);
       color: color('text', 'basic');
     }
 
@@ -147,7 +148,7 @@
 
       li {
         list-style: disc;
-        @include textStyle('lg', 'normal', 'normal', $tracking-tighter);
+        @include textStyle($text-lg, $font-normal, $leading-normal, $tracking-tighter);
         color: color('text', 'secondary');
         margin-block-end: space(3);
       }

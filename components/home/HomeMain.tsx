@@ -13,14 +13,22 @@ import CubeScanner from 'components/home/CubeScanner'
 import GuideNotice from 'components/home/GuideNotice'
 import styles from './HomeMain.module.scss'
 
+const FULL_TEXT = 'ACCESS AUTHORIZED'
+const TYPING_SPEED = 100
+const SHOW_DELAY = 1.4
+const SHOW_GNB = 500
+
 export default function HomeMain() {
+  const { setAnimationDone, animationDone } = useAnimationContext()
   const [phase, setPhase] = useState<'scan' | 'typing' | 'done'>('scan')
   const [displayedText, setDisplayedText] = useState('')
   const [scanText, setScanText] = useState('')
   const [showScanner, setShowScanner] = useState(false)
-  const fullText = 'ACCESS GRANTED'
-  const typingSpeed = 100
-  const { setAnimationDone, animationDone } = useAnimationContext()
+
+  // Initialize
+  useEffect(() => {
+    setAnimationDone(false)
+  }, [setAnimationDone])
 
   useEffect(() => {
     if (animationDone) {
@@ -53,17 +61,17 @@ export default function HomeMain() {
     if (phase === 'typing') {
       let currentIndex = 0
       const timer = setInterval(() => {
-        if (currentIndex <= fullText.length) {
-          setDisplayedText(fullText.slice(0, currentIndex))
+        if (currentIndex <= FULL_TEXT.length) {
+          setDisplayedText(FULL_TEXT.slice(0, currentIndex))
           currentIndex++
         } else {
           clearInterval(timer)
           setTimeout(() => {
             setPhase('done')
             setAnimationDone(true)
-          }, 1000)
+          }, SHOW_GNB)
         }
-      }, typingSpeed)
+      }, TYPING_SPEED)
       return () => clearInterval(timer)
     }
   }, [phase, setAnimationDone])
@@ -94,11 +102,17 @@ export default function HomeMain() {
             </motion.span>
           </h2>
 
-          <FadeInView as="p" className={styles.tagline} delay={0.8} duration={0.8} y={10}>
+          <FadeInView
+            as="p"
+            className={styles.tagline}
+            delay={SHOW_DELAY + 0.1}
+            duration={0.8}
+            y={10}
+          >
             사건 파일을 열고, 기술 수사를 시작하세요.
           </FadeInView>
 
-          <FadeInView className={styles.actions} delay={1.3} duration={0.8} y={20}>
+          <FadeInView className={styles.actions} delay={SHOW_DELAY + 0.6} duration={0.8} y={20}>
             <BasicButton href="/case" variant="primary">
               사건 기록 열람
             </BasicButton>

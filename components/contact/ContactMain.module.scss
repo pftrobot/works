@@ -7,7 +7,6 @@
 .contactWrap {
   container: contact-container / inline-size;
 
-  position: relative;
   @include flex(row, center, center);
   @include container('desktop');
   padding-block: space(20);
@@ -19,8 +18,8 @@
     inset-block-end: 0;
     inset-inline-start: 10%;
     inline-size: max(50%, 500px);
-    aspect-ratio: 1;
-    background: url('/imgs/bg/handcuffs.png') no-repeat;
+    aspect-ratio: 1 / 1.3;
+    background: url('/imgs/bg/handcuffs.png') no-repeat 0 90%;
     background-size: 100% auto;
     mix-blend-mode: exclusion;
     z-index: zIndex('below');
@@ -33,7 +32,7 @@
     margin-inline: auto;
     z-index: zIndex('base');
 
-    @include containerQuery('xl') {
+    @include containerQuery('xxxl') {
       @include grid(1, 16);
     }
   }
@@ -43,7 +42,7 @@
   @include flex(column, stretch, flex-start, 12);
 
   .mainTitle {
-    @include textStyle('6xl', 'semibold', 'tight');
+    @include textStyle($text-6xl, $font-semibold, $leading-tight);
     color: color('text', 'white');
 
     @include containerQuery('xl') {

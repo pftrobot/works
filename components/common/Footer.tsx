@@ -17,7 +17,7 @@ const Footer = () => {
           <Link href="/about">프로파일</Link>
           <Link href="/contact">제보</Link>
           <button onClick={() => setOpenGuide(true)} className={styles.guideBtn}>
-            Guide
+            관람가이드
           </button>
           <a href="https://github.com/yourname" target="_blank" rel="noopener noreferrer">
             GitHub

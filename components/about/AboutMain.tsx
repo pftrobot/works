@@ -23,7 +23,7 @@ import {
   IconCompass,
 } from '@tabler/icons-react'
 
-const iconMap: Record<string, ReactNode> = {
+const ICON_MAP: Record<string, ReactNode> = {
   'dna-1': <IconPuzzle />,
   'dna-2': <IconBolt />,
   'dna-3': <IconCpu />,
@@ -31,6 +31,7 @@ const iconMap: Record<string, ReactNode> = {
   'dna-5': <IconBug />,
   'dna-6': <IconCompass />,
 } as const
+const SHOW_GNB = 600
 
 export default function AboutMain() {
   const { setAnimationDone } = useAnimationContext()
@@ -51,7 +52,7 @@ export default function AboutMain() {
   useEffect(() => {
     const timeout = setTimeout(() => {
       setAnimationDone(true)
-    }, 600)
+    }, SHOW_GNB)
     return () => clearTimeout(timeout)
   }, [setAnimationDone])
 
@@ -90,7 +91,7 @@ export default function AboutMain() {
             >
               <div className={styles.labelTop}>
                 <span className={styles.skillText}>{'//'} SKILL</span>
-                <span className={styles.iconShape}>{iconMap[id]}</span>
+                <span className={styles.iconShape}>{ICON_MAP[id]}</span>
               </div>
               <div className={styles.labelLine}>
                 <motion.div

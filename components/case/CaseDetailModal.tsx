@@ -23,6 +23,7 @@ interface Props {
 const INITIAL_STYLE = { opacity: 0, y: 20 } as const
 const ANIMATE_STYLE = { opacity: 1, y: 0 } as const
 const DURATION = 0.6
+
 export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
   const [quizStep, setQuizStep] = useState<'question' | 'answer'>('question')
   const [selectedOption, setSelectedOption] = useState<number | null>(null)

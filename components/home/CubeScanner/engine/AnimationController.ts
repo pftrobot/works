@@ -137,6 +137,7 @@ export class AnimationController {
 
   /* 렌더 루프 시작 */
   start() {
+    this.clock.start()
     this.rafId = requestAnimationFrame(this.animate)
   }
 

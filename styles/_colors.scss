@@ -12,8 +12,10 @@ $semantic-info: #58a6ff;
 
 /* BACKGROUND COLOR */
 $bg-body: #1b1b1b;
+$bg-header: #141414;
 $bg-footer: #121212;
 $bg-input: #323232;
+$bg-white: #fff;
 
 /* TEXT COLOR */
 $text-basic: #e0e0e0;
@@ -47,6 +49,7 @@ $colors: (
     'body': $bg-body,
     'footer': $bg-footer,
     'input': $bg-input,
+    'white': $bg-white
   ),
   'text': (
     'basic': $text-basic,

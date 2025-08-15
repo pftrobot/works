@@ -89,7 +89,7 @@
 @mixin input-base {
   width: 100%;
   color: color('text', 'text');
-  @include textStyle('base', 'light');
+  @include textStyle($text-base, $font-light);
   padding: space(4) space(2);
   outline: none;
   background: transparent;

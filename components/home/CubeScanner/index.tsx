@@ -20,7 +20,7 @@ export default function CubeScanner({
   const controllerRef = useRef<AnimationController | null>(null)
 
   const [isFullscreen, setIsFullscreen] = useState(false)
-  const [showGlitch] = useState(false) // 유지
+  const [showGlitch] = useState(false)
   const [showFlash, setShowFlash] = useState(false)
 
   // 포털 루트 관리 (풀스크린 전환 시)

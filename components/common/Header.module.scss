@@ -5,9 +5,11 @@
 @use "@mixins" as *;
 
 .header {
+  position: sticky;
+  top: 0;
+  z-index: $z-header;
   padding: space(12);
-  margin-block-end: space(12);
-  background-color: #141414;
+  background-color: $bg-header;
   border-block-end: 1px solid #2d2d2d;
 
   @include respondFrom('sm') {
