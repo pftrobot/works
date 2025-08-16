@@ -32,7 +32,7 @@
     margin-inline: auto;
     z-index: zIndex('base');
 
-    @include containerQuery('xxxl') {
+    @include containerQuery('3xl') {
       @include grid(1, 16);
     }
   }

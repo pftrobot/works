@@ -6,13 +6,13 @@
 /*
 * MEDIA QUERY
 */
-@mixin respondTo($breakpoint) {
+@mixin respondFrom($breakpoint) {
   @media (min-width: mediaBreakpoint($breakpoint)) {
     @content;
   }
 }
 
-@mixin respondFrom($breakpoint) {
+@mixin respondTo($breakpoint) {
   @media (max-width: mediaBreakpoint($breakpoint) - 1px) {
     @content;
   }
@@ -40,10 +40,17 @@
   inline-size: container($size);
   margin-inline: auto;
 
-  @if $size == 'desktop' {
-    @include respondFrom('wide') {
-      inline-size: container('mobile');
-    }
+  @include respondTo('laptop') {
+    inline-size: container('laptop');
+  }
+  @include respondTo('tablet') {
+    inline-size: container('tablet');
+  }
+  @include respondTo('mobile-lg') {
+    inline-size: container('mobile-lg');
+  }
+  @include respondTo('mobile') {
+    inline-size: container('mobile');
   }
 }
 
@@ -77,10 +84,17 @@
   gap: space($gap);
 }
 
-@mixin grid-auto-fit($min-size: 20rem, $gap: 6) {
+@mixin grid-auto-fit($min-size: 20rem, $gaps...) {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax($min-size, 1fr));
-  gap: space($gap);
+
+  @if length($gaps) == 1 {
+    gap: space(nth($gaps, 1));
+  } @else if length($gaps) == 2 {
+    gap: space(nth($gaps, 1)) space(nth($gaps, 2));
+  } @else {
+    gap: 0;
+  }
 }
 
 /*

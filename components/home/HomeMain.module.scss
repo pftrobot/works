@@ -8,6 +8,7 @@
   container: home-container / inline-size;
 
   @include flex(column, center, center);
+  @include container;
   min-block-size: calc(100vh - 12rem);
   text-align: center;
 
@@ -50,12 +51,16 @@
     @include flex(row, center, center, 12, wrap);
     margin-block-start: 2.4rem;
 
+    @include containerQuery('md') {
+      font-size: 0;
+      gap: space(8);
+    }
+
     > a {
       position: relative;
       @include flex(row, center, center);
       font-size: $text-base-s;
       color: #ddd;
-      //letter-spacing: 0.0625rem;
       letter-spacing: $tracking-wider;
       text-transform: uppercase;
       padding-block: space(5);

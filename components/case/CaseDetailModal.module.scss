@@ -8,6 +8,10 @@
   container: case-detail-container / inline-size;
   @include flex(row, stretch, flex-start, 15);
 
+  @include respondTo('tablet') {
+    display: block;
+  }
+
   .leftColumn {
     @include flex(column, stretch, flex-start, 0);
     inline-size: 21rem;
@@ -34,6 +38,28 @@
       letter-spacing: $tracking-tight;
       @include fadeSlideUp(0.6s, 0.3s);
     }
+
+    @include respondTo('tablet') {
+      inline-size: 100%;
+
+      .subtitle {
+        margin-block-end: space(9);
+      }
+    }
+
+    @include containerQuery('sm') {
+      .title {
+        font-size: $text-2xl;
+      }
+
+      .subtitle {
+        font-size: $text-base-sm;
+      }
+
+      .summary {
+        font-size: $text-sm;
+      }
+    }
   }
 
   .rightColumn {
@@ -41,16 +67,30 @@
     @include flex(column, stretch, flex-start, 0);
     padding-block-start: space(2);
 
+    @include respondTo('tablet') {
+      padding-block-start: space(11);
+      margin-block-start: space(11);
+      border-block-start: 1px solid $bg-body;
+    }
+
     .question {
       font-size: $text-base;
       font-weight: $font-semibold;
       color: color('text', 'accent');
       margin-block-end: space(12);
       @include fadeSlideUp(0.6s, 0.4s);
+
+      @include containerQuery('sm') {
+        font-size: $text-base-sm;
+      }
     }
 
     .options {
       @include flex(column, stretch, flex-start, 5);
+
+      @include respondTo('tablet') {
+        gap: space(3);
+      }
 
       button {
         display: block;
@@ -69,6 +109,15 @@
 
         &:hover {
           border-color: #c5a46a;
+        }
+
+        @include respondTo('tablet') {
+          padding-block: space(4);
+          padding-inline: space(5);
+        }
+
+        @include containerQuery('sm') {
+          font-size: $text-base-sm;
         }
       }
 
@@ -108,9 +157,12 @@
         font-size: $text-base-sm;
         color: color('text', 'basic');
         line-height: $leading-loose;
-        //letter-spacing: -0.28px;
         letter-spacing: $tracking-tight;
         margin-block-start: space(6);
+
+        @include containerQuery('sm') {
+          font-size: $text-sm;
+        }
       }
 
       .link {
@@ -121,6 +173,10 @@
 
         &:hover {
           color: #80c4ff;
+        }
+
+        @include containerQuery('sm') {
+          font-size: $text-sm;
         }
       }
 
@@ -140,54 +196,8 @@
             }
           }
         }
-      }
-    }
-  }
-}
 
-@include containerQuery('md') {
-  .modalWrap {
-    .leftColumn {
-      .title {
-        font-size: $text-2xl;
-      }
-
-      .subtitle {
-        font-size: $text-base-sm;
-      }
-
-      .summary {
-        font-size: $text-sm;
-      }
-    }
-
-    .rightColumn {
-      padding-block-start: 1.6rem;
-
-      .question {
-        font-size: $text-base-sm;
-      }
-
-      .options {
-        gap: space(3);
-
-        button {
-          font-size: $text-base-sm;
-          padding-block: space(4);
-          padding-inline: space(5);
-        }
-      }
-
-      .answerWrap {
-        .description {
-          font-size: $text-sm;
-        }
-
-        .link {
-          font-size: $text-sm;
-        }
-
-        .backBtn {
+        @include containerQuery('sm') {
           font-size: $text-sm;
         }
       }

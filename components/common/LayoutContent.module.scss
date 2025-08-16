@@ -1,5 +1,6 @@
 @use "@styles/layout" as *;
 @use "@styles/spacing" as *;
+@use "@styles/mixins" as *;
 
 .layout {
   display: flex;
@@ -21,6 +22,22 @@
 
     &.isMain {
       margin-top: $header-block-size;
+    }
+
+    @include respondTo('tablet'){
+      margin-top: calc(#{$header-block-size-tablet} + #{$space-12});
+
+      &.isMain {
+        margin-top: $header-block-size-tablet;
+      }
+    }
+
+    @include respondTo('mobile'){
+      margin-top: calc(#{$header-block-size-mobile} + #{$space-12});
+
+      &.isMain {
+        margin-top: $header-block-size-mobile;
+      }
     }
   }
 }

@@ -1,8 +1,6 @@
-@use "@styles/layout" as *;
 @use "@styles/colors" as *;
 @use "@styles/typography" as *;
 @use "@styles/spacing" as *;
-@use "@mixins" as *;
 
 .title {
   container: page-title / inline-size;
@@ -14,8 +12,4 @@
   padding-block-end: space(7);
   margin-block-end: space(7);
   border-block-end: 1px solid #464646;
-
-  @include containerQuery('sm') {
-    font-size: $text-2xl;
-  }
 }

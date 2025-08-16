@@ -170,7 +170,7 @@
     }
   }
 
-  @include respondFrom('md') {
+  @include respondTo('md') {
     grid-template-columns: 1fr;
 
     .dnaItem {

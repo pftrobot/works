@@ -12,10 +12,6 @@
   @include container('desktop');
   margin-block-end: $footer-margin-block;
 
-  @include respondFrom('xxl') {
-    inline-size: container('mobile');
-  }
-
   .infoBox {
     position: relative;
     @include flex(column, center, center, 6);

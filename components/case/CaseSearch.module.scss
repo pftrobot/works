@@ -56,6 +56,11 @@ $borderInputFocus: #ffffff99;
   border: none;
   outline: none;
 
+  @include respondTo('tablet') {
+    padding-block: space(5);
+    padding-inline: space(7);
+  }
+
   &::placeholder {
     color: color('text', 'secondary');
   }

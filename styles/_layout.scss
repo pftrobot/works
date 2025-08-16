@@ -4,7 +4,7 @@
 $media-breakpoints: (
   'mobile': 480px,
   'tablet': 768px,
-  'desktop': 1024px,
+  'laptop': 1024px,
   'wide': 1280px,
 );
 
@@ -15,17 +15,20 @@ $container-breakpoints: (
   'md': 600px,
   'lg': 768px,
   'xl': 800px,
-  'xxl': 900px,
-  'xxxl': 1000px,
+  '2xl': 900px,
+  '3xl': 1000px,
 );
 
 /* SIZE */
 $container-desktop: calc(100% - 10rem);
+$container-laptop: calc(100% - 6rem);
 $container-tablet: calc(100% - 4rem);
 $container-mobile-lg: calc(100% - 2.4rem);
 $container-mobile: calc(100% - 2rem);
 
 $header-block-size: 90px;
+$header-block-size-tablet: 82px;
+$header-block-size-mobile: 72px;
 $footer-margin-block: $space-32;
 
 
@@ -76,6 +79,7 @@ $transition-bounce: cubic-bezier(0.22, 1, 0.36, 1);
 @function container($size) {
   @return map.get((
     'desktop': $container-desktop,
+    'laptop': $container-laptop,
     'tablet': $container-tablet,
     'mobile-lg': $container-mobile-lg,
     'mobile': $container-mobile

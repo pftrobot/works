@@ -26,6 +26,23 @@
     background-color: #000;
     animation: popIn 0.4s $transition-bounce;
 
+    @include respondTo('tablet') {
+      block-size: 100%;
+      max-block-size: 100%;
+      border: none;
+      border-radius: 0;
+    }
+
+    @include containerQuery('md') {
+      inline-size: 100%;
+      max-inline-size: 100%;
+      padding: space(12);
+    }
+
+    @include containerQuery('s') {
+      padding: space(8);
+    }
+
     .close {
       position: absolute;
       inset-block-start: space(8);
@@ -35,37 +52,18 @@
       background-color: transparent;
       border: none;
       cursor: pointer;
+      z-index: zIndex('modal');
+
+      @include containerQuery('md') {
+        font-size: $text-sm;
+      }
+
+      @include containerQuery('s') {
+        font-size: $text-xs;
+      }
 
       &:hover {
         color: color('text', 'basic');
-      }
-    }
-  }
-
-  @include containerQuery('md') {
-    .modal {
-      inline-size: 100%;
-      max-inline-size: 100%;
-      padding: space(9);
-
-      .close {
-        inset-block-start: space(5);
-        inset-inline-end: space(6);
-        font-size: $text-sm;
-      }
-    }
-  }
-
-  @include containerQuery('sm') {
-    .modal {
-      inline-size: 100%;
-      max-inline-size: 100%;
-      padding: space(6);
-
-      .close {
-        inset-block-start: space(3);
-        inset-inline-end: space(5);
-        font-size: $text-xs;
       }
     }
   }

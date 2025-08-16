@@ -11,25 +11,31 @@
   @include container('desktop');
   padding-block-end: space(24);
 
-  @include respondFrom('xl') {
-    inline-size: container('tablet');
-  }
-
-  @include respondFrom('sm') {
-    inline-size: container('mobile-lg');
-  }
-
   .description {
     font-size: $text-lg;
     color: color('text', 'muted');
-    margin-block-end: 4.5rem;
+    margin-block-end: space(20);
+
+    @include containerQuery('lg') {
+      font-size: $text-base;
+      margin-block-end: space(12);
+    }
   }
 
   .filterSection {
     margin-block-end: space(14);
 
+    @include containerQuery('lg') {
+      margin-block-start: space(16);
+      margin-block-end: space(9);
+    }
+
     .filterButtons {
       @include flex(row, stretch, flex-start, 7, wrap);
+
+      @include containerQuery('lg') {
+        gap: space(4, 3);
+      }
 
       .filterButton {
         font-size: $text-base-sm;
@@ -42,6 +48,10 @@
         border: 1px solid transparent;
         transition: all $transition-fast;
         cursor: pointer;
+
+        @include containerQuery('lg') {
+          padding-block: space(2);
+        }
 
         @media (hover: hover) {
           &:hover {
@@ -104,8 +114,11 @@
   }
 
   .caseGrid {
-    @include grid-auto-fit(22.5rem, 0);
-    gap: 6.125rem 4.125rem;
+    @include grid-auto-fit(22.5rem, 32, 20);
+
+    @include containerQuery('2xl'){
+      @include grid-auto-fit(18rem, 20, 8);
+    }
 
     .card {
       @include flex(column, stretch, flex-start, 0);
@@ -166,16 +179,33 @@
           color: color('text', 'title');
           text-transform: uppercase;
           letter-spacing: -0.1rem;
+
+          @include containerQuery('2xl') {
+            font-size: $text-2xl;
+            letter-spacing: $tracking-tighter;
+          }
         }
 
         .descArea {
           @include flex(row, stretch, space-between);
+
+          @include containerQuery('xl') {
+            display: block;
+          }
+
+          @include containerQuery('md') {
+            display: flex;
+          }
 
           .title {
             font-size: $text-lg;
             font-weight: $font-normal;
             color: color('text', 'white');
             padding-inline-end: space(3);
+
+            @include containerQuery('2xl') {
+              font-size: $text-base;
+            }
 
             &.sub {
               color: color('semantic', 'error');

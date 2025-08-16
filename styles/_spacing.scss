@@ -53,6 +53,12 @@ $spacing: (
 /*
 * HELPER
 */
-@function space($size) {
-  @return map.get($spacing, $size);
+@function space($sizes...) {
+  $values: ();
+
+  @each $s in $sizes {
+    $values: append($values, map.get($spacing, $s), space);
+  }
+
+  @return $values;
 }
