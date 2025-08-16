@@ -6,8 +6,9 @@ import { motion, AnimatePresence } from 'framer-motion'
 import { useAnimationContext } from 'contexts/AnimationContext'
 import { addMedal } from 'utils/medalUtils'
 import { MedalType } from 'types/medal'
-import { FadeInView } from 'components/common/FadeInView'
+import { MENU } from '@constants'
 
+import { FadeInView } from 'components/common/FadeInView'
 import BasicButton from 'components/common/BasicButton'
 import CubeScanner from 'components/home/CubeScanner'
 import GuideNotice from 'components/home/GuideNotice'
@@ -17,6 +18,7 @@ const FULL_TEXT = 'ACCESS AUTHORIZED'
 const TYPING_SPEED = 100
 const SHOW_DELAY = 1.4
 const SHOW_GNB = 500
+const { LIST, ABOUT } = MENU
 
 export default function HomeMain() {
   const { setAnimationDone, animationDone } = useAnimationContext()
@@ -113,10 +115,10 @@ export default function HomeMain() {
           </FadeInView>
 
           <FadeInView className={styles.actions} delay={SHOW_DELAY + 0.6} duration={0.8} y={20}>
-            <BasicButton href="/case" variant="primary">
+            <BasicButton href={LIST} variant="primary">
               사건 기록 열람
             </BasicButton>
-            <BasicButton href="/about" variant="secondary">
+            <BasicButton href={ABOUT} variant="secondary">
               수사관 프로파일
             </BasicButton>
           </FadeInView>

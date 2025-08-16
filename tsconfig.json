@@ -25,7 +25,8 @@
     "paths": {
       "@/*": ["./*"],
       "@styles/*": ["./styles/*"],
-      "@mixins": ["./styles/mixins.scss"]
+      "@mixins": ["./styles/mixins.scss"],
+      "@constants": ["./constants/index.ts"]
     },
     "forceConsistentCasingInFileNames": true,
     "verbatimModuleSyntax": false

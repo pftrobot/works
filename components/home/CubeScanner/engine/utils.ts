@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import * as CONST from '../constants'
+import * as CONST from '@constants'
 
 /* Easing */
 // 초반에 천천히, 끝으로 갈수록 빠르게

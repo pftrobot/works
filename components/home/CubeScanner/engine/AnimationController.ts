@@ -13,7 +13,7 @@ import {
   CAMERA_END_Z,
   CUBE_ZOOM_SCALE,
   GLOW_SCALE_MULTIPLIER,
-} from '../constants'
+} from '@constants'
 
 export class AnimationController {
   private scene = new THREE.Scene()

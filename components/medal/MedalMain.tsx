@@ -8,18 +8,20 @@ import classNames from 'classnames'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
 import { getMedalCount, getMedalSources } from 'utils/medalUtils'
+import { MENU } from '@constants'
 
 import PageTitle from 'components/common/PageTitle'
 import { TypingText } from 'components/common/TypingText'
 import { StaggerList } from 'components/common/StaggerList'
 import styles from './MedalMain.module.scss'
 
+const { LIST, CONTACT } = MENU
 const GUIDE_ITEMS = [
   <>
-    <Link href="/case">사건 목록</Link>을 탐색해보세요.
+    <Link href={LIST}>사건 목록</Link>을 탐색해보세요.
   </>,
   <>
-    <Link href="/contact">제보</Link>를 남기면 수사에 기여한 것으로 인정돼요.
+    <Link href={CONTACT}>제보</Link>를 남기면 수사에 기여한 것으로 인정돼요.
   </>,
   <>사이트 곳곳에 숨겨진 단서를 찾아보세요. 예상치 못한 보상이 기다리고 있어요.</>,
 ]

@@ -69,12 +69,10 @@ export default function CubeScanner({
       {
         onEnterFullscreen: () => setIsFullscreen(true),
         onFlash: (on, durationMs) => {
-          console.log(':::: on flash')
           setShowFlash(on)
           if (on) setTimeout(() => setShowFlash(false), durationMs)
         },
         onComplete: () => {
-          console.log(':::: on complete')
           onScanComplete()
         },
       },

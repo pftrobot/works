@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import { BLOOM_INTENSITY, BLOOM_RADIUS, BLOOM_THRESHOLD, TRAILS_DAMP } from '../constants'
+import { BLOOM_INTENSITY, BLOOM_RADIUS, BLOOM_THRESHOLD, TRAILS_DAMP } from '@constants'
 
 /**
  * PostFX Type

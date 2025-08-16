@@ -151,6 +151,10 @@
         @include textStyle($text-lg, $font-normal, $leading-normal, $tracking-tighter);
         color: color('text', 'secondary');
         margin-block-end: space(3);
+
+        a {
+          @include linkUnderline(#c49d40, #f5ca64);
+        }
       }
     }
 

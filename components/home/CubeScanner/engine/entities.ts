@@ -1,5 +1,5 @@
 import * as THREE from 'three'
-import * as CONST from '../constants'
+import * as CONST from '@constants'
 import { makeScanbarTexture, makeCircleTexture, toLuminanceCanvasTexture } from './utils'
 
 /**
