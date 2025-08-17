@@ -10,7 +10,7 @@ const fetchTimeline = async (): Promise<TimelineItem[]> => {
     .order('year', { ascending: false })
 
   if (error) {
-    console.error('Supabase Error:: fetching timeline data:: ', error)
+    console.error('Fetch Error:: Timeline List:: ', error)
     throw error
   }
   return data ?? []

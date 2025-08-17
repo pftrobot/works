@@ -6,7 +6,7 @@ import { motion } from 'framer-motion'
 import classNames from 'classnames'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
-import { addMedal } from 'utils/medalUtils'
+import { useAddMedal } from 'utils/medalUtils'
 import { MedalType } from 'types/medal'
 
 import BasicButton from 'components/common/BasicButton'
@@ -21,6 +21,7 @@ const TEXT_ITEMS = [
 ]
 export default function ContactMain() {
   const { setAnimationDone } = useAnimationContext()
+  const { mutate: getMedal } = useAddMedal()
 
   const [formData, setFormData] = useState({
     name: '',
@@ -63,8 +64,7 @@ export default function ContactMain() {
   const handleSubmit = (e: React.FormEvent | React.MouseEvent) => {
     e.preventDefault()
     if (!validate()) return
-    console.log('::: Form submitted:', formData)
-    addMedal(MedalType.Contact)
+    getMedal({ type: MedalType.Contact })
   }
 
   const containerVariants = {

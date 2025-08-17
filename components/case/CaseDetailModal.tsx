@@ -1,13 +1,13 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import classNames from 'classnames'
 
-import { addMedal } from 'utils/medalUtils'
-import { MedalType } from 'types/medal'
 import { CaseMeta } from 'lib/supabase'
+import { useAddMedal } from 'utils/medalUtils'
+import { MedalType } from 'types/medal'
 
 import Modal from 'components/common/Modal'
 import ConfirmModal from 'components/common/ConfirmModal'
@@ -28,6 +28,9 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
   const [quizStep, setQuizStep] = useState<'question' | 'answer'>('question')
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
   const [confirmVisible, setConfirmVisible] = useState(false)
+  const awardedRef = useRef(false)
+
+  const { mutate: getMedal } = useAddMedal()
 
   if (!caseMeta) return null
 
@@ -50,13 +53,19 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
 
   const isCorrectAnswer = selectedOption === quiz.answer
 
-  if (typeof window !== 'undefined' && quizStep === 'answer' && isCorrectAnswer) {
-    const stored = localStorage.getItem('case_medal_track')
-    const solvedIds = stored ? (JSON.parse(stored) as Array<string | number>) : []
-    if (!solvedIds.includes(caseMeta.id)) {
-      addMedal(MedalType.Case, caseMeta.id)
+  useEffect(() => {
+    awardedRef.current = false
+  }, [open, caseMeta?.id])
+
+  useEffect(() => {
+    if (!open || !caseMeta) return
+    const isCorrectAnswer = selectedOption === caseMeta.quiz.answer
+
+    if (quizStep === 'answer' && isCorrectAnswer && !awardedRef.current) {
+      awardedRef.current = true
+      getMedal({ type: MedalType.Case, sourceId: caseMeta.id })
     }
-  }
+  }, [open, quizStep, selectedOption, caseMeta?.id, getMedal])
 
   return (
     <Modal open={open} onClose={onClose} width={1120}>

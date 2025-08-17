@@ -25,6 +25,23 @@
   background: transparent;
   border-radius: 16px;
 
+  &::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(
+                    ellipse at center,
+                    transparent 0%,
+                    transparent 70%,
+                    rgba(245, 192, 100, 0.1) 100%
+    );
+    pointer-events: none;
+    border-radius: 16px;
+  }
+
   canvas {
     display: block;
     width: 100% !important;
@@ -58,38 +75,5 @@
                     transparent 100%
     );
     mix-blend-mode: screen;
-  }
-}
-
-// 빈티지 CRT 효과
-.canvasWrapper::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: radial-gradient(
-                  ellipse at center,
-                  transparent 0%,
-                  transparent 70%,
-                  rgba(245, 192, 100, 0.1) 100%
-  );
-  pointer-events: none;
-  border-radius: 16px;
-}
-
-// Responsive
-@media (max-width: 768px) {
-  .canvasWrapper {
-    max-width: 400px;
-    max-height: 400px;
-  }
-}
-
-@media (max-width: 480px) {
-  .canvasWrapper {
-    max-width: 320px;
-    max-height: 320px;
   }
 }

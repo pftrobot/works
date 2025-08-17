@@ -25,27 +25,23 @@ export const useCaseStore = create<CaseState>((set, get) => ({
     set({ isLoading: true, error: null })
 
     try {
-      const { data, error } = await supabase
+      const { data } = await supabase
         .from('cases')
         .select('*')
         .order('id', { ascending: true })
-
-      if (error) {
-        console.error('Supabase Error:: fetching case list data:: ', error)
-        throw error
-      }
+        .throwOnError()
 
       set({
-        cases: data || [],
-        filteredCases: data || [],
-        isLoading: false,
+        cases: data ?? [],
+        filteredCases: data ?? [],
       })
-    } catch (error) {
-      console.error('Fetch error:: Case List::', error)
-      set({
-        error: error instanceof Error ? error.message : 'Error',
-        isLoading: false,
-      })
+    } catch (err) {
+      const message = (err as any)?.message ?? 'Error'
+      set({ error: message })
+
+      console.error('Fetch error:: Case List::', err)
+    } finally {
+      set({ isLoading: false })
     }
   },
 

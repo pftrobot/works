@@ -154,6 +154,11 @@
         line-height: $leading-none;
         margin-block-start: space(3);
       }
+
+      .date {
+        font-size: $text-xs;
+        color: color('text', 'muted');
+      }
     }
   }
 

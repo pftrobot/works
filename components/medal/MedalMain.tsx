@@ -7,7 +7,7 @@ import { motion } from 'framer-motion'
 import classNames from 'classnames'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
-import { getMedalCount, getMedalSources } from 'utils/medalUtils'
+import { useMedals } from 'utils/medalUtils'
 import { MENU } from '@constants'
 
 import PageTitle from 'components/common/PageTitle'
@@ -28,23 +28,17 @@ const GUIDE_ITEMS = [
 export default function MedalMain() {
   const { setAnimationDone } = useAnimationContext()
   const [alias, setAlias] = useState('수사 손님')
-  const [medals, setMedals] = useState<number>(0)
-  const [medalSources, setMedalSources] = useState<Array<'case' | 'contact' | 'egg'>>([])
-  const [rank, setRank] = useState<'탐색자' | '조력자' | '공범'>('조력자')
+  const { data, isLoading, isError } = useMedals()
+  const medals = data?.count ?? 0
+  const medalItems = data?.items ?? []
 
   const [refInfo, inViewInfo] = useInView({ triggerOnce: true, threshold: 0.2 })
   const [refList, inViewList] = useInView({ triggerOnce: true, threshold: 0.2 })
   const [refHint, inViewHint] = useInView({ triggerOnce: true, threshold: 0.2 })
 
   useEffect(() => {
-    const randomAlias = ['행인', '기술 탐색자', '정의의 메신저'][Math.floor(Math.random() * 3)] // TODO : random name
+    const randomAlias = ['행인', '기술 탐색자', '정의의 메신저'][Math.floor(Math.random() * 3)]
     setAlias(randomAlias)
-    setMedals(getMedalCount())
-
-    if (typeof window !== 'undefined') {
-      setMedalSources(getMedalSources())
-      setMedals(getMedalCount())
-    }
   }, [])
 
   useEffect(() => {
@@ -53,6 +47,16 @@ export default function MedalMain() {
     }, 600)
     return () => clearTimeout(timeout)
   }, [setAnimationDone])
+
+  const format = (iso: string) => {
+    const d = new Date(iso)
+    const yy = String(d.getFullYear()).slice(-2)
+    const mm = String(d.getMonth() + 1).padStart(2, '0')
+    const dd = String(d.getDate()).padStart(2, '0')
+    const hh = String(d.getHours()).padStart(2, '0')
+    const mi = String(d.getMinutes()).padStart(2, '0')
+    return `${yy}. ${mm}. ${dd}. ${hh}:${mi}`
+  }
 
   return (
     <motion.section
@@ -79,10 +83,10 @@ export default function MedalMain() {
         />
         <div className={styles.infoList}>
           <div className={styles.infoItem}>
-            <TypingText text={'랭크'} as={'strong'} staggerDelay={0.06} delay={0.1} />
+            <TypingText text="랭크" as="strong" staggerDelay={0.06} delay={0.1} />
             <TypingText
-              text={rank}
-              as={'span'}
+              text={medals >= 20 ? '파트너' : medals >= 10 ? '조력자' : '탐색자'}
+              as="span"
               className={styles.char}
               staggerDelay={0.06}
               delay={0.1}
@@ -108,18 +112,29 @@ export default function MedalMain() {
         animate={inViewList ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5 }}
       >
-        {medalSources.map((type, i) => (
-          <motion.div
-            key={i}
-            className={styles.medalItem}
-            initial={{ opacity: 0, scale: 0.8 }}
-            animate={inViewList ? { opacity: 1, scale: 1 } : {}}
-            transition={{ duration: 0.4, delay: i * 0.1 }}
-          >
-            <p>+ 1</p>
-            <span>{type === 'case' ? '사건' : type === 'contact' ? '제보' : '단서'}</span>
-          </motion.div>
-        ))}
+        {isLoading && <div>로딩중</div>}
+        {isError && (
+          <div>
+            데이터를 불러오는 데 실패했습니다. <br />
+            잠시 후 다시 시도해주세요.
+          </div>
+        )}
+        {!isLoading &&
+          medalItems.map((medal, i) => (
+            <motion.div
+              key={medal.id ?? i}
+              className={styles.medalItem}
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={inViewList ? { opacity: 1, scale: 1 } : {}}
+              transition={{ duration: 0.4, delay: i * 0.1 }}
+            >
+              <p>+ 1</p>
+              <span>
+                {medal.type === 'case' ? '사건' : medal.type === 'contact' ? '제보' : '단서'}
+              </span>
+              <span className={styles.date}>{format(medal.awarded_at)}</span>
+            </motion.div>
+          ))}
       </motion.div>
 
       <motion.div

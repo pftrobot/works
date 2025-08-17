@@ -26,17 +26,14 @@
     background-color: #000;
     animation: popIn 0.4s $transition-bounce;
 
-    @include respondTo('tablet') {
-      block-size: 100%;
-      max-block-size: 100%;
-      border: none;
-      border-radius: 0;
-    }
-
     @include containerQuery('md') {
       inline-size: 100%;
+      block-size: 100%;
       max-inline-size: 100%;
+      max-block-size: 100%;
       padding: space(12);
+      border: none;
+      border-radius: 0;
     }
 
     @include containerQuery('s') {

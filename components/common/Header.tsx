@@ -2,7 +2,7 @@
 
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
-import { IconFileText, IconUser, IconMessageCircle, IconAward } from '@tabler/icons-react'
+import { IconFingerprint, IconUser, IconMessageCircle, IconAward } from '@tabler/icons-react'
 
 import { MENU } from '@constants'
 
@@ -21,7 +21,7 @@ export default function Header() {
 
         <nav className={styles.nav}>
           <Link href={LIST} className={pathname.startsWith(LIST) ? styles.active : undefined}>
-            <IconFileText size={18} className={styles.icon} />
+            <IconFingerprint size={18} className={styles.icon} />
             <span className={styles.label}>CASE</span>
           </Link>
           <Link href={ABOUT} className={pathname === ABOUT ? styles.active : undefined}>

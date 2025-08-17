@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
-import { addMedal } from 'utils/medalUtils'
+import { useAddMedal } from 'utils/medalUtils'
 import { MedalType } from 'types/medal'
 import { MENU } from '@constants'
 
@@ -26,6 +26,8 @@ export default function HomeMain() {
   const [displayedText, setDisplayedText] = useState('')
   const [scanText, setScanText] = useState('')
   const [showScanner, setShowScanner] = useState(false)
+
+  const { mutate: getMedal } = useAddMedal()
 
   // Initialize
   useEffect(() => {
@@ -120,7 +122,7 @@ export default function HomeMain() {
       {phase === 'done' && <GuideNotice />}
 
       {/* TODO 테스트용 이스터에그 */}
-      <button onClick={() => addMedal(MedalType.Egg)} className={styles.hiddenBtn}>
+      <button onClick={() => getMedal({ type: MedalType.Egg })} className={styles.hiddenBtn}>
         사실 이스터에그
       </button>
     </section>
