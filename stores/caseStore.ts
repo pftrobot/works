@@ -31,7 +31,7 @@ export const useCaseStore = create<CaseState>((set, get) => ({
         .order('id', { ascending: true })
 
       if (error) {
-        console.error('Supabase Error::', error)
+        console.error('Supabase Error:: fetching case list data:: ', error)
         throw error
       }
 

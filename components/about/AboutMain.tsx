@@ -6,7 +6,8 @@ import { useInView } from 'react-intersection-observer'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
 import { useStaggerAnimation } from 'hooks/useStaggerAnimation'
-import { dnaList, techGroups, timeline } from 'data/aboutData'
+import { TimelineItem } from '@/types/about'
+import { dnaList, techGroups } from 'data/aboutData'
 
 import PageTitle from 'components/common/PageTitle'
 import { FadeInView } from 'components/common/FadeInView'
@@ -33,7 +34,10 @@ const ICON_MAP: Record<string, ReactNode> = {
 } as const
 const SHOW_GNB = 600
 
-export default function AboutMain() {
+interface AboutMainProps {
+  timelines: TimelineItem[]
+}
+export default function AboutMain({ timelines }: AboutMainProps) {
   const { setAnimationDone } = useAnimationContext()
   const [refProfile, inViewProfile] = useInView({ triggerOnce: true, threshold: 0.1 })
 
@@ -213,7 +217,7 @@ export default function AboutMain() {
         subtitle="TIMELINE"
         description="기술 수사관으로 성장해온 여정을 정리했습니다."
       >
-        <TimelineCards data={timeline} />
+        <TimelineCards timelines={timelines} />
       </Block>
     </FadeInView>
   )

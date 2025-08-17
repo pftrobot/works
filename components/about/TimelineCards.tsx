@@ -1,20 +1,15 @@
 import { motion } from 'framer-motion'
+import { TimelineItem } from '@/types/about'
 import styles from './TimelineCards.module.scss'
 
-export type TimelineItem = {
-  id: number
-  year: string
-  text: string
-}
-
 interface TimelineCardsProps {
-  data: TimelineItem[]
+  timelines: TimelineItem[]
 }
 
-export default function TimelineCards({ data }: TimelineCardsProps) {
+export default function TimelineCards({ timelines }: TimelineCardsProps) {
   return (
     <div className={styles.timelineWrap}>
-      {data.map((item, index) => (
+      {timelines?.map((item, index) => (
         <motion.div
           key={item.id}
           className={styles.card}
