@@ -5,15 +5,20 @@ import { createContext, useContext, useState, ReactNode } from 'react'
 interface AnimationContextValue {
   animationDone: boolean
   setAnimationDone: (done: boolean) => void
+  hasSeenIntro: boolean
+  setHasSeenIntro: (v: boolean) => void
 }
 
 const AnimationContext = createContext<AnimationContextValue | null>(null)
 
 export const AnimationProvider = ({ children }: { children: ReactNode }) => {
   const [animationDone, setAnimationDone] = useState(false)
+  const [hasSeenIntro, setHasSeenIntro] = useState(false)
 
   return (
-    <AnimationContext.Provider value={{ animationDone, setAnimationDone }}>
+    <AnimationContext.Provider
+      value={{ animationDone, setAnimationDone, hasSeenIntro, setHasSeenIntro }}
+    >
       {children}
     </AnimationContext.Provider>
   )
