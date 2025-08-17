@@ -19,6 +19,11 @@
     color: color('text', 'gray');
     line-height: $leading-relaxed;
     margin-block-end: space(9);
+
+    span {
+      display: inline-block;
+      vertical-align: middle;
+    }
   }
 
   .guideList {
@@ -47,23 +52,5 @@
     padding-block-end: 4px;
     background-color: transparent;
     @include linkUnderline(#4a9eff, #4a9eff);
-  }
-}
-
-@include containerQuery('s') {
-  .wrap {
-    .title {
-      font-size: $text-lg;
-    }
-
-    .description {
-      font-size: $text-sm;
-    }
-
-    .guideList {
-      li {
-        font-size: $text-xs;
-      }
-    }
   }
 }

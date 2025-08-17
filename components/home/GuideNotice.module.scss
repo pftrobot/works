@@ -5,25 +5,28 @@
 @use "@mixins" as *;
 
 .guideNotice {
-  container-name: guide-notice-container / inline-size;
-
   position: fixed;
-  inset-block-start: space(12);
-  inset-inline-start: 50%;
+  inset-block-start: space(32);
+  inset-inline-end: space(12);
   font-size: $text-base-sm;
   color: color('semantic', 'warning');
   padding: space(5) space(9);
-  transform: translateX(-50%);
   background-color: #1a1a1a;
   border-radius: radius('base');
   box-shadow: 0 0 0.5rem rgba(255, 169, 77, 0.1);
   border: 1px solid color('semantic', 'warning');
   z-index: zIndex('notification');
-}
 
-@include containerQuery('sm') {
-  .guideNotice {
-    font-size: $text-xs;
-    padding: space(3) space(6);
+  .brM {
+    display: none;
   }
+
+  @include respondTo('tablet') {
+    text-align: right;
+
+    .brM {
+      display: block;
+    }
+  }
+
 }

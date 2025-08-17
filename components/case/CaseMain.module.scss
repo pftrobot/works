@@ -8,8 +8,12 @@
   $keyColor: #ff4d4d;
 
   container: container-width / inline-size;
-  @include container('desktop');
+  @include container();
   padding-block-end: space(24);
+
+  @include respondTo('tablet') {
+    padding-block-end: space(20);
+  }
 
   .description {
     font-size: $text-lg;
@@ -51,6 +55,7 @@
 
         @include containerQuery('lg') {
           padding-block: space(2);
+          padding-inline: space(6);
         }
 
         @media (hover: hover) {
@@ -167,6 +172,11 @@
         text-align: left;
         padding-block-start: space(7);
         padding-block-end: space(7);
+
+        @include containerQuery('md') {
+          min-block-size: initial;
+          gap: space(9);
+        }
 
         .animatedText {
           display: inline-block;

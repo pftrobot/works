@@ -6,6 +6,10 @@
 
 .techBlock {
   padding-block-start: space(16);
+
+  @include respondTo('tablet') {
+    padding-block-start: space(10);
+  }
 }
 
 .label {

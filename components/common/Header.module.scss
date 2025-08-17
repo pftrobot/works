@@ -19,7 +19,7 @@
 
   .inner {
     @include flex(row, center, space-between);
-    @include container('desktop');
+    @include container();
 
     @include respondTo('tablet') {
       gap: space(9);

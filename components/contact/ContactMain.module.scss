@@ -8,7 +8,7 @@
   container: contact-container / inline-size;
 
   @include flex(row, center, center);
-  @include container('desktop');
+  @include container();
   padding-block: space(20);
 
   &::before {
@@ -45,8 +45,20 @@
     @include textStyle($text-6xl, $font-semibold, $leading-tight);
     color: color('text', 'white');
 
+    span {
+      display: inline-block;
+    }
+
     @include containerQuery('xl') {
       font-size: $text-4xl;
+    }
+
+    @include containerQuery('s') {
+      font-size: $text-3xl;
+    }
+
+    @include containerQuery('xs') {
+      font-size: $text-2xl;
     }
 
     .highlight {
@@ -59,10 +71,6 @@
     font-size: $text-lg;
     color: color('text', 'light-gray');
     line-height: $leading-loose;
-
-    @include containerQuery('xl') {
-      font-size: $text-base;
-    }
   }
 }
 
@@ -75,6 +83,11 @@
   @include containerQuery('xl') {
     padding-block: space(12);
     padding-inline: space(12);
+  }
+
+  @include containerQuery('s') {
+    padding-block: space(8);
+    padding-inline: space(8);
   }
 
   .form {
@@ -142,10 +155,6 @@
           color: color('text', 'deep-gray');
           background-color: color('key', 'primary');
         }
-      }
-
-      @include containerQuery('xl') {
-        font-size: $text-3xs;
       }
     }
   }

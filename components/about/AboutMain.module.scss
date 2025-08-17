@@ -7,7 +7,7 @@
 .aboutWrap {
   container: about-container / inline-size;
 
-  @include container('desktop');
+  @include container();
   z-index: zIndex('base');
 
   > * {
@@ -17,6 +17,10 @@
 
   section {
     margin-block-end: space(32);
+
+    @include containerQuery('2xl') {
+      margin-block-end: space(20);
+    }
 
     h2 {
       color: color('text', 'subtitle');
@@ -45,9 +49,14 @@
 }
 
 .dnaWrap {
-  @include grid(2, 0);
+  @include grid(2);
   gap: 2.4rem 12rem;
   margin-block-start: space(12);
+
+  @include containerQuery('2xl') {
+    grid-template-columns: 1fr;
+    gap: space(1);
+  }
 
   .dnaItem {
     @include flex(column, stretch, flex-start, 2);
@@ -82,6 +91,26 @@
           width: 1.2rem;
           height: 1.2rem;
           color: color('text', 'gray');
+        }
+
+        @include containerQuery('md') {
+          margin-inline-end: 0;
+        }
+      }
+
+      @include containerQuery('md') {
+        .skillText {
+          font-size: $text-3xs;
+        }
+
+        .iconShape {
+          inline-size: space(9);
+          block-size: space(9);
+
+          svg {
+            inline-size: space(6);
+            block-size: space(6);
+          }
         }
       }
     }
@@ -146,6 +175,16 @@
         letter-spacing: $tracking-wide;
         z-index: 2;
       }
+
+      @include containerQuery('md') {
+        block-size: 2.2rem;
+        inline-size: calc(100% - 1rem);
+        padding-inline: space(5);
+
+        .labelText {
+          font-size: $text-sm;
+        }
+      }
     }
 
     .barLine {
@@ -167,29 +206,9 @@
       text-align: end;
       letter-spacing: $tracking-widest;
       margin-inline-end: 14px;
-    }
-  }
 
-  @include respondTo('md') {
-    grid-template-columns: 1fr;
-
-    .dnaItem {
-      .labelLine {
-        block-size: 2.5rem;
-        padding-inline: space(5);
-
-        .labelText {
-          font-size: $text-sm;
-        }
-
-        .iconShape {
-          inline-size: 1.25rem;
-          block-size: 1.25rem;
-        }
-      }
-
-      .percentage {
-        font-size: $text-2xs;
+      @include containerQuery('md') {
+        font-size: $text-3xs;
       }
     }
   }
@@ -198,12 +217,20 @@
 .techBox {
   @include grid(1, 14);
 
+  @include containerQuery('2xl') {
+    gap: space(8);
+  }
+
   .techItem {
     padding-block: space(9);
     padding-inline: space(11);
     background: #161616;
     border: solid 1px #c5a46a50;
     border-radius: radius('base');
+
+    @include containerQuery('md') {
+      padding: space(6);
+    }
 
     h4 {
       color: color('key', 'primary');
@@ -228,6 +255,15 @@
         inline-size: 1px;
         block-size: 3.5rem;
         background-color: #4a4a4a;
+      }
+
+      @include containerQuery('2xl') {
+        padding-inline-start: space(0);
+        padding-block-start: space(2);
+
+        &::before {
+          display: none;
+        }
       }
     }
 
@@ -258,6 +294,15 @@
         block-size: space(8);
         background-color: color('key', 'primary-deep');
         border-radius: 0.2rem;
+      }
+
+      @include containerQuery('md') {
+        padding: space(2) space(3);
+
+        .toolIcon {
+          inline-size: space(6);
+          block-size: space(6);
+        }
       }
     }
   }
@@ -390,66 +435,6 @@
     strong {
       color: color('text', 'basic');
       margin-inline-end: space(2);
-    }
-  }
-}
-
-@container about-container (max-width: 600px) {
-  .dnaWrap {
-    grid-template-columns: 1fr;
-    gap: space(9) space(12);
-
-    .dnaItem {
-      .labelTop {
-        .skillText {
-          font-size: $text-xs;
-        }
-
-        .iconShape {
-          inline-size: space(9);
-          block-size: space(9);
-
-          svg {
-            inline-size: space(6);
-            block-size: space(6);
-          }
-        }
-      }
-
-      .labelLine {
-        block-size: 2.2rem;
-        padding-inline: space(5);
-
-        .labelText {
-          font-size: $text-sm;
-        }
-      }
-
-      .percentage {
-        font-size: $text-2xs;
-      }
-    }
-  }
-
-  .techBox {
-    gap: space(8);
-
-    .techItem {
-      padding: space(6);
-
-      h4 {
-        font-size: $text-base-sm;
-      }
-
-      .toolItem {
-        font-size: $text-xs;
-        padding: space(2) space(3);
-
-        .toolIcon {
-          inline-size: space(6);
-          block-size: space(6);
-        }
-      }
     }
   }
 }

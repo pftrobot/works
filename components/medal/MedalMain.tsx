@@ -70,7 +70,7 @@ export default function MedalMain() {
         animate={inViewInfo ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.6 }}
       >
-        <p className={styles.title}>나의 메달함</p>
+        <p className={styles.title}>메달함</p>
         <TypingText
           text={`${alias}님, 수사관님께 남긴 흔적입니다.`}
           as={'p'}

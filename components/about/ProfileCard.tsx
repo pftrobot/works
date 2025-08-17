@@ -1,10 +1,13 @@
 'use client'
 
 import Image from 'next/image'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import { TypingText } from 'components/common/TypingText'
 import styles from './Profile.module.scss'
 
 export default function ProfileCard() {
+  const isMobile = useIsMobile()
+
   return (
     <div className={styles.profileWrap}>
       <div className={styles.imageBox}>
@@ -21,12 +24,31 @@ export default function ProfileCard() {
           <TypingText text={'기술 수사관'} as={'span'} className={styles.char} delay={0.2} />
         </TypingText>
 
-        <TypingText
-          text="기술 문제는 반드시 흔적을 남깁니다. 그 단서를 포착하고 구조화하는 것, 그것이 제 수사 방식입니다."
-          as="p"
-          className={styles.description}
-          staggerDelay={0.015}
-        />
+        {isMobile ? (
+          <div className={styles.descWrap}>
+            <TypingText
+              text="기술 문제는 반드시 흔적을 남깁니다."
+              as="p"
+              className={styles.description}
+              staggerDelay={0.015}
+            />
+            <TypingText
+              text="그 단서를 포착하고 구조화하는 것, 그것이 제 수사 방식입니다."
+              as="p"
+              className={styles.description}
+              staggerDelay={0.015}
+            />
+          </div>
+        ) : (
+          <div className={styles.descWrap}>
+            <TypingText
+              text="기술 문제는 반드시 흔적을 남깁니다. 그 단서를 포착하고 구조화하는 것, 그것이 제 수사 방식입니다."
+              as="p"
+              className={styles.description}
+              staggerDelay={0.015}
+            />
+          </div>
+        )}
 
         <TypingText
           text="총 해결 사건 수: "

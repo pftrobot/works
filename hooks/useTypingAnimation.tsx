@@ -18,13 +18,11 @@ export function useTypingAnimation(options: TypingAnimationOptions = {}) {
   })
 
   const charVariant = {
-    // hidden: { opacity: 0, y: -4 },
-    // visible: { opacity: 1, y: 0 },
     hidden: { opacity: 0 },
     visible: {
       opacity: 1,
       transition: {
-        duration: 0.01, // 매우 빠르게 나타나도록
+        duration: 0.01,
         ease: 'linear',
       },
     },
@@ -34,7 +32,7 @@ export function useTypingAnimation(options: TypingAnimationOptions = {}) {
     hidden: {},
     visible: {
       transition: {
-        staggerChildren: staggerDelay || 0.1, // staggerDelay가 있으면 사용, 없으면 0.1
+        staggerChildren: staggerDelay || 0.1,
       },
     },
   }

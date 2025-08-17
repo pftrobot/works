@@ -68,7 +68,7 @@ $borderInputFocus: #ffffff99;
 
 .clearButton {
   position: absolute;
-  inset-inline-end: 3.75rem;
+  inset-inline-end: space(18);
   @include flex(row, center, center);
   color: #ffffffb3;
   cursor: pointer;
@@ -77,6 +77,10 @@ $borderInputFocus: #ffffff99;
   border: none;
   border-radius: radius('base');
   transition: all $transition-fast;
+
+  @include respondTo('tablet') {
+    inset-inline-end: space(16);
+  }
 
   &:hover {
     background-color: #ffffff33;

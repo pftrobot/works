@@ -9,19 +9,28 @@
 
   container: medal-container / inline-size;
 
-  @include container('desktop');
+  @include container();
   margin-block-end: $footer-margin-block;
+
+  @include respondTo('tablet') {
+    margin-block-end: space(20);
+  }
 
   .infoBox {
     position: relative;
     @include flex(column, center, center, 6);
     text-align: center;
-    padding-block-start: 2.875rem;
-    padding-block-end: 6.75rem;
-    margin-block-start: 3.125rem;
+    padding-block-start: space(15);
+    padding-block-end: space(32);
+    margin-block-start: space(16);
     margin-block-end: space(20);
     background-color: $bgColor;
     border-radius: radius('base');
+
+    @include containerQuery('md') {
+      padding-block: space(14);
+      margin-block: space(7, 0);
+    }
 
     .title {
       @include textStyle($text-2xl, $font-bold, $leading-none);
@@ -39,6 +48,12 @@
       @include flex(row, stretch, center, 6);
       inline-size: 100%;
 
+      @include containerQuery('md') {
+        position: relative;
+        inset-block-end: 0;
+        margin-block-start: space(6);
+      }
+
       .infoItem {
         position: relative;
         inline-size: max(20.125rem, 40%);
@@ -49,6 +64,10 @@
         border: 1px solid #c5a46a50;
         border-radius: radius('lg');
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+
+        @include containerQuery('md') {
+          inline-size: max(10rem, 40%);
+        }
 
         strong {
           display: block;
@@ -61,6 +80,10 @@
           font-size: $text-2xl;
           font-weight: $font-semibold;
           margin-block-start: space(3);
+
+          @include containerQuery('md') {
+            font-size: $text-xl;
+          }
         }
 
         &.medal::before {
@@ -72,11 +95,13 @@
           inline-size: 4.75rem;
           block-size: 100%;
           background: url('/imgs/medal.png') no-repeat 100% 0 / contain;
-        }
-      }
 
-      @include containerQuery('md') {
-        @include flex(column, center, center, 6);
+          @include containerQuery('md') {
+            inset-block-start: -1.125rem;
+            inset-inline-end: space(5);
+            inline-size: 2.25rem;
+          }
+        }
       }
     }
   }
@@ -85,6 +110,11 @@
     @include flex(row, stretch, center, 6, wrap);
     place-content: center;
     padding-block-start: space(14);
+
+    @include containerQuery('md') {
+      @include grid-auto-fit(6rem, 4, 6);
+      padding-block-start: space(9);
+    }
 
     .medalItem {
       @include flex(column, stretch, center);
@@ -99,6 +129,12 @@
       background-color: $bgColor;
       border: 1px solid #c5a46a50;
       border-radius: radius('base');
+
+      @include containerQuery('md') {
+        min-inline-size: initial;
+        min-block-size: initial;
+        padding-block: space(4);
+      }
 
       p {
         @include flex(row, center, center, 3);
@@ -119,23 +155,28 @@
         margin-block-start: space(3);
       }
     }
-
-    @include containerQuery('md') {
-      grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-    }
   }
 
   .hintBox {
     color: color('text', 'gray');
     padding: space(11);
-    margin-block-start: 5.25rem;
+    margin-block-start: space(24);
     background-color: #2d2d2d;
     border: 1px solid #333;
     border-radius: radius('base');
 
+    @include containerQuery('md') {
+      padding: space(8);
+      margin-block-start: space(18);
+    }
+
     h3 {
       color: color('text', 'title');
       font-size: $text-2xl;
+
+      @include containerQuery('md') {
+        font-size: $text-xl;
+      }
     }
 
     ul {
@@ -152,14 +193,13 @@
           @include linkUnderline(#c49d40, #f5ca64);
         }
       }
-    }
 
-    @include containerQuery('md') {
-      padding: space(6);
-      font-size: $text-sm;
+      @include containerQuery('md') {
+        margin-block-start: space(6);
 
-      h3 {
-        font-size: $text-base-sm;
+        li {
+          font-size: $text-base;
+        }
       }
     }
   }

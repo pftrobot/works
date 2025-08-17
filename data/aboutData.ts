@@ -59,13 +59,6 @@ export const techGroups = [
   },
 ]
 
-export const caseWeapons = caseList.map((item) => ({
-  id: item.id,
-  title: item.subtitle,
-  summary: item.summary,
-  tech: item.tech?.join(', ') ?? '-',
-}))
-
 export const timeline = [
   { id: 1, year: '2019', text: 'JSP + JQuery로 웹 개발 입문 및 게시판 기능 구현' },
   { id: 2, year: '2020', text: 'Vanilla JS 기반 구조 설계 및 컴포넌트화 시도' },
@@ -77,9 +70,3 @@ export const timeline = [
   { id: 8, year: '2024', text: 'WebAuthn, OTP 인증 시스템으로 보안 강화 구조 설계' },
   { id: 9, year: '2024', text: 'OpenCV, ChatGPT, DALL·E 기반 자동화 콘텐츠 생성 구현' },
 ]
-
-export const recentCases = caseList.slice(0, 3).map((item) => ({
-  id: item.id,
-  title: item.title,
-  desc: item.summary,
-}))

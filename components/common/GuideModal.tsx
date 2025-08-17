@@ -38,7 +38,7 @@ export default function GuideModal({ open, onClose }: GuideModalProps) {
     <>
       지금까지 모은 기록과 인정은{' '}
       <button onClick={() => goAndClose('medal')} className={styles.goBtn}>
-        나의 메달함
+        메달함
       </button>
       에서 확인할 수 있습니다.
     </>,

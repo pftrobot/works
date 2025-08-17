@@ -16,7 +16,7 @@
 
   .inner {
     @include flex(column, center, center, 5);
-    @include container('desktop');
+    @include container();
     text-align: center;
 
     @include containerQuery('xl') {
