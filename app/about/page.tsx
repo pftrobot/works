@@ -1,9 +1,9 @@
 import { supabase } from 'lib/supabase'
-import { TimelineItem } from '@/types/about'
+import { TimelineItem } from 'types'
 
 import AboutMain from 'components/about/AboutMain'
 
-const fetchTimeline = async (): Promise<TimelineItem[]> => {
+async function fetchTimeline(): Promise<TimelineItem[]> {
   const { data, error } = await supabase
     .from('timeline')
     .select('*')

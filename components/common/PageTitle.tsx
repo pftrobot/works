@@ -6,7 +6,7 @@ interface PageTitleProps {
   className?: string
 }
 
-const PageTitle: FC<PageTitleProps> = ({ children, className }) => {
+function PageTitle({ children, className }: PageTitleProps) {
   return <h1 className={`${styles.title} ${className || ''}`}>{children}</h1>
 }
 

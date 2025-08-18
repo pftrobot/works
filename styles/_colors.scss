@@ -7,6 +7,7 @@ $key-primary-dim: #c5a46a;
 $key-blue: #2970ff;
 
 $semantic-error: #e53838;
+$semantic-success: #07cb00;
 $semantic-warning: #ffa94d;
 $semantic-info: #58a6ff;
 
@@ -42,6 +43,7 @@ $colors: (
   ),
   'semantic': (
     'error': $semantic-error,
+    'success': $semantic-success,
     'warning': $semantic-warning,
     'info': $semantic-info
   ),

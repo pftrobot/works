@@ -6,7 +6,7 @@ import { useInView } from 'react-intersection-observer'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
 import { useStaggerAnimation } from 'hooks/useStaggerAnimation'
-import { TimelineItem } from '@/types/about'
+import { TimelineItem } from 'types'
 import { dnaList, techGroups } from 'data/aboutData'
 
 import PageTitle from 'components/common/PageTitle'

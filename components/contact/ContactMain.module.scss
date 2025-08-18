@@ -23,6 +23,10 @@
     background-size: 100% auto;
     mix-blend-mode: exclusion;
     z-index: zIndex('below');
+
+    @include containerQuery('md') {
+      inline-size: 90%;
+    }
   }
 
   .inner {
@@ -81,8 +85,8 @@
   border-radius: 1.5rem;
 
   @include containerQuery('xl') {
-    padding-block: space(12);
-    padding-inline: space(12);
+    padding-block: space(10);
+    padding-inline: space(10);
   }
 
   @include containerQuery('s') {
@@ -133,6 +137,7 @@
       .errorText {
         font-size: $text-base-sm;
         color: #ff4d4f;
+        text-align: left;
         margin-block-start: space(3);
       }
     }
@@ -144,6 +149,7 @@
       color: color('key', 'primary');
       letter-spacing: $tracking-wider;
       padding-block: space(4);
+      margin-block-start: space(6);
       background-color: color('background', 'input');
       border: 1px solid color('key', 'primary-dim');
       border-radius: radius('sm');
@@ -156,6 +162,23 @@
           background-color: color('key', 'primary');
         }
       }
+
+      @include containerQuery('md') {
+        margin-block-start: space(2);
+      }
+    }
+
+    .errorText, .successText {
+      text-align: center;
+      padding-block-end: space(2);
+    }
+
+    .errorText {
+      color: color('semantic', 'error');
+    }
+
+    .successText {
+      color: color('semantic', 'success');
     }
   }
 }

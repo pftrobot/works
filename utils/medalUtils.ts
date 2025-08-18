@@ -1,5 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
-import { MedalType } from '@/types/medal'
+import { MedalType } from 'types'
 
 export type MedalItem = {
   id: string

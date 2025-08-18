@@ -1,13 +1,14 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useState, ChangeEvent, FormEvent } from 'react'
 import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
 import classNames from 'classnames'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
+import { validateContact, ContactForm } from 'lib/validation'
 import { useAddMedal } from 'utils/medalUtils'
-import { MedalType } from 'types/medal'
+import { MedalType, APIResponse } from 'types'
 
 import BasicButton from 'components/common/BasicButton'
 import { TypingText } from 'components/common/TypingText'
@@ -23,49 +24,60 @@ export default function ContactMain() {
   const { setAnimationDone } = useAnimationContext()
   const { mutate: getMedal } = useAddMedal()
 
-  const [formData, setFormData] = useState({
-    name: '',
-    email: '',
-    message: '',
-  })
-  const [formErrors, setFormErrors] = useState({
-    name: '',
-    email: '',
-    message: '',
-  })
+  const [formData, setFormData] = useState<ContactForm>({ name: '', email: '', message: '' })
+  const [formErrors, setFormErrors] = useState({ name: '', email: '', message: '' })
+  const [submitting, setSubmitting] = useState(false)
+  const [sent, setSent] = useState<null | APIResponse>(null)
+  const [serverError, setServerError] = useState('')
 
-  const isValidEmail = (email: string) => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-
-  const validate = () => {
-    const errors = {
-      name: formData.name.trim() ? '' : '이름을 입력해주세요',
-      email: formData.email.trim()
-        ? isValidEmail(formData.email)
-          ? ''
-          : '올바른 이메일 형식이 아닙니다'
-        : '이메일을 입력해주세요',
-      message: formData.message.trim() ? '' : '내용을 입력해주세요',
-    }
-
-    setFormErrors(errors)
-    return Object.values(errors).every((e) => e === '')
-  }
-
-  const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.1,
-  })
-
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+  const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
     setFormData((prev) => ({ ...prev, [name]: value }))
+    setServerError('')
+    setSent(null)
   }
 
-  const handleSubmit = (e: React.FormEvent | React.MouseEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault()
-    if (!validate()) return
-    getMedal({ type: MedalType.Contact })
+    if (submitting) return
+
+    const validation = validateContact(formData)
+    setFormErrors(validation.errors)
+    if (!validation.ok) return
+
+    try {
+      setSubmitting(true)
+      setServerError('')
+      setSent(null)
+
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify(validation.data),
+      })
+
+      const json = await res.json().catch(() => ({}))
+      if (!res.ok || !json?.ok) {
+        setSent(APIResponse.FAIL)
+        setServerError('전송에 실패했습니다. 잠시 후 다시 시도해주세요.')
+        return
+      }
+
+      setSent(APIResponse.OK)
+      getMedal({ type: MedalType.Contact })
+
+      setFormData({ name: '', email: '', message: '' })
+      setFormErrors({ name: '', email: '', message: '' })
+    } catch (err) {
+      console.error('Post Error:: Contact email:: ', err)
+      setSent(APIResponse.FAIL)
+      setServerError('서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.')
+    } finally {
+      setSubmitting(false)
+    }
   }
+
+  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -138,7 +150,12 @@ export default function ContactMain() {
 
         <motion.div variants={rightVariants} className={styles.rightSection}>
           <FadeInView className={styles.form}>
-            <form onSubmit={handleSubmit}>
+            <form onSubmit={handleSubmit} noValidate>
+              {serverError && <p className={styles.errorText}>{serverError}</p>}
+              {sent === APIResponse.OK && (
+                <p className={styles.successText}>메시지가 전송되었습니다!</p>
+              )}
+
               <FadeInView className={styles.inputGroup} delay={0.3}>
                 <input
                   type="text"
@@ -146,11 +163,15 @@ export default function ContactMain() {
                   placeholder="Name*"
                   value={formData.name}
                   onChange={handleInputChange}
-                  className={classNames(styles.input, {
-                    [styles.error]: formErrors.name,
-                  })}
+                  className={classNames(styles.input, { [styles.error]: !!formErrors.name })}
+                  aria-invalid={!!formErrors.name}
+                  aria-describedby="error-name"
                 />
-                {formErrors.name && <p className={styles.errorText}>{formErrors.name}</p>}
+                {formErrors.name && (
+                  <p id="error-name" className={styles.errorText}>
+                    {formErrors.name}
+                  </p>
+                )}
               </FadeInView>
 
               <FadeInView className={styles.inputGroup} delay={0.45}>
@@ -160,11 +181,15 @@ export default function ContactMain() {
                   placeholder="Email*"
                   value={formData.email}
                   onChange={handleInputChange}
-                  className={classNames(styles.input, {
-                    [styles.error]: formErrors.email,
-                  })}
+                  className={classNames(styles.input, { [styles.error]: !!formErrors.email })}
+                  aria-invalid={!!formErrors.email}
+                  aria-describedby="error-email"
                 />
-                {formErrors.email && <p className={styles.errorText}>{formErrors.email}</p>}
+                {formErrors.email && (
+                  <p id="error-email" className={styles.errorText}>
+                    {formErrors.email}
+                  </p>
+                )}
               </FadeInView>
 
               <FadeInView className={styles.inputGroup} delay={0.6}>
@@ -173,21 +198,26 @@ export default function ContactMain() {
                   placeholder="Project Information*"
                   value={formData.message}
                   onChange={handleInputChange}
-                  className={classNames(styles.textarea, {
-                    [styles.error]: formErrors.message,
-                  })}
+                  className={classNames(styles.textarea, { [styles.error]: !!formErrors.message })}
                   rows={6}
+                  aria-invalid={!!formErrors.message}
+                  aria-describedby="error-message"
                 />
-                {formErrors.message && <p className={styles.errorText}>{formErrors.message}</p>}
+                {formErrors.message && (
+                  <p id="error-message" className={styles.errorText}>
+                    {formErrors.message}
+                  </p>
+                )}
               </FadeInView>
 
               <FadeInView delay={0.75}>
                 <BasicButton
                   variant="primary"
-                  onClick={handleSubmit}
+                  type="submit"
+                  disabled={submitting}
                   className={styles.submitButton}
                 >
-                  Send
+                  {submitting ? 'Sending...' : 'Send'}
                 </BasicButton>
               </FadeInView>
             </form>

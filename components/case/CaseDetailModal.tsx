@@ -7,7 +7,7 @@ import classNames from 'classnames'
 
 import { CaseMeta } from 'lib/supabase'
 import { useAddMedal } from 'utils/medalUtils'
-import { MedalType } from 'types/medal'
+import { MedalType } from 'types'
 
 import Modal from 'components/common/Modal'
 import ConfirmModal from 'components/common/ConfirmModal'

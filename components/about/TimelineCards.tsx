@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion'
-import { TimelineItem } from '@/types/about'
+import { TimelineItem } from 'types'
 import styles from './TimelineCards.module.scss'
 
 interface TimelineCardsProps {

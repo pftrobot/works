@@ -5,7 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
 import { useAddMedal } from 'utils/medalUtils'
-import { MedalType } from 'types/medal'
+import { MedalType } from 'types'
 import { MENU } from '@constants'
 
 import { FadeInView } from 'components/common/FadeInView'
