@@ -170,7 +170,7 @@
 
     .errorText, .successText {
       text-align: center;
-      padding-block-end: space(2);
+      padding-block-end: space(6);
     }
 
     .errorText {
@@ -179,6 +179,12 @@
 
     .successText {
       color: color('semantic', 'success');
+    }
+
+    .infoText {
+      font-size: $text-xs;
+      color: color('text', 'light-gray');
+      text-align: right;
     }
   }
 }

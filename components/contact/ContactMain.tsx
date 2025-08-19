@@ -14,6 +14,7 @@ import BasicButton from 'components/common/BasicButton'
 import { TypingText } from 'components/common/TypingText'
 import { FadeInView } from 'components/common/FadeInView'
 import { StaggerList } from 'components/common/StaggerList'
+import ConfirmModal from 'components/common/ConfirmModal'
 import styles from './ContactMain.module.scss'
 
 const TEXT_ITEMS = [
@@ -29,6 +30,8 @@ export default function ContactMain() {
   const [submitting, setSubmitting] = useState(false)
   const [sent, setSent] = useState<null | APIResponse>(null)
   const [serverError, setServerError] = useState('')
+  const [remaining, setRemaining] = useState<number | null>(null)
+  const [limitModalOpen, setLimitModalOpen] = useState(false)
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target
@@ -57,6 +60,14 @@ export default function ContactMain() {
       })
 
       const json = await res.json().catch(() => ({}))
+
+      if (res.status === 429 || json?.code === 'LIMIT') {
+        setRemaining(0)
+        setSent(APIResponse.FAIL)
+        setServerError('하루 전송 한도를 초과했습니다. 내일 다시 시도해주세요.')
+        return
+      }
+
       if (!res.ok || !json?.ok) {
         setSent(APIResponse.FAIL)
         setServerError('전송에 실패했습니다. 잠시 후 다시 시도해주세요.')
@@ -65,6 +76,14 @@ export default function ContactMain() {
 
       setSent(APIResponse.OK)
       getMedal({ type: MedalType.Contact })
+
+      // 잔여 전송 가능 횟수
+      const canSubmit = typeof json?.remaining === 'number' ? json.remaining : null
+      setRemaining(canSubmit)
+
+      if (canSubmit === 1) {
+        setLimitModalOpen(true)
+      }
 
       setFormData({ name: '', email: '', message: '' })
       setFormErrors({ name: '', email: '', message: '' })
@@ -76,6 +95,8 @@ export default function ContactMain() {
       setSubmitting(false)
     }
   }
+
+  const exceededToday = remaining === 0
 
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
 
@@ -155,6 +176,9 @@ export default function ContactMain() {
               {sent === APIResponse.OK && (
                 <p className={styles.successText}>메시지가 전송되었습니다!</p>
               )}
+              {typeof remaining === 'number' && remaining > 0 && sent === APIResponse.OK && (
+                <p className={styles.infoText}>오늘 남은 전송 횟수: {remaining}회</p>
+              )}
 
               <FadeInView className={styles.inputGroup} delay={0.3}>
                 <input
@@ -214,16 +238,27 @@ export default function ContactMain() {
                 <BasicButton
                   variant="primary"
                   type="submit"
-                  disabled={submitting}
+                  disabled={submitting || exceededToday}
                   className={styles.submitButton}
                 >
-                  {submitting ? 'Sending...' : 'Send'}
+                  {submitting ? 'Sending...' : exceededToday ? 'Limit reached' : 'Send'}
                 </BasicButton>
               </FadeInView>
             </form>
           </FadeInView>
         </motion.div>
       </motion.div>
+
+      <ConfirmModal
+        open={limitModalOpen}
+        onConfirm={() => setLimitModalOpen(false)}
+        onCancel={() => setLimitModalOpen(false)}
+        message={
+          <>
+            오늘 전송할 수 있는 횟수가 <strong>한 번</strong> 남았습니다.
+          </>
+        }
+      />
     </section>
   )
 }
