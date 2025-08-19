@@ -1,11 +1,12 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { usePathname } from 'next/navigation'
 import { motion } from 'framer-motion'
 import classNames from 'classnames'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
+import { DELTA_SKIP, HIDE_AFTER, TOP_STICKY } from '@constants'
 
 import Header from 'components/common/Header'
 import Footer from 'components/common/Footer'
@@ -15,38 +16,46 @@ export default function LayoutContent({ children }: { children: ReactNode }) {
   const { animationDone } = useAnimationContext()
   const pathname = usePathname()
   const [showHeader, setShowHeader] = useState(true)
-  const [lastScrollY, setLastScrollY] = useState(0)
+  const lastYRef = useRef(0)
   const [headerEntered, setHeaderEntered] = useState(false)
-  const [isCenterContent, setIsCenterContent] = useState(false)
 
   useEffect(() => {
-    if (pathname === '/') {
-      if (!isCenterContent) setIsCenterContent(true)
-    } else setIsCenterContent(false)
-  }, [pathname])
-
-  useEffect(() => {
-    if (animationDone && !headerEntered) {
-      setHeaderEntered(true)
-    }
+    if (animationDone && !headerEntered) setHeaderEntered(true)
   }, [animationDone, headerEntered])
 
   useEffect(() => {
     if (!animationDone) return
 
-    const handleScroll = () => {
-      const currentY = window.scrollY
-      if (currentY > lastScrollY && currentY > 50) {
+    // 초기 위치 반영
+    lastYRef.current = window.scrollY
+    setShowHeader(window.scrollY <= TOP_STICKY)
+
+    const onScroll = () => {
+      if (document.documentElement.classList.contains('modal-open')) return
+
+      const y = window.scrollY
+      const last = lastYRef.current
+
+      if (y <= TOP_STICKY) {
+        setShowHeader(true)
+        lastYRef.current = y
+        return
+      }
+
+      if (Math.abs(y - last) < DELTA_SKIP) return
+
+      if (y > last && y > HIDE_AFTER) {
         setShowHeader(false)
       } else {
         setShowHeader(true)
       }
-      setLastScrollY(currentY)
+
+      lastYRef.current = y
     }
 
-    window.addEventListener('scroll', handleScroll)
-    return () => window.removeEventListener('scroll', handleScroll)
-  }, [animationDone, lastScrollY])
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [animationDone])
 
   return (
     <div className={styles.layout}>

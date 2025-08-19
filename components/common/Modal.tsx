@@ -1,6 +1,6 @@
 'use client'
 
-import { ReactNode, useEffect, useState } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import classNames from 'classnames'
 import { IconX } from '@tabler/icons-react'
@@ -17,6 +17,7 @@ interface ModalProps {
 
 export default function Modal({ open, onClose, children, width = 480, className }: ModalProps) {
   const [mounted, setMounted] = useState(false)
+  const scrollYRef = useRef(0)
 
   useEffect(() => {
     setMounted(true)
@@ -24,24 +25,30 @@ export default function Modal({ open, onClose, children, width = 480, className 
 
   useEffect(() => {
     if (!mounted) return
+    const root = document.documentElement
+    const body = document.body
 
     if (open) {
-      const scrollY = window.scrollY
-      const body = document.body
+      scrollYRef.current = window.scrollY
 
+      root.classList.add('modal-open')
       body.style.position = 'fixed'
-      body.style.top = `-${scrollY}px`
+      body.style.top = `-${scrollYRef.current}px`
       body.style.left = '0'
       body.style.right = '0'
       body.style.overflow = 'hidden'
 
       return () => {
-        body.style.position = ''
-        body.style.top = ''
-        body.style.left = ''
-        body.style.right = ''
-        body.style.overflow = ''
-        window.scrollTo(0, scrollY)
+        if (open) {
+          const scrollY = scrollYRef.current
+          body.style.position = ''
+          body.style.top = ''
+          body.style.left = ''
+          body.style.right = ''
+          body.style.overflow = ''
+          root.classList.remove('modal-open')
+          window.scrollTo(0, scrollY)
+        }
       }
     }
   }, [open, mounted])
@@ -63,8 +70,8 @@ export default function Modal({ open, onClose, children, width = 480, className 
 
   return createPortal(
     <div className={classNames(styles.overlay, className)} onClick={onClose}>
-      <div className={styles.modal} style={{ width }} onClick={(e) => e.stopPropagation()}>
-        <button className={styles.close} onClick={onClose}>
+      <div style={{ width }} onClick={(e) => e.stopPropagation()}>
+        <button onClick={onClose}>
           <IconX size={24} stroke={1.5} color={'#ddd'} />
         </button>
         {children}

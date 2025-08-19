@@ -13,12 +13,12 @@
   background-color: #00000060;
   z-index: zIndex('modal');
 
-  .modal {
+  > div {
     position: relative;
     overflow-y: auto;
     inline-size: 100%;
     max-inline-size: 50rem;
-    max-block-size: 95vh;
+    max-block-size: 100dvh;
     color: color('text', 'basic');
     padding: space(17);
     border: 1px solid #282828;
@@ -26,21 +26,20 @@
     background-color: #000;
     animation: popIn 0.4s $transition-bounce;
 
-    @include containerQuery('md') {
+    @include respondTo('tablet') {
       inline-size: 100%;
       block-size: 100%;
       max-inline-size: 100%;
-      max-block-size: 100%;
-      padding: space(12);
+      padding-inline: space(12);
+      padding-block: max(#{space(3)}, 10vh) space(12);
       border: none;
-      border-radius: 0;
     }
 
     @include containerQuery('s') {
-      padding: space(8);
+      padding-inline: space(8);
     }
 
-    .close {
+    > button {
       position: absolute;
       inset-block-start: space(8);
       inset-inline-end: space(8);

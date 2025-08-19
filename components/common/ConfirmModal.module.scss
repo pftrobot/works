@@ -4,40 +4,68 @@
 @use "@styles/spacing" as *;
 @use "@mixins" as *;
 
-.message {
-  font-size: $text-base-sm;
-  color: color('text', 'gray');
-  margin-block-end: space(12);
-}
+.modalWrap {
+  padding-inline: space(4);
 
-.buttonGroup {
-  @include flex(row, stretch, flex-end, 2);
-}
+  > div {
+    padding-inline: space(8);
+    padding-block: space(17, 10);
 
-.confirmButton {
-  font-size: $text-base-sm;
-  color: color('text', 'white');
-  padding: space(1) space(6);
-  background-color: color('key', 'blue');
-  border: none;
-  border-radius: radius('sm');
-  cursor: pointer;
+    @include respondTo('tablet') {
+      block-size: initial;
+      max-block-size: initial;
+      border: 1px solid color('border', 'gray');
+    }
 
-  &:hover {
-    background-color: #3b82f6;
+    button {
+      inset-block-start: space(6);
+      inset-inline-end: space(6);
+    }
   }
-}
 
-.cancelButton {
-  color: color('text', 'dark-gray');
-  font-size: $text-base-sm;
-  padding: space(1) space(6);
-  background: transparent;
-  border: 1px solid #555;
-  border-radius: radius('sm');
-  cursor: pointer;
+  .message {
+    font-size: $text-base;
+    color: color('text', 'gray');
+    text-align: center;
+    margin-block-end: space(14);
+  }
 
-  &:hover {
-    background-color: #2a2a2a;
+  .buttonGroup {
+    @include flex(row, stretch, space-between, 4);
+
+    button {
+      position: relative;
+      inset: 0;
+      flex: 1;
+      transition: all 0.3s;
+    }
+  }
+
+  .confirmButton {
+    font-size: $text-sm;
+    color: color('text', 'white');
+    padding: space(3, 6);
+    background-color: color('key', 'blue');
+    border: none;
+    border-radius: radius('sm');
+    cursor: pointer;
+
+    &:hover {
+      background-color: #3b82f6;
+    }
+  }
+
+  .cancelButton {
+    color: color('text', 'dark-gray');
+    font-size: $text-base-sm;
+    padding: space(1, 6);
+    background: transparent;
+    border: 1px solid #555;
+    border-radius: radius('sm');
+    cursor: pointer;
+
+    &:hover {
+      background-color: #2a2a2a;
+    }
   }
 }

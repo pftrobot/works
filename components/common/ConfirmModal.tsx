@@ -1,3 +1,4 @@
+import { ReactNode } from 'react'
 import Modal from './Modal'
 import styles from './ConfirmModal.module.scss'
 
@@ -5,7 +6,7 @@ interface ConfirmModalProps {
   open: boolean
   onCancel: () => void
   onConfirm: () => void
-  message?: string
+  message?: ReactNode
   confirmText?: string
   cancelText?: string
 }
@@ -19,7 +20,7 @@ export default function ConfirmModal({
   cancelText = '취소',
 }: ConfirmModalProps) {
   return (
-    <Modal open={open} onClose={onCancel} width={320}>
+    <Modal open={open} onClose={onCancel} width={320} className={styles.modalWrap}>
       <div className={styles.message}>{message}</div>
       <div className={styles.buttonGroup}>
         <button onClick={onConfirm} className={styles.confirmButton}>
