@@ -12,7 +12,7 @@ export default function ProfileCard() {
     <div className={styles.profileWrap}>
       <div className={styles.imageBox}>
         <Image
-          src="/imgs/cat_face.png"
+          src="/imgs/cat/face.png"
           alt="기술 수사관 프로필"
           width={120}
           height={120}

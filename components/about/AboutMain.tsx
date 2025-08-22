@@ -3,6 +3,17 @@
 import { useEffect, ReactNode } from 'react'
 import { motion } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
+import classNames from 'classnames'
+import {
+  IconBug,
+  IconBolt,
+  IconPuzzle,
+  IconFileText,
+  IconCpu,
+  IconCompass,
+} from '@tabler/icons-react'
+
+import { getIconComponent } from '@pftrobot/icons'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
 import { useStaggerAnimation } from 'hooks/useStaggerAnimation'
@@ -15,14 +26,6 @@ import ProfileCard from 'components/about/ProfileCard'
 import TimelineCards from 'components/about/TimelineCards'
 import Block from './Block'
 import styles from './AboutMain.module.scss'
-import {
-  IconBug,
-  IconBolt,
-  IconPuzzle,
-  IconFileText,
-  IconCpu,
-  IconCompass,
-} from '@tabler/icons-react'
 
 const ICON_MAP: Record<string, ReactNode> = {
   'dna-1': <IconPuzzle />,
@@ -187,25 +190,34 @@ export default function AboutMain({ timelines }: AboutMainProps) {
             <div key={category} className={styles.techItem}>
               <h4>{category}</h4>
               <div className={styles.toolBox}>
-                {items.map(({ label, highlight }, index) => (
-                  <motion.div
-                    key={`tech-item-${label}`}
-                    className={
-                      highlight ? `${styles.highlight} ${styles.toolItem}` : styles.toolItem
-                    }
-                    initial={{ rotateY: 90, opacity: 0 }}
-                    whileInView={{ rotateY: 0, opacity: 1 }}
-                    transition={{
-                      duration: 0.6,
-                      ease: 'easeOut',
-                      delay: index * 0.1,
-                    }}
-                    viewport={{ once: true, amount: 0.2 }}
-                  >
-                    <div className={styles.toolIcon} />
-                    <span className={styles.toolName}>{label}</span>
-                  </motion.div>
-                ))}
+                {items.map(({ label, logo, highlight }, index) => {
+                  const IconComp = logo ? getIconComponent(logo) : null
+                  const logoClass = logo
+                    ? (styles[logo as keyof typeof styles] as string | undefined)
+                    : undefined
+
+                  return (
+                    <motion.div
+                      key={`tech-item-${label}`}
+                      className={classNames(styles.toolItem, {
+                        [styles.highlight]: highlight,
+                      })}
+                      initial={{ rotateY: 90, opacity: 0 }}
+                      whileInView={{ rotateY: 0, opacity: 1 }}
+                      transition={{
+                        duration: 0.6,
+                        ease: 'easeOut',
+                        delay: index * 0.1,
+                      }}
+                      viewport={{ once: true, amount: 0.2 }}
+                    >
+                      <div className={classNames(styles.toolIcon, logoClass)}>
+                        {IconComp && <IconComp width={24} height={24} />}
+                      </div>
+                      <span className={styles.toolName}>{label}</span>
+                    </motion.div>
+                  )
+                })}
               </div>
             </div>
           ))}

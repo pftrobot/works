@@ -283,17 +283,31 @@
       &.highlight {
         background-color: color('key', 'primary-deep');
         color: color('text', 'black');
-
-        .toolIcon {
-          background: #000;
-        }
       }
 
       .toolIcon {
+        overflow: hidden;
+        @include flex(row, center, center);
         inline-size: space(8);
         block-size: space(8);
-        background-color: color('key', 'primary-deep');
         border-radius: 0.2rem;
+
+        svg {
+          inline-size: 100%;
+          block-size: 100%;
+        }
+
+        &.react-logo svg {
+          transform: scale(1.2);
+        }
+        &.next-logo svg {
+          fill: color('background', 'black');
+        }
+        &.pnpm-logo svg {
+          inline-size: 80%;
+          block-size: 80%;
+          fill: color('background', 'black');
+        }
       }
 
       @include containerQuery('md') {

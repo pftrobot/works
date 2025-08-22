@@ -17,6 +17,7 @@ $bg-header: #141414;
 $bg-footer: #121212;
 $bg-input: #323232;
 $bg-white: #fff;
+$bg-black: #111;
 
 /* BORDER COLOR */
 $border-gray: #282828;
@@ -54,7 +55,8 @@ $colors: (
     'body': $bg-body,
     'footer': $bg-footer,
     'input': $bg-input,
-    'white': $bg-white
+    'white': $bg-white,
+    'black': $bg-black,
   ),
   'border': (
     'gray': $border-gray,
