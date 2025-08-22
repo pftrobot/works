@@ -1,4 +1,4 @@
-import React from 'react'
+import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { IconSearch, IconX } from '@tabler/icons-react'
 
@@ -31,7 +31,7 @@ export default function CaseSearch({ cases, activeFilters, onSearchChange }: Cas
     setShowAutocomplete,
   } = useCaseSearch({ cases, activeFilters })
 
-  React.useEffect(() => {
+  useEffect(() => {
     if (onSearchChange) {
       onSearchChange(searchFilteredCases)
     }

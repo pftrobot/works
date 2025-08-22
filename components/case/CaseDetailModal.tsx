@@ -28,6 +28,8 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
   const [quizStep, setQuizStep] = useState<'question' | 'answer'>('question')
   const [selectedOption, setSelectedOption] = useState<number | null>(null)
   const [confirmVisible, setConfirmVisible] = useState(false)
+
+  // 정답 맞췄을 때, 메달 중복 지급 방지 ref
   const awardedRef = useRef(false)
 
   const { mutate: getMedal } = useAddMedal()
@@ -57,6 +59,7 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
     awardedRef.current = false
   }, [open, caseMeta?.id])
 
+  // 정답이고 중복지급이 아닌 경우에 메달 지급
   useEffect(() => {
     if (!open || !caseMeta) return
     const isCorrectAnswer = selectedOption === caseMeta.quiz.answer

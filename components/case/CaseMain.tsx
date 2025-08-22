@@ -22,13 +22,13 @@ const SHOW_GNB = 800
 
 export default function CaseMain() {
   const [selected, setSelected] = useState<CaseMeta | null>(null)
-  const [animationKey, setAnimationKey] = useState(0)
+  const [animationKey, setAnimationKey] = useState(0) // 리스트 전환 시 grid 전체에 exit/enter 트랜지션 주기 위한 key
   const [filteredCases, setFilteredCases] = useState<CaseMeta[]>([])
   const { setAnimationDone } = useAnimationContext()
 
   const { cases, activeFilters, isLoading, error, fetchCases, setActiveFilters } = useCaseStore()
 
-  // 애니메이션을 한번만 실행시키기 위한 ref
+  // 카드 등장 애니메이션을 한번만 실행시키기 위한 ref (스크롤 재방문 시 재애니메이션 방지)
   const animatedCardsRef = useRef<Set<string>>(new Set())
 
   const handleFilterClick = (filter: FilterKeyword) => {
@@ -73,15 +73,16 @@ export default function CaseMain() {
     })
 
     const cardId = item.id.toString()
-    const hasAnimatedBefore = animatedCardsRef.current.has(cardId)
+    const hasAnimated = animatedCardsRef.current.has(cardId)
 
+    // 뷰포트 진입시 한 번만 등장 모션
     useEffect(() => {
-      if (inView && !hasAnimatedBefore) {
+      if (inView && !hasAnimated) {
         animatedCardsRef.current.add(cardId)
       }
-    }, [inView, hasAnimatedBefore, cardId])
+    }, [inView, hasAnimated, cardId])
 
-    const shouldAnimate = hasAnimatedBefore || inView
+    const shouldAnimate = hasAnimated || inView
 
     return (
       <motion.button
@@ -91,18 +92,18 @@ export default function CaseMain() {
         className={styles.card}
         onClick={onClick}
         initial={{
-          opacity: hasAnimatedBefore ? 1 : 0,
-          y: hasAnimatedBefore ? 0 : 30,
+          opacity: hasAnimated ? 1 : 0,
+          y: hasAnimated ? 0 : 30,
         }}
         animate={shouldAnimate ? { opacity: 1, y: 0 } : {}}
         transition={{
-          duration: hasAnimatedBefore ? 0 : BASIC_DURATION,
+          duration: hasAnimated ? 0 : BASIC_DURATION,
           ease: 'easeOut',
         }}
       >
         <div className={styles.thumbnail}>
           <Image
-            src={getCaseThumbnailUrlViaAPI(item.thumbnail)}
+            src={getCaseThumbnailUrlViaAPI(item.thumbnail)} // 썸네일 이미지는 스토리지 서버에서 불러옴
             alt={item.title}
             fill
             sizes="(max-width: 768px) 100vw, 50vw"
@@ -116,7 +117,7 @@ export default function CaseMain() {
 
         <motion.div
           className={styles.textWrap}
-          initial={hasAnimatedBefore ? 'visible' : 'hidden'}
+          initial={hasAnimated ? 'visible' : 'hidden'}
           animate={shouldAnimate ? 'visible' : 'hidden'}
           variants={animateProps.variants}
         >
