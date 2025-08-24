@@ -297,11 +297,15 @@
           block-size: 100%;
         }
 
-        &.react-logo svg {
-          transform: scale(1.2);
+        &.react-logo, &.google-auth-logo, &.prettier-logo {
+          svg {
+            transform: scale(1.2);
+          }
         }
-        &.next-logo svg {
-          fill: color('background', 'black');
+        &.next-logo, &.vercel-logo, &.auth-logo {
+          svg {
+            fill: color('background', 'black');
+          }
         }
         &.pnpm-logo svg {
           inline-size: 80%;
