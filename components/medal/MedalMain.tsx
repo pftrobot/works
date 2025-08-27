@@ -58,6 +58,9 @@ export default function MedalMain() {
     return `${yy}. ${mm}. ${dd}. ${hh}:${mi}`
   }
 
+  const labelOf = (t: string) =>
+    t === 'case' ? '사건' : t === 'contact' ? '제보' : t === 'special10' ? '스페셜' : '단서'
+
   return (
     <motion.section
       className={styles.medalWrap}
@@ -128,10 +131,8 @@ export default function MedalMain() {
               animate={inViewList ? { opacity: 1, scale: 1 } : {}}
               transition={{ duration: 0.4, delay: i * 0.1 }}
             >
-              <p>+ 1</p>
-              <span>
-                {medal.type === 'case' ? '사건' : medal.type === 'contact' ? '제보' : '단서'}
-              </span>
+              <p>+ {medal.amount ?? 1}</p>
+              <span>{labelOf(medal.type)}</span>
               <span className={styles.date}>{format(medal.awarded_at)}</span>
             </motion.div>
           ))}

@@ -1,6 +1,7 @@
 'use client'
 
 import { useInView } from 'react-intersection-observer'
+import { EASE_OUT } from '@constants'
 
 interface StaggerAnimationOptions {
   threshold?: number
@@ -24,7 +25,7 @@ export function useStaggerAnimation(options: StaggerAnimationOptions = {}) {
       y: 0,
       transition: {
         duration: itemDuration,
-        ease: 'easeOut',
+        ease: EASE_OUT,
       },
     },
   }

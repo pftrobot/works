@@ -4,7 +4,7 @@ import styles from './ConfirmModal.module.scss'
 
 interface ConfirmModalProps {
   open: boolean
-  onCancel: () => void
+  onCancel?: () => void
   onConfirm: () => void
   message?: ReactNode
   confirmText?: string
@@ -20,15 +20,17 @@ export default function ConfirmModal({
   cancelText = '취소',
 }: ConfirmModalProps) {
   return (
-    <Modal open={open} onClose={onCancel} width={320} className={styles.modalWrap}>
+    <Modal open={open} onClose={onConfirm || onCancel} width={320} className={styles.modalWrap}>
       <div className={styles.message}>{message}</div>
       <div className={styles.buttonGroup}>
         <button onClick={onConfirm} className={styles.confirmButton}>
           {confirmText}
         </button>
-        <button onClick={onCancel} className={styles.cancelButton}>
-          {cancelText}
-        </button>
+        {onCancel && (
+          <button onClick={onCancel} className={styles.cancelButton}>
+            {cancelText}
+          </button>
+        )}
       </div>
     </Modal>
   )

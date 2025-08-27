@@ -1,43 +1,18 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
 import { Resend } from 'resend'
-import crypto from 'crypto'
 
 import { supabaseAdmin } from 'lib/supabaseAdmin'
 import { contactSchema } from 'lib/validation'
+import { ensureVisitor } from 'lib/visitors'
 
 const resend = new Resend(process.env.RESEND_API_KEY)
 
-const COOKIE_KEY = 'visitor_id'
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 365 // 1y
 const DAILY_LIMIT = 5
-
-async function ensureVisitor() {
-  const jar = await cookies()
-  let id = jar.get(COOKIE_KEY)?.value
-  if (!id) {
-    id = crypto.randomUUID()
-    await supabaseAdmin
-      .from('visitors')
-      .upsert({ id }, { onConflict: 'id', ignoreDuplicates: true })
-
-    jar.set({
-      name: COOKIE_KEY,
-      value: id,
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-      maxAge: COOKIE_MAX_AGE,
-    })
-  }
-  return id
-}
 
 function todayRange() {
   const now = new Date()
   const offsetMs = 9 * 60 * 60 * 1000 // 9h
-  const local = new Date(now.getTime() + offsetMs) // UTC+9 기준
+  const local = new Date(now.getTime() + offsetMs) // UTC+9 (KST)
   local.setUTCHours(0, 0, 0, 0)
   const start = new Date(local.getTime() - offsetMs)
   const end = new Date(start.getTime() + 24 * 60 * 60 * 1000)

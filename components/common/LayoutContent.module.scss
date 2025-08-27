@@ -18,6 +18,7 @@
 
   .main {
     flex: 1;
+    position: relative;
     margin-top: calc(#{$header-block-size} + #{$space-12});
 
     &.isMain {

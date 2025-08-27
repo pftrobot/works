@@ -4,7 +4,11 @@ import { MedalType } from 'types'
 export type MedalItem = {
   id: string
   type: MedalType
-  source_id: string | number | null
+  source_id?: string | number | null
+  route?: string | null
+  egg_id?: string | null
+  award_code?: string | null
+  amount: number
   awarded_at: string
 }
 
@@ -18,14 +22,18 @@ async function fetchMedalsApi() {
   return (await res.json()) as { items: MedalItem[]; count: number }
 }
 
-async function postMedalApi(args: { type: MedalType; sourceId?: string | number }) {
+async function postMedalApi(args: {
+  type: MedalType
+  sourceId?: string | number
+  amount?: number
+}) {
   const res = await fetch('/api/medals', {
     method: 'POST',
     headers: { 'content-type': 'application/json' },
-    body: JSON.stringify({ type: args.type, sourceId: args.sourceId ?? null }),
+    body: JSON.stringify({ type: args.type, sourceId: args.sourceId ?? null, amount: args.amount }),
   })
   if (!res.ok) throw new Error('Failed to add medal')
-  return res.json() as Promise<{ ok: boolean; duplicate?: boolean }>
+  return res.json() as Promise<{ ok: boolean }>
 }
 
 /**

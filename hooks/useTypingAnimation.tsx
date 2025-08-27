@@ -2,6 +2,7 @@
 
 import { useInView } from 'react-intersection-observer'
 import { motion } from 'framer-motion'
+import { EASE_LINEAR } from '@constants'
 
 interface TypingAnimationOptions {
   threshold?: number
@@ -23,7 +24,7 @@ export function useTypingAnimation(options: TypingAnimationOptions = {}) {
       opacity: 1,
       transition: {
         duration: 0.01,
-        ease: 'linear',
+        ease: EASE_LINEAR,
       },
     },
   }

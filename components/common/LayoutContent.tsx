@@ -6,10 +6,11 @@ import { motion } from 'framer-motion'
 import classNames from 'classnames'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
-import { DELTA_SKIP, HIDE_AFTER, TOP_STICKY } from '@constants'
+import { DELTA_SKIP, HIDE_AFTER, TOP_STICKY, EASE_LINEAR } from '@constants'
 
 import Header from 'components/common/Header'
 import Footer from 'components/common/Footer'
+import EasterEggLayer from 'components/common/EasterEggLayer'
 import styles from 'components/common/LayoutContent.module.scss'
 
 export default function LayoutContent({ children }: { children: ReactNode }) {
@@ -64,7 +65,7 @@ export default function LayoutContent({ children }: { children: ReactNode }) {
           className={styles.headerWrap}
           initial={{ y: '-100%' }}
           animate={{ y: showHeader ? 0 : '-100%' }}
-          transition={{ duration: 0.4, ease: 'linear' }}
+          transition={{ duration: 0.4, ease: EASE_LINEAR }}
         >
           <Header />
         </motion.div>
@@ -72,13 +73,14 @@ export default function LayoutContent({ children }: { children: ReactNode }) {
 
       <main className={classNames(styles.main, { [styles.isMain]: pathname === '/' })}>
         {children}
+        <EasterEggLayer />
       </main>
 
       {animationDone && (
         <motion.div
           initial={{ opacity: 0, y: '100%' }}
           animate={{ opacity: animationDone ? 1 : 0, y: animationDone ? 0 : '100%' }}
-          transition={{ duration: 0.6, ease: 'linear' }}
+          transition={{ duration: 0.6, ease: EASE_LINEAR }}
         >
           <Footer />
         </motion.div>

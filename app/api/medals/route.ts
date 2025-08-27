@@ -1,71 +1,58 @@
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
-import { supabaseAdmin } from '@/lib/supabaseAdmin'
-import crypto from 'crypto'
+import { supabaseAdmin } from 'lib/supabaseAdmin'
+import { ensureVisitor } from 'lib/visitors'
 
-const COOKIE_KEY = 'visitor_id'
-const COOKIE_MAX_AGE = 60 * 60 * 24 * 365 // 1y
-
-async function ensureVisitor() {
-  const jar = await cookies()
-  let id = jar.get(COOKIE_KEY)?.value
-  if (!id) {
-    id = crypto.randomUUID()
-    const { error } = await supabaseAdmin
-      .from('visitors')
-      .upsert({ id }, { onConflict: 'id', ignoreDuplicates: true })
-
-    if (error) {
-      console.error('Upsert Error:: Visitors:: ', error)
-    }
-
-    jar.set({
-      name: COOKIE_KEY,
-      value: id,
-      httpOnly: true,
-      sameSite: 'lax',
-      secure: process.env.NODE_ENV === 'production',
-      path: '/',
-      maxAge: COOKIE_MAX_AGE,
-    })
-  }
-  return id
-}
-
-export async function GET(req: Request) {
+export async function GET() {
   const visitorId = await ensureVisitor()
+
   const { data, error } = await supabaseAdmin
-    .from('medals')
-    .select('id,type,source_id,awarded_at')
+    .from('medal_events')
+    .select('id,type,source_id,route,egg_id,award_code,amount,created_at')
     .eq('visitor_id', visitorId)
-    .order('awarded_at', { ascending: true })
+    .order('created_at', { ascending: true })
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-  return NextResponse.json({ items: data ?? [], count: data?.length ?? 0 })
+
+  const items =
+    (data ?? []).map((r) => ({
+      id: r.id,
+      type: r.type as 'case' | 'contact' | 'egg' | 'special10',
+      source_id: r.source_id,
+      route: r.route,
+      egg_id: r.egg_id,
+      award_code: r.award_code,
+      amount: r.amount ?? 1,
+      awarded_at: r.created_at as string,
+    })) ?? []
+
+  const count = items.reduce((acc, it) => acc + (it.amount ?? 1), 0)
+
+  return NextResponse.json({ items, count })
 }
 
 export async function POST(req: Request) {
   const visitorId = await ensureVisitor()
   const body = await req.json().catch(() => ({}))
-  const { type, sourceId } = body as {
-    type: 'case' | 'contact' | 'egg'
+  const { type, sourceId, amount } = body as {
+    type: 'case' | 'contact' | 'egg' | 'special10'
     sourceId?: string | number | null
+    amount?: number
   }
 
   if (!type) return NextResponse.json({ error: 'type required' }, { status: 400 })
 
-  // 중복 삽입시 처리
   const { data, error } = await supabaseAdmin
-    .from('medals')
-    .insert({ visitor_id: visitorId, type, source_id: sourceId ?? null })
-    .select('id,type,source_id,awarded_at')
+    .from('medal_events')
+    .insert({
+      visitor_id: visitorId,
+      type,
+      source_id: sourceId != null ? String(sourceId) : null,
+      amount: Math.max(1, Number.isFinite(amount) ? Number(amount) : 1),
+    })
+    .select('id,type,source_id,amount,created_at')
     .single()
 
-  if (error) {
-    if ((error as any).code === '23505') {
-      return NextResponse.json({ ok: true, duplicate: true })
-    }
-    return NextResponse.json({ error: error.message }, { status: 500 })
-  }
+  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
+
   return NextResponse.json({ ok: true, item: data })
 }

@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { useIsMobile } from '@/hooks/useIsMobile'
+import { useIsMobile } from 'hooks/useIsMobile'
 import { TypingText } from 'components/common/TypingText'
 import styles from './Profile.module.scss'
 

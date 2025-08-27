@@ -1,0 +1,160 @@
+@use "@styles/layout" as *;
+
+.easterEggContainer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: $z-dropdown;
+}
+
+.easterEgg {
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  pointer-events: auto;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  user-select: none;
+  z-index: $z-header;
+  opacity: 0.2;
+
+  &[data-secret="true"] {
+    // opacity: 0.8;
+    animation: secretPulse 1s ease-in-out infinite alternate;
+  }
+
+  &[data-treasure="true"] {
+    .shape {
+      filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));
+    }
+
+    &[data-secret="true"] {
+      .shape {
+        filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.9));
+      }
+    }
+  }
+
+  &:hover {
+    opacity: 0.8 !important;
+    transform: scale(1.3);
+
+    .shape {
+      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8)) !important;
+    }
+
+    &[data-treasure="true"] .shape {
+      filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.9)) !important;
+    }
+  }
+}
+
+.shape {
+  width: 12px;
+  height: 12px;
+  transition: all 0.2s ease;
+  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
+}
+
+.dot {
+  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.2) 70%);
+  border-radius: 50%;
+}
+
+.triangle {
+  width: 0;
+  height: 0;
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 10px solid rgba(255, 255, 255, 0.6);
+}
+
+.square {
+  background: linear-gradient(45deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.2) 100%);
+  border-radius: 2px;
+}
+
+.diamond {
+  background: rgba(255, 255, 255, 0.6);
+  transform: rotate(45deg);
+  border-radius: 2px;
+}
+
+.star {
+  position: relative;
+  background: rgba(255, 255, 255, 0.6);
+  transform: rotate(45deg);
+  border-radius: 2px;
+
+  &::before {
+    content: '';
+    position: absolute; inset: 0;
+    background: rgba(255, 255, 255, 0.6);
+    transform: rotate(45deg);
+    border-radius: 2px;
+  }
+}
+
+.circle {
+  background: radial-gradient(circle, transparent 40%, rgba(255,255,255,0.6) 50%, transparent 60%);
+  border-radius: 50%;
+}
+
+.hex {
+  background: rgba(255, 255, 255, 0.6);
+  width: 10px; height: 12px; position: relative;
+  &::before, &::after {
+    content: ''; position: absolute; width: 0;
+    border-left: 5px solid transparent; border-right: 5px solid transparent;
+  }
+  &::before { bottom: 100%; border-bottom: 3px solid rgba(255, 255, 255, 0.6); }
+  &::after { top: 100%; border-top: 3px solid rgba(255, 255, 255, 0.6); }
+}
+
+.cross {
+  position: relative; background: rgba(255, 255, 255, 0.6);
+  width: 3px; height: 12px;
+  &::before {
+    content: ''; position: absolute; background: rgba(255, 255, 255, 0.6);
+    width: 12px; height: 3px; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  }
+}
+
+.arrow {
+  width: 0; height: 0;
+  border-top: 4px solid transparent; border-bottom: 4px solid transparent;
+  border-left: 8px solid rgba(255, 255, 255, 0.6);
+  &::before {
+    content: ''; position: absolute; right: -3px; top: -2px;
+    width: 6px; height: 4px; background: rgba(255, 255, 255, 0.6);
+  }
+}
+
+.heart {
+  position: relative; width: 10px; height: 8px; transform: rotate(-45deg);
+  &::before, &::after {
+    content: ''; position: absolute; width: 6px; height: 10px;
+    background: rgba(255, 255, 255, 0.6); border-radius: 6px 6px 0 0;
+  }
+  &::before { left: 5px; transform: rotate(-45deg); transform-origin: 0 100%; }
+  &::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
+}
+
+@keyframes secretPulse {
+  from { opacity: 0.6; transform: scale(1); }
+  to   { opacity: 1;   transform: scale(1.1); }
+}
+
+.easterEggContainer[data-page='about'] .shape { filter: drop-shadow(0 0 2px rgba(0,255,255,0.4)); }
+.easterEggContainer[data-page='case'] .shape { filter: drop-shadow(0 0 2px rgba(255,100,100,0.4)); }
+.easterEggContainer[data-page='contact'] .shape { filter: drop-shadow(0 0 2px rgba(100,255,100,0.4)); }
+.easterEggContainer[data-page='medal'] .shape { filter: drop-shadow(0 0 2px rgba(255,255,100,0.4)); }
