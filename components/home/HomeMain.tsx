@@ -5,7 +5,6 @@ import { motion, AnimatePresence } from 'framer-motion'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
 import { useAddMedal } from 'utils/medalUtils'
-import { MedalType } from 'types'
 import { MENU } from '@constants'
 
 import { FadeInView } from 'components/common/FadeInView'
@@ -120,11 +119,6 @@ export default function HomeMain() {
       )}
 
       {phase === 'done' && <GuideNotice />}
-
-      {/* TODO 테스트용 이스터에그 */}
-      <button onClick={() => getMedal({ type: MedalType.Egg })} className={styles.hiddenBtn}>
-        사실 이스터에그
-      </button>
     </section>
   )
 }

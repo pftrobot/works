@@ -75,7 +75,7 @@ export default function ContactMain() {
       }
 
       setSent(APIResponse.OK)
-      getMedal({ type: MedalType.Contact })
+      getMedal({ type: MedalType.Contact, amount: 3 })
 
       // 잔여 전송 가능 횟수
       const canSubmit = typeof json?.remaining === 'number' ? json.remaining : null

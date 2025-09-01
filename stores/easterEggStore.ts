@@ -1,37 +1,60 @@
 import { create } from 'zustand'
 
-export type EggType = 'normal' | 'secret' | 'treasure' | 'fake'
+export type EggType = 'normal' | 'secret' | 'fake'
 export type EggKind = 'dud' | 'medal' | 'special10'
 
 export type Rect = { left: number; top: number; width: number; height: number }
 
 export type Field = {
   id: string
-  baseDensity: number
+  baseDensity: number // 기본 밀도 (default: 1.0, 2배 더 많이: 2.0)
   rect: Rect
 }
 
 export type EggInstance = {
   id: string
-  fieldId: string
+  fieldId: string // 어떤 필드에 속해있는지
   x: number
   y: number
   type: EggType
   kind: EggKind
   attrs?: Record<string, string | boolean>
-  challenge?: { key: string; clicks: number; windowMs: number }
-  awardCode?: string
+  challenge?: {
+    // 모든 챌린지에 공통으로 있는 속성들
+    type:
+      | 'keyhold'
+      | 'sequence'
+      | 'doubleclick'
+      | 'tripleclick'
+      | 'scroll'
+      | 'combo'
+      | 'mousemove'
+      | 'typing'
+      | 'rapidkey'
+    windowMs?: number
+
+    // keyhold 타입용
+    key?: string
+    clicks?: number
+
+    // sequence 타입용
+    keys?: readonly string[]
+    repeat?: number
+
+    // 기타 타입용
+    count?: number
+    scrolls?: number
+    moves?: number
+    pattern?: string
+    duration?: number
+    word?: string
+  }
+  awardCode?: string // 성공시 부여할 코드
 }
 
 const AREA_PER_EGG = 220_000 // px^2 당 1개 기준
 const MAX_PER_FIELD = 14
 const RNG_SEED = 0x2f6e_1bcd
-
-const SPECIAL_VARIANTS = [
-  { code: 'TEN_Gx4_1p2s', challenge: { key: 'KeyG', clicks: 4, windowMs: 1200 } },
-  { code: 'TEN_Ux3_0p9s', challenge: { key: 'KeyU', clicks: 3, windowMs: 900 } },
-  { code: 'TEN_Rx5_1p5s', challenge: { key: 'KeyR', clicks: 5, windowMs: 1500 } },
-] as const
 
 function makeRng(seed = RNG_SEED) {
   let s = seed >>> 0
@@ -42,10 +65,11 @@ function makeRng(seed = RNG_SEED) {
 }
 
 type State = {
-  fields: Record<string, Field>
-  eggs: EggInstance[]
-  cycleId: string
-  cycleEndsAt: number
+  fields: Record<string, Field> // 등록된 모든 필드들
+  eggs: EggInstance[] // 현재 화면에 있는 모든 이스터에그들
+  collectedEggs: Set<string> // 수집된 이스터에그 id 추적
+  cycleId: string // 현재 이스터에그 사이클 id
+  cycleEndsAt: number // 사이클 종료 시간
 
   registerField: (f: { id: string; baseDensity?: number }) => void
   updateFieldRect: (id: string, rect: Rect) => void
@@ -55,13 +79,13 @@ type State = {
   spawnAll: () => void
   collectEgg: (eggId: string) => void
 
-  hydrateFromServer: (route: string) => Promise<void>
   flushToServer: (route: string) => Promise<void>
 }
 
 export const useEggStore = create<State>((set, get) => ({
   fields: {},
   eggs: [],
+  collectedEggs: new Set(),
   cycleId: '',
   cycleEndsAt: 0,
 
@@ -87,7 +111,11 @@ export const useEggStore = create<State>((set, get) => ({
     set((st) => {
       const next = { ...st.fields }
       delete next[id]
-      return { fields: next, eggs: st.eggs.filter((e) => e.fieldId !== id) }
+      return {
+        fields: next,
+        eggs: st.eggs.filter((e) => e.fieldId !== id),
+        collectedEggs: new Set(), // 필드가 바뀌면 수집된 이스터에그 초기화
+      }
     }),
 
   startCycle: (id, ttlMs) =>
@@ -95,8 +123,14 @@ export const useEggStore = create<State>((set, get) => ({
       cycleId: id,
       cycleEndsAt: Date.now() + ttlMs,
       eggs: [],
+      collectedEggs: new Set(),
     })),
 
+  /**
+   * 모든 등록된 필드에 이스터에그들을 생성하는 핵심 함수
+   * - 필드 크기에 따라 이스터에그 개수 계산
+   * - 확률적으로 타입 결정 (secret 4%, normal 8%, 나머지 fake)
+   */
   spawnAll: () => {
     const st = get()
     const rng = makeRng(hashCycleSeed(st.cycleId))
@@ -111,30 +145,29 @@ export const useEggStore = create<State>((set, get) => ({
       const target = Math.max(0, Math.min(MAX_PER_FIELD, Math.round(ideal + rng() * 2 - 1)))
 
       for (let i = 0; i < target; i++) {
+        const eggId = `${f.id}-${st.cycleId}-${i}`
+
+        // 이미 수집된 에그는 생성하지 않음
+        if (st.collectedEggs.has(eggId)) {
+          continue
+        }
+
         const rx = rect.left + Math.floor(rng() * Math.max(1, rect.width - 16))
         const ry = rect.top + Math.floor(rng() * Math.max(1, rect.height - 16))
 
         const r = rng()
-        const type: EggType =
-          r < 0.05 ? 'treasure' : r < 0.1 ? 'secret' : r < 0.18 ? 'fake' : 'normal'
+        const type: EggType = r < 0.04 ? 'secret' : r < 0.12 ? 'normal' : 'fake'
 
         let kind: EggKind = 'medal'
-        let challenge: EggInstance['challenge'] | undefined
-        let awardCode: string | undefined
 
         if (type === 'fake') {
           kind = 'dud'
-        } else if (type === 'treasure') {
-          kind = 'special10'
-          const v = SPECIAL_VARIANTS[Math.floor(rng() * SPECIAL_VARIANTS.length)]
-          awardCode = v.code
-          challenge = v.challenge
         } else {
           kind = 'medal'
         }
 
         eggs.push({
-          id: `${f.id}-${st.cycleId}-${i}`,
+          id: eggId,
           fieldId: f.id,
           x: rx,
           y: ry,
@@ -142,11 +175,8 @@ export const useEggStore = create<State>((set, get) => ({
           kind,
           attrs: {
             secret: type === 'secret',
-            treasure: type === 'treasure',
             fake: type === 'fake',
           },
-          challenge,
-          awardCode,
         })
       }
     })
@@ -157,9 +187,9 @@ export const useEggStore = create<State>((set, get) => ({
   collectEgg: (eggId) =>
     set((st) => ({
       eggs: st.eggs.filter((e) => e.id !== eggId),
+      collectedEggs: new Set([...st.collectedEggs, eggId]),
     })),
 
-  hydrateFromServer: async (_route) => {},
   flushToServer: async (_route) => {},
 }))
 

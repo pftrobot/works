@@ -1,2 +1,3 @@
-export * from './commonConstants'
-export * from './cubeConstants'
+export * from './common'
+export * from './cube'
+export * from './egg'

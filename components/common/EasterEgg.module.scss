@@ -25,35 +25,97 @@
   transition: all 0.2s ease;
   user-select: none;
   z-index: $z-header;
-  opacity: 0.2;
+  opacity: 0.1;
 
   &[data-secret="true"] {
-    // opacity: 0.8;
-    animation: secretPulse 1s ease-in-out infinite alternate;
+    animation: secretPulse 3s ease-in-out infinite alternate;
   }
 
   &[data-treasure="true"] {
     .shape {
-      filter: drop-shadow(0 0 4px rgba(255, 215, 0, 0.6));
+      filter: drop-shadow(0 0 1px rgba(255, 215, 0, 0.3));
     }
 
     &[data-secret="true"] {
       .shape {
-        filter: drop-shadow(0 0 8px rgba(255, 215, 0, 0.9));
+        filter: drop-shadow(0 0 2px rgba(255, 215, 0, 0.4));
       }
     }
   }
 
+  // 마우스오버 시에만 명확히 보임
   &:hover {
-    opacity: 0.8 !important;
-    transform: scale(1.3);
+    opacity: 0.9 !important;
+    transform: scale(1.5);
 
     .shape {
-      filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8)) !important;
+      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9)) !important;
     }
 
     &[data-treasure="true"] .shape {
-      filter: drop-shadow(0 0 10px rgba(255, 215, 0, 0.9)) !important;
+      filter: drop-shadow(0 0 12px rgba(255, 215, 0, 1)) !important;
+    }
+  }
+
+  // 클릭 시 즉시 사라지는 효과
+  &:active {
+    animation: clickDisappear 0.2s ease-out forwards;
+  }
+}
+
+// 가장자리 이스터에그
+.edgeEgg {
+  position: fixed;
+  width: 40px;
+  height: 40px;
+  opacity: 0;
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  pointer-events: auto;
+  cursor: pointer;
+  z-index: $z-header;
+
+  &.show {
+    opacity: 0.8;
+    transform: translateX(0) translateY(0);
+  }
+
+  &.left {
+    left: -15px;
+    top: 50%;
+    transform: translateX(-100%) translateY(-50%);
+
+    &.show {
+      transform: translateX(0) translateY(-50%);
+    }
+  }
+
+  &.right {
+    right: -15px;
+    top: 50%;
+    transform: translateX(100%) translateY(-50%);
+
+    &.show {
+      transform: translateX(0) translateY(-50%);
+    }
+  }
+
+  &.top {
+    top: -15px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-100%);
+
+    &.show {
+      transform: translateX(-50%) translateY(0);
+    }
+  }
+
+  &.bottom {
+    bottom: -15px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100%);
+
+    &.show {
+      transform: translateX(-50%) translateY(0);
     }
   }
 }
@@ -62,11 +124,12 @@
   width: 12px;
   height: 12px;
   transition: all 0.2s ease;
-  filter: drop-shadow(0 0 2px rgba(255, 255, 255, 0.3));
+  filter: drop-shadow(0 0 1px rgba(255, 255, 255, 0.1));
 }
 
+// 기존 모양들 (더 투명하게)
 .dot {
-  background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0.2) 70%);
+  background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, rgba(255,255,255,0.1) 70%);
   border-radius: 50%;
 }
 
@@ -75,56 +138,56 @@
   height: 0;
   border-left: 6px solid transparent;
   border-right: 6px solid transparent;
-  border-bottom: 10px solid rgba(255, 255, 255, 0.6);
+  border-bottom: 10px solid rgba(255, 255, 255, 0.3);
 }
 
 .square {
-  background: linear-gradient(45deg, rgba(255,255,255,0.6) 0%, rgba(255,255,255,0.2) 100%);
+  background: linear-gradient(45deg, rgba(255,255,255,0.3) 0%, rgba(255,255,255,0.1) 100%);
   border-radius: 2px;
 }
 
 .diamond {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.3);
   transform: rotate(45deg);
   border-radius: 2px;
 }
 
 .star {
   position: relative;
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.4);
   transform: rotate(45deg);
   border-radius: 2px;
 
   &::before {
     content: '';
     position: absolute; inset: 0;
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.4);
     transform: rotate(45deg);
     border-radius: 2px;
   }
 }
 
 .circle {
-  background: radial-gradient(circle, transparent 40%, rgba(255,255,255,0.6) 50%, transparent 60%);
+  background: radial-gradient(circle, transparent 40%, rgba(255,255,255,0.3) 50%, transparent 60%);
   border-radius: 50%;
 }
 
 .hex {
-  background: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.3);
   width: 10px; height: 12px; position: relative;
   &::before, &::after {
     content: ''; position: absolute; width: 0;
     border-left: 5px solid transparent; border-right: 5px solid transparent;
   }
-  &::before { bottom: 100%; border-bottom: 3px solid rgba(255, 255, 255, 0.6); }
-  &::after { top: 100%; border-top: 3px solid rgba(255, 255, 255, 0.6); }
+  &::before { bottom: 100%; border-bottom: 3px solid rgba(255, 255, 255, 0.3); }
+  &::after { top: 100%; border-top: 3px solid rgba(255, 255, 255, 0.3); }
 }
 
 .cross {
-  position: relative; background: rgba(255, 255, 255, 0.6);
+  position: relative; background: rgba(255, 255, 255, 0.3);
   width: 3px; height: 12px;
   &::before {
-    content: ''; position: absolute; background: rgba(255, 255, 255, 0.6);
+    content: ''; position: absolute; background: rgba(255, 255, 255, 0.3);
     width: 12px; height: 3px; top: 50%; left: 50%; transform: translate(-50%, -50%);
   }
 }
@@ -132,10 +195,10 @@
 .arrow {
   width: 0; height: 0;
   border-top: 4px solid transparent; border-bottom: 4px solid transparent;
-  border-left: 8px solid rgba(255, 255, 255, 0.6);
+  border-left: 8px solid rgba(255, 255, 255, 0.3);
   &::before {
     content: ''; position: absolute; right: -3px; top: -2px;
-    width: 6px; height: 4px; background: rgba(255, 255, 255, 0.6);
+    width: 6px; height: 4px; background: rgba(255, 255, 255, 0.3);
   }
 }
 
@@ -143,18 +206,30 @@
   position: relative; width: 10px; height: 8px; transform: rotate(-45deg);
   &::before, &::after {
     content: ''; position: absolute; width: 6px; height: 10px;
-    background: rgba(255, 255, 255, 0.6); border-radius: 6px 6px 0 0;
+    background: rgba(255, 255, 255, 0.3); border-radius: 6px 6px 0 0;
   }
   &::before { left: 5px; transform: rotate(-45deg); transform-origin: 0 100%; }
   &::after { left: 0; transform: rotate(45deg); transform-origin: 100% 100%; }
 }
 
-@keyframes secretPulse {
-  from { opacity: 0.6; transform: scale(1); }
-  to   { opacity: 1;   transform: scale(1.1); }
+// 애니메이션들
+@keyframes fadeIn {
+  from { opacity: 0; transform: scale(0.5); }
+  to   { opacity: 0.05; transform: scale(1); }
 }
 
-.easterEggContainer[data-page='about'] .shape { filter: drop-shadow(0 0 2px rgba(0,255,255,0.4)); }
-.easterEggContainer[data-page='case'] .shape { filter: drop-shadow(0 0 2px rgba(255,100,100,0.4)); }
-.easterEggContainer[data-page='contact'] .shape { filter: drop-shadow(0 0 2px rgba(100,255,100,0.4)); }
-.easterEggContainer[data-page='medal'] .shape { filter: drop-shadow(0 0 2px rgba(255,255,100,0.4)); }
+@keyframes clickDisappear {
+  0%   { opacity: 0.9; transform: scale(1.5); }
+  50%  { opacity: 1; transform: scale(2); }
+  100% { opacity: 0; transform: scale(0.1); }
+}
+
+@keyframes secretPulse {
+  from { opacity: 0.05; transform: scale(1); }
+  to   { opacity: 0.15; transform: scale(1.05); }
+}
+
+.easterEggContainer[data-page='about'] .shape { filter: drop-shadow(0 0 1px rgba(0,255,255,0.2)); }
+.easterEggContainer[data-page='case'] .shape { filter: drop-shadow(0 0 1px rgba(255,100,100,0.2)); }
+.easterEggContainer[data-page='contact'] .shape { filter: drop-shadow(0 0 1px rgba(100,255,100,0.2)); }
+.easterEggContainer[data-page='medal'] .shape { filter: drop-shadow(0 0 1px rgba(255,255,100,0.2)); }

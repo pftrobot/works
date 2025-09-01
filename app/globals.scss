@@ -6,6 +6,7 @@
 :root {
   --background: #ffffff;
   --foreground: #111;
+  --scrollbar-width: 20px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,13 +20,22 @@
   box-sizing: border-box;
 }
 
-html.modal-open,
-body.modal-open {
-  overflow: hidden;
-}
-
 html {
   font-size: 16px;
+
+  &.modal-open{
+    overflow: hidden;
+
+    body {
+      overflow: hidden;
+      min-height: 100vh;
+      padding-right: var(--scrollbar-width, 0);
+
+      /* iOS Safari에서의 스크롤 바운스 방지 */
+      //position: relative;
+      //touch-action: none;
+    }
+  }
 
   @include respondTo('tablet') {
     font-size: 15px;
@@ -33,6 +43,20 @@ html {
 
   @include respondTo('mobile') {
     font-size: 14px;
+  }
+}
+
+
+/* iOS Safari에서의 스크롤 바운스 방지 */
+html.modal-open body {
+  position: relative;
+  touch-action: none;
+}
+
+/* 스크롤바 너비를 CSS 변수로 설정하는 스크립트가 필요한 경우를 위한 대비 */
+@supports (scrollbar-width: thin) {
+  html.modal-open body {
+    padding-right: 0;
   }
 }
 

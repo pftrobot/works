@@ -9,7 +9,7 @@ export async function GET() {
     .from('medal_events')
     .select('id,type,source_id,route,egg_id,award_code,amount,created_at')
     .eq('visitor_id', visitorId)
-    .order('created_at', { ascending: true })
+    .order('created_at', { ascending: false })
 
   if (error) return NextResponse.json({ error: error.message }, { status: 500 })
 
