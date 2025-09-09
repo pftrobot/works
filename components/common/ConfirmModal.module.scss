@@ -7,6 +7,58 @@
 .modalWrap {
   padding-inline: space(4);
 
+  &.success {
+    .confirmButton {
+      color: color('text', 'black');
+      background-color: color('semantic', 'success');
+
+      @media (hover: hover) {
+        &:hover {
+          background-color: #45f140;
+        }
+      }
+    }
+  }
+
+  &.warning {
+    .confirmButton {
+      color: color('text', 'black');
+      background-color: color('semantic', 'warning');
+
+      @media (hover: hover) {
+        &:hover {
+          background-color: #fb9218;
+        }
+      }
+    }
+  }
+
+  &.error {
+    .confirmButton {
+      color: color('text', 'white');
+      background-color: color('semantic', 'error');
+
+      @media (hover: hover) {
+        &:hover {
+          background-color: #ff1111;
+        }
+      }
+    }
+  }
+
+  &.gold {
+    .confirmButton {
+      color: color('text', 'black');
+      background-color: #ffcb43;
+
+      @media (hover: hover) {
+        &:hover {
+          background-color: #eaae13;
+        }
+      }
+    }
+  }
+
   > div {
     padding-inline: space(8);
     padding-block: space(17, 10);
@@ -43,6 +95,7 @@
 
   .confirmButton {
     font-size: $text-sm;
+    font-weight: $font-bold;
     color: color('text', 'white');
     padding: space(3, 6);
     background-color: color('key', 'blue');

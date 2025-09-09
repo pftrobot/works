@@ -23,7 +23,10 @@ export default function EasterEggLayer() {
 
   const { eggs } = useEasterEggInitialization(pathname)
   const { activeEdge, hideEdgeEgg } = useEdgeEasterEgg()
-  const { award, notify, collectEgg } = useEasterEggHandlers(pathname, setModalMsg, setModalOpen)
+  const { award, notify } = useEasterEggHandlers(pathname, setModalMsg, setModalOpen)
+
+  const collectEgg = useEggStore((state) => state.collectEgg)
+  const reshuffleEggs = useEggStore((state) => state.reshuffleEggs)
 
   // 전역 스페셜 이스터에그 감지기
   useGlobalSpecialEggs(award, notify, setModalMsg, setModalOpen, SPEC_OK_LINES, SPEC_DUP_LINES)
@@ -40,17 +43,23 @@ export default function EasterEggLayer() {
   }, [pathname, flushToServer])
 
   async function onEggClick(egg: ReturnType<typeof useEggStore.getState>['eggs'][number]) {
+    collectEgg(egg.id, egg.fieldId)
+
+    // 에그들 위치 재배치
+    reshuffleEggs()
+
     // 가짜 에그 (fake 타입)
     if (egg.kind === 'dud') {
-      collectEgg(egg.id)
       notify(MESSAGE_LINES.DUD)
       return
     }
 
     // 당첨 에그 (normal, secret 타입)
     if (egg.kind === 'medal') {
-      collectEgg(egg.id)
-      const { ok, awarded } = await award('medal', { eggId: egg.id })
+      const { ok, awarded } = await award('medal', {
+        eggId: egg.id,
+        fieldId: egg.fieldId,
+      })
       if (!ok) {
         setModalMsg('서버와의 통신에 실패했습니다. 잠시 후 다시 시도해주세요.')
         setModalOpen(true)
@@ -59,8 +68,6 @@ export default function EasterEggLayer() {
       notify(awarded ? MESSAGE_LINES.MEDAL_OK : MESSAGE_LINES.MEDAL_DUP)
       return
     }
-
-    collectEgg(egg.id)
   }
 
   async function onEdgeEggClick() {
@@ -97,43 +104,63 @@ export default function EasterEggLayer() {
 
         {activeEdge && (
           <div
-            className={`${styles.edgeEgg} ${styles[activeEdge]} ${styles.show}`}
+            className={`${styles.edgeEgg} ${styles[activeEdge.position]} ${styles.show}`}
             onClick={onEdgeEggClick}
+            onMouseEnter={(e) => {
+              // 마우스가 이스터에그 위에 올라오면 도망가기
+              const currentTarget = e.currentTarget
+              const rect = currentTarget.getBoundingClientRect()
+              const centerX = rect.left + rect.width / 2
+              const centerY = rect.top + rect.height / 2
+
+              // 마우스 위치에서 반대 방향으로 도망가기 (거리 2배로 증가)
+              const mouseX = e.clientX
+              const mouseY = e.clientY
+              const deltaX = centerX - mouseX
+              const deltaY = centerY - mouseY
+              const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
+
+              if (distance > 0) {
+                const escapeDistance = 100 // 도망가는 거리 (기존보다 2배)
+                const normalizedX = deltaX / distance
+                const normalizedY = deltaY / distance
+                const newX = centerX + normalizedX * escapeDistance
+                const newY = centerY + normalizedY * escapeDistance
+
+                // 화면 경계 체크
+                const maxX = window.innerWidth - 60
+                const maxY = window.innerHeight - 60
+                const clampedX = Math.max(10, Math.min(maxX, newX))
+                const clampedY = Math.max(10, Math.min(maxY, newY))
+
+                currentTarget.style.transition = 'left 0.2s ease-out, top 0.2s ease-out'
+                currentTarget.style.left = `${clampedX}px`
+                currentTarget.style.top = `${clampedY}px`
+
+                // 트랜지션 후 원래 속도로 복원
+                setTimeout(() => {
+                  currentTarget.style.transition = ''
+                }, 200)
+              }
+            }}
             style={{
-              // 흰색 도형에 주황색 그림자
-              filter: 'drop-shadow(0 0 10px #ff8c00) drop-shadow(0 0 20px #ff8c00)',
-              // 각 가장자리별 위치 조정 (잘림 방지)
-              ...(activeEdge === 'left' && {
-                left: '10px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                position: 'fixed' as const,
-              }),
-              ...(activeEdge === 'right' && {
-                right: '10px',
-                top: '50%',
-                transform: 'translateY(-50%)',
-                position: 'fixed' as const,
-              }),
-              ...(activeEdge === 'top' && {
-                left: '50%',
-                top: '10px',
-                transform: 'translateX(-50%)',
-                position: 'fixed' as const,
-              }),
-              ...(activeEdge === 'bottom' && {
-                left: '50%',
-                bottom: '10px',
-                transform: 'translateX(-50%)',
-                position: 'fixed' as const,
-              }),
+              filter:
+                'drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 20px #ffb400) drop-shadow(0 0 30px #ff8c00)',
+              left: `${activeEdge.x}px`,
+              top: `${activeEdge.y}px`,
+              position: 'fixed' as const,
+              transform: 'none',
+              cursor: 'pointer',
             }}
           >
             <div
               className={`${styles.shape} ${styles.star}`}
               style={{
-                backgroundColor: 'white',
-                border: '2px solid #ff8c00',
+                backgroundColor: '#ffd700',
+                border: '2px solid #ffb400',
+                boxShadow:
+                  'inset 0 0 10px rgba(255, 255, 255, 0.5), 0 0 15px rgba(255, 215, 0, 0.8)',
+                pointerEvents: 'none',
               }}
             />
           </div>
@@ -145,6 +172,7 @@ export default function EasterEggLayer() {
         onConfirm={() => setModalOpen(false)}
         message={modalMsg}
         confirmText="확인"
+        color={'gold'}
       />
     </>
   )

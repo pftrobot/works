@@ -1,10 +1,13 @@
 import { useEffect, useRef, useState } from 'react'
 import { useEggStore } from 'stores/easterEggStore'
-import { BASE_DENSITY, CYCLE_TTL_MS, FIELD_ID } from '@constants'
+import { BASE_DENSITY, CYCLE_TTL_MS, getFieldIdByPath } from '@constants'
 
 export function useEasterEggInitialization(pathname: string) {
   const [isInitialized, setIsInitialized] = useState(false)
-  const initTimeoutRef = useRef<NodeJS.Timeout>(null)
+  const initTimeoutRef = useRef<NodeJS.Timeout | null>(null)
+  const currentFieldIdRef = useRef<string | null>(null)
+
+  const fieldId = getFieldIdByPath(pathname)
 
   const eggs = useEggStore((s) => s.eggs)
   const cycleId = useEggStore((s) => s.cycleId)
@@ -24,7 +27,7 @@ export function useEasterEggInitialization(pathname: string) {
     const main = document.querySelector('main') as HTMLElement | null
     if (!main) return
 
-    updateFieldRect(FIELD_ID, {
+    updateFieldRect(fieldId, {
       left: 0,
       top: 0,
       width: main.clientWidth,
@@ -57,10 +60,25 @@ export function useEasterEggInitialization(pathname: string) {
     const main = document.querySelector('main') as HTMLElement | null
     if (!main) return
 
-    const { fields } = useEggStore.getState()
-    Object.keys(fields).forEach((id) => id.startsWith('__') && unregisterField(id))
+    // 이전 페이지의 필드 정리
+    if (currentFieldIdRef.current && currentFieldIdRef.current !== fieldId) {
+      unregisterField(currentFieldIdRef.current)
+    }
 
-    registerField({ id: FIELD_ID, baseDensity: BASE_DENSITY })
+    // 모든 시스템 필드 정리
+    const { fields } = useEggStore.getState()
+    Object.keys(fields).forEach((id) => {
+      if (id.startsWith('__') && id !== fieldId) {
+        unregisterField(id)
+      }
+    })
+
+    // 현재 페이지 필드 등록
+    registerField({
+      id: fieldId,
+      baseDensity: BASE_DENSITY,
+    })
+    currentFieldIdRef.current = fieldId
 
     /**
      * 초기 크기 설정을 위한 다중 시도
@@ -94,11 +112,12 @@ export function useEasterEggInitialization(pathname: string) {
         clearTimeout(initTimeoutRef.current)
       }
       resizeObsv.disconnect()
-      unregisterField(FIELD_ID)
+      unregisterField(fieldId)
+      currentFieldIdRef.current = null
       setIsInitialized(false)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [pathname])
+  }, [pathname, fieldId])
 
   useEffect(() => {
     const onResize = () => {
@@ -106,7 +125,7 @@ export function useEasterEggInitialization(pathname: string) {
     }
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
-  }, [updateFieldRect])
+  }, [updateMainRect])
 
   useEffect(() => {
     if (typeof window === 'undefined') return
@@ -141,11 +160,12 @@ export function useEasterEggInitialization(pathname: string) {
       window.removeEventListener('load', checkAndUpdate)
       observer.disconnect()
     }
-  }, [isInitialized])
+  }, [isInitialized, updateMainRect])
 
   return {
     isInitialized, // 초기화 완료 여부
     eggs, // 현재 활성화된 이스터에그 목록
     updateMainRect, // 수동으로 크기 업데이트하는 함수
+    fieldId, // 현재 페이지의 필드 ID
   }
 }

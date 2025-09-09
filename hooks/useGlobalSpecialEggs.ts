@@ -27,7 +27,6 @@ export function useGlobalSpecialEggs(
     sequences: {},
     combos: {},
     typing: {},
-    scrollTracker: { scrollCount: 0, lastScrollTime: 0, challenges: {} },
     mouseTracker: { positions: [], challenges: {} },
     rapidKey: {},
     clickTrackers: {},
@@ -40,7 +39,6 @@ export function useGlobalSpecialEggs(
     if (completedRef.current.has(awardCode)) return
 
     completedRef.current.add(awardCode)
-    console.log(`Special challenge completed: ${awardCode}`)
 
     const { ok, awarded } = await award('special10', { awardCode })
     if (!ok) {
@@ -92,13 +90,6 @@ export function useGlobalSpecialEggs(
           awardCode: code,
           word: challenge.word!,
           typedWord: '',
-          windowMs: challenge.windowMs!,
-          deadline: 0,
-        }
-      } else if (challenge.type === 'scroll') {
-        state.scrollTracker.challenges[code] = {
-          awardCode: code,
-          required: challenge.scrolls!,
           windowMs: challenge.windowMs!,
           deadline: 0,
         }
@@ -268,29 +259,6 @@ export function useGlobalSpecialEggs(
       })
     }
 
-    const onScroll = async () => {
-      const state = stateRef.current
-      const now = Date.now()
-
-      // 100ms 디바운싱으로 과도한 스크롤 이벤트 방지
-      if (now - state.scrollTracker.lastScrollTime > 100) {
-        state.scrollTracker.scrollCount++
-        state.scrollTracker.lastScrollTime = now
-
-        Object.values(state.scrollTracker.challenges).forEach(async (challenge) => {
-          if (challenge.deadline === 0 || now > challenge.deadline) {
-            challenge.deadline = now + challenge.windowMs
-          }
-
-          if (state.scrollTracker.scrollCount >= challenge.required && now <= challenge.deadline) {
-            await completeChallenge(challenge.awardCode)
-            state.scrollTracker.scrollCount = 0
-            challenge.deadline = 0
-          }
-        })
-      }
-    }
-
     const onMouseMove = async (e: MouseEvent) => {
       const state = stateRef.current
       const now = Date.now()
@@ -329,14 +297,12 @@ export function useGlobalSpecialEggs(
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('keyup', onKeyUp)
     window.addEventListener('click', onClick)
-    window.addEventListener('scroll', onScroll, { passive: true })
     window.addEventListener('mousemove', onMouseMove, { passive: true })
 
     return () => {
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
       window.removeEventListener('click', onClick)
-      window.removeEventListener('scroll', onScroll)
       window.removeEventListener('mousemove', onMouseMove)
     }
   }, [award, notify, setModalMsg, setModalOpen, SPEC_OK_LINES, SPEC_DUP_LINES])

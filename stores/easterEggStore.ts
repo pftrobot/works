@@ -67,7 +67,7 @@ function makeRng(seed = RNG_SEED) {
 type State = {
   fields: Record<string, Field> // 등록된 모든 필드들
   eggs: EggInstance[] // 현재 화면에 있는 모든 이스터에그들
-  collectedEggs: Set<string> // 수집된 이스터에그 id 추적
+  collectedEggsByField: Record<string, Set<string>> // 필드별 수집된 이스터에그 추적
   cycleId: string // 현재 이스터에그 사이클 id
   cycleEndsAt: number // 사이클 종료 시간
 
@@ -77,7 +77,10 @@ type State = {
 
   startCycle: (id: string, ttlMs: number) => void
   spawnAll: () => void
-  collectEgg: (eggId: string) => void
+  reshuffleEggs: () => void // 에그들 위치 재배치
+  collectEgg: (eggId: string, fieldId: string) => void
+  clearFieldCollection: (fieldId: string) => void // 특정 필드 기록 초기화
+  clearAllCollections: () => void // 모든 필드 기록 초기화 (사이클 변경 시)
 
   flushToServer: (route: string) => Promise<void>
 }
@@ -85,17 +88,22 @@ type State = {
 export const useEggStore = create<State>((set, get) => ({
   fields: {},
   eggs: [],
-  collectedEggs: new Set(),
+  collectedEggsByField: {},
   cycleId: '',
   cycleEndsAt: 0,
 
   registerField: ({ id, baseDensity = 1 }) =>
     set((st) => {
       const prev = st.fields[id]
+      const collectedEggs = st.collectedEggsByField[id] || new Set<string>()
       return {
         fields: {
           ...st.fields,
           [id]: prev ?? { id, baseDensity, rect: { left: 0, top: 0, width: 0, height: 0 } },
+        },
+        collectedEggsByField: {
+          ...st.collectedEggsByField,
+          [id]: collectedEggs,
         },
       }
     }),
@@ -111,20 +119,24 @@ export const useEggStore = create<State>((set, get) => ({
     set((st) => {
       const next = { ...st.fields }
       delete next[id]
+      // 필드 해제 시 해당 필드의 이스터에그만 제거
+      // 수집 기록은 유지 (다시 방문했을 때 재생성 방지)
       return {
         fields: next,
         eggs: st.eggs.filter((e) => e.fieldId !== id),
-        collectedEggs: new Set(), // 필드가 바뀌면 수집된 이스터에그 초기화
       }
     }),
 
   startCycle: (id, ttlMs) =>
-    set((st) => ({
-      cycleId: id,
-      cycleEndsAt: Date.now() + ttlMs,
-      eggs: [],
-      collectedEggs: new Set(),
-    })),
+    set((st) => {
+      const isSameCycle = st.cycleId === id
+      return {
+        cycleId: id,
+        cycleEndsAt: Date.now() + ttlMs,
+        eggs: [],
+        collectedEggsByField: isSameCycle ? st.collectedEggsByField : {},
+      }
+    }),
 
   /**
    * 모든 등록된 필드에 이스터에그들을 생성하는 핵심 함수
@@ -144,11 +156,13 @@ export const useEggStore = create<State>((set, get) => ({
       const ideal = (area / AREA_PER_EGG) * baseDensity
       const target = Math.max(0, Math.min(MAX_PER_FIELD, Math.round(ideal + rng() * 2 - 1)))
 
+      const fieldCollectedEggs = st.collectedEggsByField[f.id] || new Set<string>()
+
       for (let i = 0; i < target; i++) {
         const eggId = `${f.id}-${st.cycleId}-${i}`
 
         // 이미 수집된 에그는 생성하지 않음
-        if (st.collectedEggs.has(eggId)) {
+        if (fieldCollectedEggs.has(eggId)) {
           continue
         }
 
@@ -184,10 +198,53 @@ export const useEggStore = create<State>((set, get) => ({
     set({ eggs })
   },
 
-  collectEgg: (eggId) =>
+  collectEgg: (eggId, fieldId) =>
+    set((st) => {
+      // 해당 필드의 수집 기록에 추가
+      const fieldCollectedEggs = new Set(st.collectedEggsByField[fieldId] || [])
+      fieldCollectedEggs.add(eggId)
+
+      return {
+        eggs: st.eggs.filter((e) => e.id !== eggId),
+        collectedEggsByField: {
+          ...st.collectedEggsByField,
+          [fieldId]: fieldCollectedEggs,
+        },
+      }
+    }),
+
+  reshuffleEggs: () => {
+    const st = get()
+    const rng = makeRng(Date.now()) // 현재 시간을 시드로 사용하여 매번 랜덤한 위치 지정
+
+    const reshuffledEggs = st.eggs.map((egg) => {
+      const field = st.fields[egg.fieldId]
+      if (!field || !field.rect.width || !field.rect.height) return egg
+
+      const newX = field.rect.left + Math.floor(rng() * Math.max(1, field.rect.width - 16))
+      const newY = field.rect.top + Math.floor(rng() * Math.max(1, field.rect.height - 16))
+
+      return {
+        ...egg,
+        x: newX,
+        y: newY,
+      }
+    })
+
+    set({ eggs: reshuffledEggs })
+  },
+
+  clearFieldCollection: (fieldId) =>
     set((st) => ({
-      eggs: st.eggs.filter((e) => e.id !== eggId),
-      collectedEggs: new Set([...st.collectedEggs, eggId]),
+      collectedEggsByField: {
+        ...st.collectedEggsByField,
+        [fieldId]: new Set<string>(),
+      },
+    })),
+
+  clearAllCollections: () =>
+    set(() => ({
+      collectedEggsByField: {},
     })),
 
   flushToServer: async (_route) => {},

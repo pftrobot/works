@@ -45,20 +45,6 @@ export type GlobalSpecialState = {
     }
   >
 
-  scrollTracker: {
-    scrollCount: number
-    lastScrollTime: number
-    challenges: Record<
-      string,
-      {
-        awardCode: string
-        required: number
-        windowMs: number
-        deadline: number
-      }
-    >
-  }
-
   mouseTracker: {
     positions: MousePosition[]
     challenges: Record<

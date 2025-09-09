@@ -2,86 +2,188 @@ import { useEffect, useState } from 'react'
 
 type EdgePosition = 'left' | 'right' | 'top' | 'bottom'
 
+interface EdgeEggState {
+  position: EdgePosition
+  x: number
+  y: number
+  escapeCount: number
+}
+
+interface HiddenSpot {
+  edge: EdgePosition
+  x: number
+  y: number
+  triggerArea: { x1: number; y1: number; x2: number; y2: number }
+}
+
 /**
  * 가장자리 이스터에그 훅
- * - 마우스가 실제 이스터에그가 위치할 가장자리 근처에 1초간 머물면 등장
- * - 각 가장자리별로 고정된 위치에 이스터에그 배치
- * - 3초 후 자동으로 사라짐
+ * - 미리 정해진 2곳의 히든 스팟에서만 이스터에그 등장
+ * - 해당 위치 근처에 마우스를 1초간 머물면 이스터에그 나타남
  * - EDGE_MASTER 어워드와 연결되는 히든 기능
  */
 export function useEdgeEasterEgg() {
-  const [activeEdge, setActiveEdge] = useState<EdgePosition | null>(null)
+  const [activeEdge, setActiveEdge] = useState<EdgeEggState | null>(null)
+  const [hiddenSpots, setHiddenSpots] = useState<HiddenSpot[]>([])
+
+  // 페이지 로드시 히든 스팟 2곳을 랜덤으로 생성
+  useEffect(() => {
+    const generateHiddenSpots = (): HiddenSpot[] => {
+      const { innerWidth, innerHeight } = window
+      const edges: EdgePosition[] = ['left', 'right', 'top', 'bottom']
+      const selectedEdges = edges.sort(() => Math.random() - 0.5).slice(0, 2) // 랜덤으로 2개 선택
+
+      return selectedEdges.map((edge) => {
+        const triggerRadius = 50
+        const eggSize = 50
+
+        switch (edge) {
+          case 'left': {
+            const y = Math.random() * (innerHeight - eggSize * 2) + eggSize
+            return {
+              edge,
+              x: 10,
+              y,
+              triggerArea: {
+                x1: 0,
+                y1: y - triggerRadius,
+                x2: 20 + triggerRadius,
+                y2: y + triggerRadius,
+              },
+            }
+          }
+          case 'right': {
+            const y = Math.random() * (innerHeight - eggSize * 2) + eggSize
+            return {
+              edge,
+              x: innerWidth - 60,
+              y,
+              triggerArea: {
+                x1: innerWidth - 60 - triggerRadius,
+                y1: y - triggerRadius,
+                x2: innerWidth,
+                y2: y + triggerRadius,
+              },
+            }
+          }
+          case 'top': {
+            const x = Math.random() * (innerWidth - eggSize * 2) + eggSize
+            return {
+              edge,
+              x,
+              y: 10,
+              triggerArea: {
+                x1: x - triggerRadius,
+                y1: 0,
+                x2: x + triggerRadius,
+                y2: 20 + triggerRadius,
+              },
+            }
+          }
+          case 'bottom': {
+            const x = Math.random() * (innerWidth - eggSize * 2) + eggSize
+            return {
+              edge,
+              x,
+              y: innerHeight - 60,
+              triggerArea: {
+                x1: x - triggerRadius,
+                y1: innerHeight - 60 - triggerRadius,
+                x2: x + triggerRadius,
+                y2: innerHeight,
+              },
+            }
+          }
+          default:
+            return {
+              edge: 'left',
+              x: 0,
+              y: 0,
+              triggerArea: { x1: 0, y1: 0, x2: 0, y2: 0 },
+            }
+        }
+      })
+    }
+
+    setHiddenSpots(generateHiddenSpots())
+  }, [])
 
   useEffect(() => {
     let timeout: NodeJS.Timeout | null = null
+    let currentSpot: HiddenSpot | null = null
 
-    const checkEdgeHover = (e: MouseEvent) => {
+    const checkHiddenSpotHover = (e: MouseEvent) => {
       const { clientX, clientY } = e
-      const { innerWidth, innerHeight } = window
 
-      const edgeThreshold = 20 // 가장자리 감지 거리 (픽셀)
-      const centerRange = 100 // 중앙에서 양쪽으로 허용 범위 (픽셀)
-      let edge: EdgePosition | null = null
-
-      // 왼쪽 가장자리: 세로 중앙 ±100px 범위
-      if (clientX <= edgeThreshold) {
-        const centerY = innerHeight / 2
-        if (Math.abs(clientY - centerY) <= centerRange) {
-          edge = 'left'
-        }
-      }
-      // 오른쪽 가장자리: 세로 중앙 ±100px 범위
-      else if (clientX >= innerWidth - edgeThreshold) {
-        const centerY = innerHeight / 2
-        if (Math.abs(clientY - centerY) <= centerRange) {
-          edge = 'right'
-        }
-      }
-      // 상단 가장자리: 가로 중앙 ±100px 범위
-      else if (clientY <= edgeThreshold) {
-        const centerX = innerWidth / 2
-        if (Math.abs(clientX - centerX) <= centerRange) {
-          edge = 'top'
-        }
-      }
-      // 하단 가장자리: 가로 중앙 ±100px 범위
-      else if (clientY >= innerHeight - edgeThreshold) {
-        const centerX = innerWidth / 2
-        if (Math.abs(clientX - centerX) <= centerRange) {
-          edge = 'bottom'
-        }
+      if (activeEdge) {
+        return
       }
 
-      if (edge && edge !== activeEdge) {
+      // 현재 마우스 위치가 어떤 히든 스팟 영역에 있는지 확인
+      const hoveredSpot = hiddenSpots.find(
+        (spot) =>
+          clientX >= spot.triggerArea.x1 &&
+          clientX <= spot.triggerArea.x2 &&
+          clientY >= spot.triggerArea.y1 &&
+          clientY <= spot.triggerArea.y2,
+      )
+
+      if (hoveredSpot && hoveredSpot !== currentSpot) {
+        currentSpot = hoveredSpot
         if (timeout) clearTimeout(timeout)
 
         timeout = setTimeout(() => {
-          setActiveEdge(edge)
+          // 약간의 랜덤 오프셋 추가 (+-20px)
+          const randomOffsetX = (Math.random() - 0.5) * 40
+          const randomOffsetY = (Math.random() - 0.5) * 40
+
+          setActiveEdge({
+            position: hoveredSpot.edge,
+            x: hoveredSpot.x + randomOffsetX,
+            y: hoveredSpot.y + randomOffsetY,
+            escapeCount: 0,
+          })
 
           setTimeout(() => {
             setActiveEdge(null)
           }, 3000)
         }, 1000)
-      } else if (!edge && timeout) {
+      } else if (!hoveredSpot && timeout) {
         clearTimeout(timeout)
         timeout = null
+        currentSpot = null
       }
     }
 
-    window.addEventListener('mousemove', checkEdgeHover, { passive: true })
+    if (hiddenSpots.length > 0) {
+      window.addEventListener('mousemove', checkHiddenSpotHover, { passive: true })
+    }
 
     return () => {
-      window.removeEventListener('mousemove', checkEdgeHover)
+      window.removeEventListener('mousemove', checkHiddenSpotHover)
       if (timeout) clearTimeout(timeout)
     }
-  }, [activeEdge])
+  }, [hiddenSpots, activeEdge])
 
   const hideEdgeEgg = () => {
     setActiveEdge(null)
   }
 
+  // 이스터에그 위치와 도망 횟수 업데이트 함수
+  const updateEdgeEgg = (newX: number, newY: number) => {
+    if (activeEdge) {
+      setActiveEdge({
+        ...activeEdge,
+        x: newX,
+        y: newY,
+        escapeCount: activeEdge.escapeCount + 1,
+      })
+    }
+  }
+
   return {
-    activeEdge, // 현재 활성화된 가장자리 위치 ('left'|'right'|'top'|'bottom'|null)
-    hideEdgeEgg, // 이스터에그를 숨기는 함수
+    activeEdge,
+    hideEdgeEgg,
+    updateEdgeEgg,
   }
 }

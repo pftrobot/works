@@ -1,5 +1,4 @@
 import { useQueryClient } from '@tanstack/react-query'
-import { useEggStore } from 'stores/easterEggStore'
 import { medalsKeys } from 'utils/medalUtils'
 
 export function useEasterEggHandlers(
@@ -8,11 +7,10 @@ export function useEasterEggHandlers(
   setModalOpen: (open: boolean) => void,
 ) {
   const queryClient = useQueryClient()
-  const collectEgg = useEggStore((s) => s.collectEgg)
 
   async function award(
     kind: 'medal' | 'special10',
-    opts: { eggId?: string; awardCode?: string } = {},
+    opts: { eggId?: string; fieldId?: string; awardCode?: string } = {},
   ): Promise<{ ok: boolean; awarded: boolean; amount: number }> {
     const payload =
       kind === 'medal'
@@ -27,9 +25,12 @@ export function useEasterEggHandlers(
     })
     const json = await res.json().catch(() => ({}))
     const ok = !!json?.ok
-    if (ok) {
+
+    if (ok && json?.awarded) {
+      // 실제로 메달을 받았을 때만 쿼리 무효화
       queryClient.invalidateQueries({ queryKey: medalsKeys.all })
     }
+
     return { ok, awarded: !!json?.awarded, amount: json?.amount ?? 0 }
   }
 
@@ -42,6 +43,5 @@ export function useEasterEggHandlers(
   return {
     award,
     notify,
-    collectEgg,
   }
 }
