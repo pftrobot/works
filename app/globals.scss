@@ -20,6 +20,10 @@
   box-sizing: border-box;
 }
 
+html, body {
+  height: 100%;
+}
+
 html {
   font-size: 16px;
 
@@ -28,12 +32,12 @@ html {
 
     body {
       overflow: hidden;
-      min-height: 100vh;
+      min-height: 100dvb;
       padding-right: var(--scrollbar-width, 0);
 
       /* iOS Safari에서의 스크롤 바운스 방지 */
-      //position: relative;
-      //touch-action: none;
+      position: relative;
+      touch-action: none;
     }
   }
 
@@ -76,7 +80,7 @@ ul, ol {
 }
 
 body {
-  min-height: 100vh;
+  min-height: 100dvb;
   font-family: $font-family-basic;
   font-size: $text-base;
   color: color('text', 'basic');

@@ -340,8 +340,10 @@
     background-color: #1e1e1e;
     transition: background-color $transition-base;
 
-    &:hover {
-      background-color: #2a2a2a;
+    @media (hover: hover) {
+      &:hover {
+        background-color: #2a2a2a;
+      }
     }
 
     strong {
@@ -372,8 +374,11 @@
     text-decoration: none;
     transition: color $transition-fast;
 
-    &:hover {
-      color: #80c4ff;
+
+    @media (hover: hover) {
+      &:hover {
+        color: #80c4ff;
+      }
     }
   }
 }

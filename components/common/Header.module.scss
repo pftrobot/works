@@ -55,8 +55,10 @@
       text-decoration: none;
       transition: color $transition-fast;
 
-      &:hover {
-        color: color('text', 'basic');
+      @media (hover: hover) {
+        &:hover {
+          color: color('text', 'basic');
+        }
       }
 
       &.active {

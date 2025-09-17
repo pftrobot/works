@@ -89,8 +89,11 @@
         transition: border-color $transition-fast;
         animation: fadeSlideUp 0.6s ease forwards;
 
-        &:hover {
-          border-color: #c5a46a;
+
+        @media (hover: hover) {
+          &:hover {
+            border-color: #c5a46a;
+          }
         }
 
         @include respondTo('tablet') {
@@ -157,8 +160,10 @@
         color: color('semantic', 'info');
         margin-block-start: space(6);
 
-        &:hover {
-          color: #80c4ff;
+        @media (hover: hover) {
+          &:hover {
+            color: #80c4ff;
+          }
         }
       }
 

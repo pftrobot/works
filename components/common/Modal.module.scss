@@ -58,8 +58,10 @@
         font-size: $text-xs;
       }
 
-      &:hover {
-        color: color('text', 'basic');
+      @media (hover: hover) {
+        &:hover {
+          color: color('text', 'basic');
+        }
       }
     }
   }

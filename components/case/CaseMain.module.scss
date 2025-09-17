@@ -98,9 +98,11 @@
         cursor: pointer;
         transition: all $transition-fast;
 
-        &:hover {
-          color: white;
-          background-color: #666;
+        @media (hover: hover) {
+          &:hover {
+            color: white;
+            background-color: #666;
+          }
         }
       }
     }
@@ -133,13 +135,15 @@
       cursor: pointer;
       transition: transform $transition-fast;
 
-      &:hover {
-        .thumbnail {
-          border-color: $keyColor;
+      @media (hover: hover) {
+        &:hover {
+          .thumbnail {
+            border-color: $keyColor;
 
-          img {
-            filter: sepia(10%) grayscale(0%);
-            transform: scale(1.08);
+            img {
+              filter: sepia(10%) grayscale(0%);
+              transform: scale(1.08);
+            }
           }
         }
       }
@@ -266,8 +270,10 @@
     cursor: pointer;
     transition: background-color $transition-fast;
 
-    &:hover {
-      background-color: palevioletred;
+    @media (hover: hover) {
+      &:hover {
+        background-color: palevioletred;
+      }
     }
   }
 }

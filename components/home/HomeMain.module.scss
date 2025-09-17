@@ -9,7 +9,7 @@
 
   @include flex(column, center, center);
   @include container;
-  min-block-size: calc(100vh - 12rem);
+  min-block-size: calc(100dvb - 12rem);
   text-align: center;
 
   .intro {
@@ -70,11 +70,13 @@
       background-color: #111;
       transition: all 0.25s ease;
 
-      &:hover {
-        background-color: #1e1e1e;
-        border-color: #555;
-        transform: translateY(-0.125rem);
-        box-shadow: 0 0 space(3) #ffffff08;
+      @media (hover: hover) {
+        &:hover {
+          background-color: #1e1e1e;
+          border-color: #555;
+          transform: translateY(-0.125rem);
+          box-shadow: 0 0 space(3) #ffffff08;
+        }
       }
 
       @include containerQuery('md') {
@@ -104,9 +106,11 @@
     border: 1px dashed #444;
     border-radius: radius('sm');
 
-    &:hover {
-      color: color('text', 'basic');
-      border-color: #888;
+    @media (hover: hover) {
+      &:hover {
+        color: color('text', 'basic');
+        border-color: #888;
+      }
     }
   }
 }

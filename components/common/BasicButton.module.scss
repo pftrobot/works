@@ -32,11 +32,13 @@
   background-color: transparent;
   border: 1px solid #e0a600;
 
-  &:hover {
-    font-weight: $font-bold;
-    color: color('text', 'black');
-    background-color: #d69f00;
-    border-color: #d69f00;
+  @media (hover: hover) {
+    &:hover {
+      font-weight: $font-bold;
+      color: color('text', 'black');
+      background-color: #d69f00;
+      border-color: #d69f00;
+    }
   }
 }
 
@@ -45,8 +47,10 @@
   background-color: transparent;
   border: 1px solid #444;
 
-  &:hover {
-    background-color: #1a1a1a;
-    border-color: #666;
+  @media (hover: hover) {
+    &:hover {
+      background-color: #1a1a1a;
+      border-color: #666;
+    }
   }
 }

@@ -29,12 +29,14 @@
     @include flex(row, center, center, 6, wrap);
     font-size: $text-base-sm;
 
-    a {
+    a, button {
       color: #bbb;
       transition: color $transition-fast;
 
-      &:hover {
-        color: color('text', 'basic');
+      @media (hover: hover) {
+        &:hover {
+          color: color('text', 'basic');
+        }
       }
     }
 

@@ -43,17 +43,18 @@
     }
   }
 
-  // 마우스오버 시에만 명확히 보임
-  &:hover {
-    opacity: 0.9 !important;
-    transform: scale(1.5);
+  @media (hover: hover) {
+    &:hover {
+      opacity: 0.9 !important;
+      transform: scale(1.5);
 
-    .shape {
-      filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9)) !important;
-    }
+      .shape {
+        filter: drop-shadow(0 0 8px rgba(255, 255, 255, 0.9)) !important;
+      }
 
-    &[data-treasure="true"] .shape {
-      filter: drop-shadow(0 0 12px rgba(255, 215, 0, 1)) !important;
+      &[data-treasure="true"] .shape {
+        filter: drop-shadow(0 0 12px rgba(255, 215, 0, 1)) !important;
+      }
     }
   }
 

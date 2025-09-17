@@ -103,8 +103,10 @@
     border-radius: radius('sm');
     cursor: pointer;
 
-    &:hover {
-      background-color: #3b82f6;
+    @media (hover: hover) {
+      &:hover {
+        background-color: #3b82f6;
+      }
     }
   }
 
@@ -117,8 +119,11 @@
     border-radius: radius('sm');
     cursor: pointer;
 
-    &:hover {
-      background-color: #2a2a2a;
+
+    @media (hover: hover) {
+      &:hover {
+        background-color: #2a2a2a;
+      }
     }
   }
 }

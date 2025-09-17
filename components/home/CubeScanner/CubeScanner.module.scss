@@ -9,7 +9,7 @@
   top: 0;
   left: 0;
   width: 100vw;
-  height: 100vh;
+  height: 100dvb;
   z-index: 1000;
   background: rgba(0, 0, 0, 0.95);
   backdrop-filter: blur(2px);
@@ -23,7 +23,11 @@
   height: 100dvb;
   overflow: hidden;
   background: transparent;
-  border-radius: 16px;
+  border-radius: radius('lg');
+
+  @include respondTo('tablet') {
+    border-radius: 0;
+  }
 
   &::after {
     content: '';
@@ -39,14 +43,12 @@
                     rgba(245, 192, 100, 0.1) 100%
     );
     pointer-events: none;
-    border-radius: 16px;
   }
 
   canvas {
     display: block;
     width: 100% !important;
     height: 100% !important;
-    border-radius: 16px;
   }
 }
 
@@ -58,7 +60,6 @@
   bottom: 0;
   pointer-events: none;
   overflow: hidden;
-  border-radius: 16px;
 
   .glitchFlash {
     position: absolute;
