@@ -3,6 +3,7 @@
 import { useState } from 'react'
 import Link from 'next/link'
 
+import { useAnimationContext } from 'contexts/AnimationContext'
 import { MENU } from '@constants'
 
 import GuideModal from './GuideModal'
@@ -11,6 +12,12 @@ import styles from './Footer.module.scss'
 const { ABOUT, CONTACT } = MENU
 const Footer = () => {
   const [openGuide, setOpenGuide] = useState(false)
+  const { setGuideNoticeVisible } = useAnimationContext()
+
+  const handleGuideOpen = () => {
+    setGuideNoticeVisible(false)
+    setOpenGuide(true)
+  }
 
   return (
     <footer className={styles.footer}>
@@ -19,7 +26,7 @@ const Footer = () => {
         <nav className={styles.links}>
           <Link href={ABOUT}>프로파일</Link>
           <Link href={CONTACT}>제보</Link>
-          <button onClick={() => setOpenGuide(true)} className={styles.guideBtn}>
+          <button onClick={handleGuideOpen} className={styles.guideBtn}>
             관람가이드
           </button>
           <Link href="https://github.com/pftrobot" target="_blank" rel="noopener noreferrer">

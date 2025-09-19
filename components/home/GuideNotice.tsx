@@ -1,7 +1,9 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+
+import { useAnimationContext } from 'contexts/AnimationContext'
 
 import styles from './GuideNotice.module.scss'
 
@@ -9,16 +11,16 @@ const SHOW_DELAY = 3500
 const DURATION = 0.6
 
 export default function GuideNotice() {
-  const [show, setShow] = useState(true)
+  const { guideNoticeVisible, setGuideNoticeVisible } = useAnimationContext()
 
   useEffect(() => {
-    const timeout = setTimeout(() => setShow(false), SHOW_DELAY)
+    const timeout = setTimeout(() => setGuideNoticeVisible(false), SHOW_DELAY)
     return () => clearTimeout(timeout)
-  }, [])
+  }, [setGuideNoticeVisible])
 
   return (
     <AnimatePresence>
-      {show && (
+      {guideNoticeVisible && (
         <motion.div
           className={styles.guideNotice}
           initial={{ opacity: 0, y: 20 }}
