@@ -25,7 +25,7 @@
   transition: all 0.2s ease;
   user-select: none;
   z-index: $z-header;
-  opacity: 0.1;
+  opacity: 0.05;
 
   &[data-secret="true"] {
     animation: secretPulse 3s ease-in-out infinite alternate;
@@ -74,6 +74,7 @@
   pointer-events: auto;
   cursor: pointer;
   z-index: $z-header;
+  filter: drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 20px #ffb400) drop-shadow(0 0 30px #ff8c00);
 
   &.show {
     opacity: 0.8;
@@ -158,6 +159,9 @@
   background: rgba(255, 255, 255, 0.4);
   transform: rotate(45deg);
   border-radius: 2px;
+  border: 2px solid #ffb400;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.5), 0 0 15px rgba(255, 215, 0, 0.8);
+  pointer-events: none;
 
   &::before {
     content: '';

@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { useDeviceDetection } from 'hooks/useDeviceDetection'
 
 type EdgePosition = 'left' | 'right' | 'top' | 'bottom'
 
@@ -20,14 +21,21 @@ interface HiddenSpot {
  * 가장자리 이스터에그 훅
  * - 미리 정해진 2곳의 히든 스팟에서만 이스터에그 등장
  * - 해당 위치 근처에 마우스를 1초간 머물면 이스터에그 나타남
+ * - 모바일 디바이스에서는 비활성화
  * - EDGE_MASTER 어워드와 연결되는 히든 기능
  */
 export function useEdgeEasterEgg() {
   const [activeEdge, setActiveEdge] = useState<EdgeEggState | null>(null)
   const [hiddenSpots, setHiddenSpots] = useState<HiddenSpot[]>([])
+  const { isMobile } = useDeviceDetection()
 
   // 페이지 로드시 히든 스팟 2곳을 랜덤으로 생성
   useEffect(() => {
+    if (isMobile) {
+      setHiddenSpots([])
+      return
+    }
+
     const generateHiddenSpots = (): HiddenSpot[] => {
       const { innerWidth, innerHeight } = window
       const edges: EdgePosition[] = ['left', 'right', 'top', 'bottom']
@@ -106,9 +114,11 @@ export function useEdgeEasterEgg() {
     }
 
     setHiddenSpots(generateHiddenSpots())
-  }, [])
+  }, [isMobile])
 
   useEffect(() => {
+    if (isMobile) return
+
     let timeout: NodeJS.Timeout | null = null
     let currentSpot: HiddenSpot | null = null
 
@@ -163,7 +173,7 @@ export function useEdgeEasterEgg() {
       window.removeEventListener('mousemove', checkHiddenSpotHover)
       if (timeout) clearTimeout(timeout)
     }
-  }, [hiddenSpots, activeEdge])
+  }, [hiddenSpots, activeEdge, isMobile])
 
   const hideEdgeEgg = () => {
     setActiveEdge(null)
@@ -182,8 +192,9 @@ export function useEdgeEasterEgg() {
   }
 
   return {
-    activeEdge,
+    activeEdge: isMobile ? null : activeEdge,
     hideEdgeEgg,
     updateEdgeEgg,
+    isMobile,
   }
 }

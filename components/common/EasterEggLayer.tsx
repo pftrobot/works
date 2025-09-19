@@ -22,7 +22,7 @@ export default function EasterEggLayer() {
   const [modalMsg, setModalMsg] = useState<ReactNode>('')
 
   const { eggs } = useEasterEggInitialization(pathname)
-  const { activeEdge, hideEdgeEgg } = useEdgeEasterEgg()
+  const { activeEdge, hideEdgeEgg, updateEdgeEgg, isMobile } = useEdgeEasterEgg()
   const { award, notify } = useEasterEggHandlers(pathname, setModalMsg, setModalOpen)
 
   const collectEgg = useEggStore((state) => state.collectEgg)
@@ -102,18 +102,22 @@ export default function EasterEggLayer() {
           </button>
         ))}
 
-        {activeEdge && (
+        {!isMobile && activeEdge && (
           <div
             className={`${styles.edgeEgg} ${styles[activeEdge.position]} ${styles.show}`}
             onClick={onEdgeEggClick}
             onMouseEnter={(e) => {
+              if (activeEdge.escapeCount >= 2) {
+                return
+              }
+
               // 마우스가 이스터에그 위에 올라오면 도망가기
               const currentTarget = e.currentTarget
               const rect = currentTarget.getBoundingClientRect()
               const centerX = rect.left + rect.width / 2
               const centerY = rect.top + rect.height / 2
 
-              // 마우스 위치에서 반대 방향으로 도망가기 (거리 2배로 증가)
+              // 마우스 위치에서 반대 방향으로 도망가기
               const mouseX = e.clientX
               const mouseY = e.clientY
               const deltaX = centerX - mouseX
@@ -121,7 +125,7 @@ export default function EasterEggLayer() {
               const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY)
 
               if (distance > 0) {
-                const escapeDistance = 100 // 도망가는 거리 (기존보다 2배)
+                const escapeDistance = 100 // 도망가는 거리
                 const normalizedX = deltaX / distance
                 const normalizedY = deltaY / distance
                 const newX = centerX + normalizedX * escapeDistance
@@ -132,6 +136,8 @@ export default function EasterEggLayer() {
                 const maxY = window.innerHeight - 60
                 const clampedX = Math.max(10, Math.min(maxX, newX))
                 const clampedY = Math.max(10, Math.min(maxY, newY))
+
+                updateEdgeEgg(clampedX, clampedY)
 
                 currentTarget.style.transition = 'left 0.2s ease-out, top 0.2s ease-out'
                 currentTarget.style.left = `${clampedX}px`
@@ -144,25 +150,11 @@ export default function EasterEggLayer() {
               }
             }}
             style={{
-              filter:
-                'drop-shadow(0 0 10px #ffd700) drop-shadow(0 0 20px #ffb400) drop-shadow(0 0 30px #ff8c00)',
               left: `${activeEdge.x}px`,
               top: `${activeEdge.y}px`,
-              position: 'fixed' as const,
-              transform: 'none',
-              cursor: 'pointer',
             }}
           >
-            <div
-              className={`${styles.shape} ${styles.star}`}
-              style={{
-                backgroundColor: '#ffd700',
-                border: '2px solid #ffb400',
-                boxShadow:
-                  'inset 0 0 10px rgba(255, 255, 255, 0.5), 0 0 15px rgba(255, 215, 0, 0.8)',
-                pointerEvents: 'none',
-              }}
-            />
+            <div className={`${styles.shape} ${styles.star}`} />
           </div>
         )}
       </div>
