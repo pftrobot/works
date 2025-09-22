@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState, useRef, useCallback } from 'react'
+import { useEffect, useState, useRef, useCallback, useMemo } from 'react'
 import Image from 'next/image'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useInView } from 'react-intersection-observer'
@@ -24,6 +24,7 @@ export default function CaseMain() {
   const [selected, setSelected] = useState<CaseMeta | null>(null)
   const [animationKey, setAnimationKey] = useState(0) // 리스트 전환 시 grid 전체에 exit/enter 트랜지션 주기 위한 key
   const [filteredCases, setFilteredCases] = useState<CaseMeta[]>([])
+  const [isModalOpen, setIsModalOpen] = useState(false)
   const { setAnimationDone } = useAnimationContext()
 
   const { cases, activeFilters, isLoading, error, fetchCases, setActiveFilters } = useCaseStore()
@@ -54,6 +55,18 @@ export default function CaseMain() {
     setActiveFilters([])
   }, [setActiveFilters])
 
+  const handleCaseSelect = useCallback((item: CaseMeta) => {
+    setSelected(item)
+    setIsModalOpen(true)
+  }, [])
+
+  const handleModalClose = useCallback(() => {
+    setIsModalOpen(false)
+    setTimeout(() => {
+      setSelected(null)
+    }, 300)
+  }, [])
+
   useEffect(() => {
     fetchCases()
   }, [fetchCases])
@@ -65,80 +78,96 @@ export default function CaseMain() {
     return () => clearTimeout(timeout)
   }, [setAnimationDone])
 
-  const CaseCard = ({ item, onClick }: { item: CaseMeta; onClick: () => void }) => {
-    const { ref, inView } = useInView({ triggerOnce: true, threshold: 0.2 })
-    const { textToSpans, animateProps } = useTypingAnimation({
-      threshold: 1,
-      staggerDelay: 0.04,
-    })
+  const CaseCard = useMemo(() => {
+    return ({
+      item,
+      onClick,
+      modalOpen,
+    }: {
+      item: CaseMeta
+      onClick: () => void
+      modalOpen: boolean
+    }) => {
+      const { ref, inView } = useInView({
+        triggerOnce: true,
+        threshold: 0.2,
+        // 모달이 열려있을 때는 observer 비활성화
+        skip: modalOpen,
+      })
 
-    const cardId = item.id.toString()
-    const hasAnimated = animatedCardsRef.current.has(cardId)
+      const { textToSpans, animateProps } = useTypingAnimation({
+        threshold: 1,
+        staggerDelay: 0.04,
+      })
 
-    // 뷰포트 진입시 한 번만 등장 모션
-    useEffect(() => {
-      if (inView && !hasAnimated) {
-        animatedCardsRef.current.add(cardId)
-      }
-    }, [inView, hasAnimated, cardId])
+      const cardId = item.id.toString()
+      const hasAnimated = animatedCardsRef.current.has(cardId)
 
-    const shouldAnimate = hasAnimated || inView
+      // 뷰포트 진입시 한 번만 등장 모션
+      useEffect(() => {
+        if (inView && !hasAnimated && !modalOpen) {
+          animatedCardsRef.current.add(cardId)
+        }
+      }, [inView, hasAnimated, cardId, modalOpen])
 
-    return (
-      <motion.button
-        ref={ref}
-        key={item.id}
-        type="button"
-        className={styles.card}
-        onClick={onClick}
-        initial={{
-          opacity: hasAnimated ? 1 : 0,
-          y: hasAnimated ? 0 : 30,
-        }}
-        animate={shouldAnimate ? { opacity: 1, y: 0 } : {}}
-        transition={{
-          duration: hasAnimated ? 0 : BASIC_DURATION,
-          ease: 'easeOut',
-        }}
-      >
-        <div className={styles.thumbnail}>
-          <Image
-            src={getCaseThumbnailUrlViaAPI(item.thumbnail)} // 썸네일 이미지는 스토리지 서버에서 불러옴
-            alt={item.title}
-            fill
-            sizes="(max-width: 768px) 100vw, 50vw"
-            className={styles.image}
-            onError={(e) => {
-              const target = e.target as HTMLImageElement
-              target.src = '/imgs/bg/OBJ02.png'
-            }}
-          />
-        </div>
+      const shouldAnimate = hasAnimated || (inView && !modalOpen)
 
-        <motion.div
-          className={styles.textWrap}
-          initial={hasAnimated ? 'visible' : 'hidden'}
-          animate={shouldAnimate ? 'visible' : 'hidden'}
-          variants={animateProps.variants}
+      return (
+        <motion.button
+          ref={ref}
+          key={item.id}
+          type="button"
+          className={styles.card}
+          onClick={onClick}
+          initial={{
+            opacity: hasAnimated ? 1 : 0,
+            y: hasAnimated ? 0 : 30,
+          }}
+          animate={shouldAnimate ? { opacity: 1, y: 0 } : {}}
+          transition={{
+            duration: hasAnimated ? 0 : BASIC_DURATION,
+            ease: 'easeOut',
+          }}
         >
-          <motion.div className={styles.slug} variants={animateProps.variants}>
-            {textToSpans(item.slug.toUpperCase(), styles.char)}
-          </motion.div>
-          <div className={styles.descArea}>
-            <motion.div className={styles.title} variants={animateProps.variants}>
-              {textToSpans(item.title, styles.char)}
-            </motion.div>
-            <motion.div
-              className={`${styles.title} ${styles.sub}`}
-              variants={animateProps.variants}
-            >
-              {textToSpans(item.subtitle, styles.char)}
-            </motion.div>
+          <div className={styles.thumbnail}>
+            <Image
+              src={getCaseThumbnailUrlViaAPI(item.thumbnail)}
+              alt={item.title}
+              fill
+              sizes="(max-width: 768px) 100vw, 50vw"
+              className={styles.image}
+              onError={(e) => {
+                const target = e.target as HTMLImageElement
+                target.src = '/imgs/bg/OBJ02.png'
+              }}
+            />
           </div>
-        </motion.div>
-      </motion.button>
-    )
-  }
+
+          <motion.div
+            className={styles.textWrap}
+            initial={hasAnimated ? 'visible' : 'hidden'}
+            animate={shouldAnimate ? 'visible' : 'hidden'}
+            variants={animateProps.variants}
+          >
+            <motion.div className={styles.slug} variants={animateProps.variants}>
+              {textToSpans(item.slug.toUpperCase(), styles.char)}
+            </motion.div>
+            <div className={styles.descArea}>
+              <motion.div className={styles.title} variants={animateProps.variants}>
+                {textToSpans(item.title, styles.char)}
+              </motion.div>
+              <motion.div
+                className={`${styles.title} ${styles.sub}`}
+                variants={animateProps.variants}
+              >
+                {textToSpans(item.subtitle, styles.char)}
+              </motion.div>
+            </div>
+          </motion.div>
+        </motion.button>
+      )
+    }
+  }, [])
 
   return (
     <AnimatePresence mode="wait">
@@ -224,7 +253,12 @@ export default function CaseMain() {
                 transition={{ duration: 0.3 }}
               >
                 {filteredCases.map((item) => (
-                  <CaseCard key={item.id} item={item} onClick={() => setSelected(item)} />
+                  <CaseCard
+                    key={item.id}
+                    item={item}
+                    onClick={() => handleCaseSelect(item)}
+                    modalOpen={isModalOpen}
+                  />
                 ))}
               </motion.div>
             </AnimatePresence>
@@ -244,12 +278,9 @@ export default function CaseMain() {
               </FadeInView>
             )}
 
-            <CaseDetailModal
-              key={selected?.id}
-              open={Boolean(selected)}
-              onClose={() => setSelected(null)}
-              caseMeta={selected}
-            />
+            {selected && (
+              <CaseDetailModal open={isModalOpen} onClose={handleModalClose} caseMeta={selected} />
+            )}
           </>
         )}
       </FadeInView>

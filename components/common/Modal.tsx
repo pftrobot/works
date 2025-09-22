@@ -59,18 +59,14 @@ export default function Modal({ open, onClose, children, width = 480, className 
       // 스크롤바로 인한 레이아웃 시프트 방지
       const hasScrollbar = document.body.scrollHeight > window.innerHeight
       if (hasScrollbar) {
-        body.style.paddingRight = `${scrollbarWidthRef.current}px`
+        root.style.setProperty('--scrollbar-width', `${scrollbarWidthRef.current}px`)
       }
 
       // 스크롤 잠금 적용
       root.classList.add('modal-open')
-      body.style.position = 'fixed'
       body.style.top = `-${scrollYRef.current}px`
-      body.style.left = '0'
-      body.style.right = '0'
+      body.style.position = 'fixed'
       body.style.width = '100%'
-      body.style.overflow = 'hidden'
-      body.style.minHeight = '100dvb'
 
       wasOpenRef.current = true
     }
@@ -79,19 +75,17 @@ export default function Modal({ open, onClose, children, width = 480, className 
       const scrollY = scrollYRef.current
 
       // 스크롤 잠금 해제
+      root.style.removeProperty('--scrollbar-width')
+      root.classList.remove('modal-open')
       body.style.position = ''
       body.style.top = ''
-      body.style.left = ''
-      body.style.right = ''
       body.style.width = ''
-      body.style.minHeight = ''
-      body.style.overflow = ''
-      body.style.paddingRight = ''
-      root.classList.remove('modal-open')
 
-      // 스크롤 위치 복원 (다음 프레임에서 실행)
+      // 스크롤 위치 복원 - 브라우저가 렌더링을 완료한 후 실행
       requestAnimationFrame(() => {
-        window.scrollTo({ top: scrollY, behavior: 'instant' })
+        requestAnimationFrame(() => {
+          window.scrollTo(0, scrollY)
+        })
       })
 
       wasOpenRef.current = false
@@ -112,27 +106,20 @@ export default function Modal({ open, onClose, children, width = 480, className 
   }, [open, onClose])
 
   useEffect(() => {
-    // 언마운트시 스크롤 잠금 해제
     return () => {
       if (wasOpenRef.current) {
         const root = document.documentElement
         const body = document.body
         const scrollY = scrollYRef.current
 
+        root.style.removeProperty('--scrollbar-width')
+        root.classList.remove('modal-open')
         body.style.position = ''
         body.style.top = ''
-        body.style.left = ''
-        body.style.right = ''
         body.style.width = ''
-        body.style.minHeight = ''
-        body.style.overflow = ''
-        body.style.paddingRight = ''
-        root.classList.remove('modal-open')
 
         if (typeof window !== 'undefined') {
-          requestAnimationFrame(() => {
-            window.scrollTo({ top: scrollY, behavior: 'instant' })
-          })
+          window.scrollTo(0, scrollY)
         }
       }
     }
