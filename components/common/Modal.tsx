@@ -7,24 +7,16 @@ import { IconX } from '@tabler/icons-react'
 
 import styles from './Modal.module.scss'
 
-// 스크롤바 너비 계산 함수
+// 스크롤바 너비 계산
 function getScrollbarWidth(): number {
   if (typeof window === 'undefined') return 0
+  return window.innerWidth - document.documentElement.clientWidth
+}
 
-  const outer = document.createElement('div')
-  outer.style.visibility = 'hidden'
-  outer.style.overflow = 'scroll'
-  outer.style.position = 'absolute'
-  outer.style.top = '-9999px'
-  document.body.appendChild(outer)
-
-  const inner = document.createElement('div')
-  outer.appendChild(inner)
-
-  const scrollbarWidth = outer.offsetWidth - inner.offsetWidth
-  outer.parentNode?.removeChild(outer)
-
-  return scrollbarWidth
+// scrollbar-gutter 지원 여부 확인
+function hasScrollbarGutterSupport(): boolean {
+  if (typeof window === 'undefined') return false
+  return CSS.supports && CSS.supports('scrollbar-gutter', 'stable')
 }
 
 interface ModalProps {
@@ -40,10 +32,12 @@ export default function Modal({ open, onClose, children, width = 480, className 
   const scrollYRef = useRef(0)
   const wasOpenRef = useRef(false)
   const scrollbarWidthRef = useRef(0)
+  const hasGutterSupportRef = useRef(false)
 
   useEffect(() => {
     setMounted(true)
     scrollbarWidthRef.current = getScrollbarWidth()
+    hasGutterSupportRef.current = hasScrollbarGutterSupport()
   }, [])
 
   useEffect(() => {
@@ -53,13 +47,21 @@ export default function Modal({ open, onClose, children, width = 480, className 
     const body = document.body
 
     if (open && !wasOpenRef.current) {
-      // 현재 스크롤 위치 저장
       scrollYRef.current = window.scrollY
 
-      // 스크롤바로 인한 레이아웃 시프트 방지
-      const hasScrollbar = document.body.scrollHeight > window.innerHeight
-      if (hasScrollbar) {
-        root.style.setProperty('--scrollbar-width', `${scrollbarWidthRef.current}px`)
+      // scrollbar-gutter를 지원하지 않는 브라우저에서만 padding 추가
+      if (!hasGutterSupportRef.current) {
+        const hasScrollbar = document.body.scrollHeight > window.innerHeight
+
+        if (hasScrollbar && scrollbarWidthRef.current > 0) {
+          body.style.paddingRight = `${scrollbarWidthRef.current}px`
+
+          const fixedElements = document.querySelectorAll('[data-fixed-element]')
+          fixedElements.forEach((el) => {
+            const element = el as HTMLElement
+            element.style.paddingRight = `${scrollbarWidthRef.current}px`
+          })
+        }
       }
 
       // 스크롤 잠금 적용
@@ -74,18 +76,34 @@ export default function Modal({ open, onClose, children, width = 480, className 
     if (!open && wasOpenRef.current) {
       const scrollY = scrollYRef.current
 
+      // 화면을 잠시 숨김 (깜빡임 방지)
+      body.style.visibility = 'hidden'
+
       // 스크롤 잠금 해제
-      root.style.removeProperty('--scrollbar-width')
-      root.classList.remove('modal-open')
       body.style.position = ''
       body.style.top = ''
       body.style.width = ''
 
-      // 스크롤 위치 복원 - 브라우저가 렌더링을 완료한 후 실행
-      requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          window.scrollTo(0, scrollY)
+      // padding 제거
+      if (!hasGutterSupportRef.current) {
+        body.style.paddingRight = ''
+
+        const fixedElements = document.querySelectorAll('[data-fixed-element]')
+        fixedElements.forEach((el) => {
+          const element = el as HTMLElement
+          element.style.paddingRight = ''
         })
+      }
+
+      // 스크롤 잠금 해제
+      root.classList.remove('modal-open')
+
+      // 스크롤 위치 복원
+      window.scrollTo(0, scrollY)
+
+      // 다음 프레임에서 화면 표시
+      requestAnimationFrame(() => {
+        body.style.visibility = ''
       })
 
       wasOpenRef.current = false
@@ -112,11 +130,21 @@ export default function Modal({ open, onClose, children, width = 480, className 
         const body = document.body
         const scrollY = scrollYRef.current
 
-        root.style.removeProperty('--scrollbar-width')
+        if (!hasGutterSupportRef.current) {
+          body.style.paddingRight = ''
+
+          const fixedElements = document.querySelectorAll('[data-fixed-element]')
+          fixedElements.forEach((el) => {
+            const element = el as HTMLElement
+            element.style.paddingRight = ''
+          })
+        }
+
         root.classList.remove('modal-open')
         body.style.position = ''
         body.style.top = ''
         body.style.width = ''
+        body.style.visibility = ''
 
         if (typeof window !== 'undefined') {
           window.scrollTo(0, scrollY)

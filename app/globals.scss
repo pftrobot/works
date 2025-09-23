@@ -6,7 +6,8 @@
 :root {
   --background: #ffffff;
   --foreground: #111;
-  --scrollbar-width: 20px;
+  --scrollbar-width: 0px;
+  --scrollbar-compensation: 0px;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -21,6 +22,7 @@
 }
 
 html {
+  scrollbar-gutter: stable;
   font-size: 16px;
 
   &.modal-open {
@@ -52,10 +54,15 @@ html {
   }
 }
 
-/* 스크롤바 너비를 CSS 변수로 설정하는 스크립트가 필요한 경우를 위한 대비 */
-@supports (scrollbar-width: thin) {
-  html.modal-open body {
-    padding-right: 0;
+@supports (scrollbar-gutter: stable) {
+  html {
+    scrollbar-gutter: stable;
+  }
+}
+
+@supports not (scrollbar-gutter: stable) {
+  html {
+    overflow-y: scroll;
   }
 }
 
@@ -90,6 +97,7 @@ body {
   background-color: color('background', 'body');
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: padding-right 0.3s ease;
 }
 
 a {
@@ -110,13 +118,8 @@ input, button, textarea, select {
   font-family: $font-family-title;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
+[data-fixed-element] {
+  transition: padding-right 0.3s ease, right 0.3s ease, margin-right 0.3s ease;
 }
 
 @media (prefers-color-scheme: dark) {
