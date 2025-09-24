@@ -140,6 +140,9 @@ export default function CaseMain() {
                 const target = e.target as HTMLImageElement
                 target.src = '/imgs/bg/OBJ02.png'
               }}
+              priority
+              placeholder="blur"
+              blurDataURL="/imgs/placeholder.jpg"
             />
           </div>
 
