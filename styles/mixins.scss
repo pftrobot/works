@@ -38,6 +38,7 @@
 */
 @mixin container($size: 'desktop') {
   inline-size: container($size);
+  max-inline-size: #{$container-max-width}px;
   margin-inline: auto;
 
   @include respondTo('laptop') {

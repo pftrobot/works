@@ -8,6 +8,7 @@
   --foreground: #111;
   --scrollbar-width: 0px;
   --scrollbar-compensation: 0px;
+  --z-modal: #{$z-modal};
 }
 
 @media (prefers-color-scheme: dark) {
@@ -22,8 +23,17 @@
 }
 
 html {
-  scrollbar-gutter: stable;
   font-size: 16px;
+
+  &.lenis {
+    &, body {
+      overflow: hidden;
+    }
+  }
+
+  &:not(.lenis) {
+    scrollbar-gutter: stable;
+  }
 
   &.modal-open {
     overflow: hidden;
@@ -55,13 +65,13 @@ html {
 }
 
 @supports (scrollbar-gutter: stable) {
-  html {
+  html:not(.lenis) {
     scrollbar-gutter: stable;
   }
 }
 
 @supports not (scrollbar-gutter: stable) {
-  html {
+  html:not(.lenis) {
     overflow-y: scroll;
   }
 }
@@ -120,6 +130,20 @@ input, button, textarea, select {
 
 [data-fixed-element] {
   transition: padding-right 0.3s ease, right 0.3s ease, margin-right 0.3s ease;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  body,
+  [data-fixed-element] {
+    transition: none !important;
+  }
 }
 
 @media (prefers-color-scheme: dark) {

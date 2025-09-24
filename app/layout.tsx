@@ -6,6 +6,7 @@ import ReactQueryProvider from 'contexts/ReactQueryProvider'
 import { AnimationProvider } from 'contexts/AnimationContext'
 import { ModalProvider } from 'contexts/ModalContext'
 import LayoutContent from 'components/common/LayoutContent'
+import SmoothScroll from 'components/common/SmoothScroll'
 
 import './globals.scss'
 import styles from 'components/common/LayoutContent.module.scss'
@@ -27,7 +28,7 @@ const pretendard = localFont({
 
 export const metadata = {
   title: 'Tech Crime Scene - YS',
-  description: '기술 문제 해결 과정을 수사히는 것처럼 보여줍니다',
+  description: '기술 문제 해결 과정을 수사하는 것처럼 보여줍니다',
 }
 
 export const viewport = {
@@ -46,6 +47,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <ReactQueryProvider>
           <ModalProvider>
             <AnimationProvider>
+              <SmoothScroll />
               <LayoutContent>{children}</LayoutContent>
             </AnimationProvider>
           </ModalProvider>
