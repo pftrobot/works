@@ -26,8 +26,11 @@ html {
   font-size: 16px;
 
   &.lenis {
-    &, body {
-      overflow: hidden;
+    overflow: hidden;
+
+    body {
+      overflow-x: auto;
+      overflow-y: hidden;
     }
   }
 
