@@ -171,17 +171,27 @@ export default function ContactMain() {
 
         <motion.div variants={rightVariants} className={styles.rightSection}>
           <FadeInView className={styles.form}>
-            <form onSubmit={handleSubmit} noValidate>
-              {serverError && <p className={styles.errorText}>{serverError}</p>}
-              {sent === APIResponse.OK && (
-                <p className={styles.successText}>메시지가 전송되었습니다!</p>
-              )}
-              {typeof remaining === 'number' && remaining > 0 && sent === APIResponse.OK && (
-                <p className={styles.infoText}>오늘 남은 전송 횟수: {remaining}회</p>
-              )}
+            <form onSubmit={handleSubmit} noValidate aria-labelledby="contact-form-title">
+              <h2 id="contact-form-title" className="sr-only">
+                Contact Form
+              </h2>
+
+              <div aria-live="polite">
+                {serverError && <p className={styles.errorText}>{serverError}</p>}
+                {sent === APIResponse.OK && (
+                  <p className={styles.successText}>메시지가 전송되었습니다!</p>
+                )}
+                {typeof remaining === 'number' && remaining > 0 && sent === APIResponse.OK && (
+                  <p className={styles.infoText}>오늘 남은 전송 횟수: {remaining}회</p>
+                )}
+              </div>
 
               <FadeInView className={styles.inputGroup} delay={0.3}>
+                <label htmlFor="contact-name" className="sr-only">
+                  이름
+                </label>
                 <input
+                  id="contact-name"
                   type="text"
                   name="name"
                   placeholder="Name*"
@@ -190,6 +200,7 @@ export default function ContactMain() {
                   className={classNames(styles.input, { [styles.error]: !!formErrors.name })}
                   aria-invalid={!!formErrors.name}
                   aria-describedby="error-name"
+                  required
                 />
                 {formErrors.name && (
                   <p id="error-name" className={styles.errorText}>
@@ -199,7 +210,11 @@ export default function ContactMain() {
               </FadeInView>
 
               <FadeInView className={styles.inputGroup} delay={0.45}>
+                <label htmlFor="contact-email" className="sr-only">
+                  이메일
+                </label>
                 <input
+                  id="contact-email"
                   type="email"
                   name="email"
                   placeholder="Email*"
@@ -208,6 +223,7 @@ export default function ContactMain() {
                   className={classNames(styles.input, { [styles.error]: !!formErrors.email })}
                   aria-invalid={!!formErrors.email}
                   aria-describedby="error-email"
+                  required
                 />
                 {formErrors.email && (
                   <p id="error-email" className={styles.errorText}>
@@ -217,7 +233,11 @@ export default function ContactMain() {
               </FadeInView>
 
               <FadeInView className={styles.inputGroup} delay={0.6}>
+                <label htmlFor="contact-message" className="sr-only">
+                  메시지
+                </label>
                 <textarea
+                  id="contact-message"
                   name="message"
                   placeholder="Project Information*"
                   value={formData.message}
@@ -226,6 +246,7 @@ export default function ContactMain() {
                   rows={6}
                   aria-invalid={!!formErrors.message}
                   aria-describedby="error-message"
+                  required
                 />
                 {formErrors.message && (
                   <p id="error-message" className={styles.errorText}>

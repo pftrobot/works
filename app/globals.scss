@@ -26,8 +26,11 @@ html {
   font-size: 16px;
 
   &.lenis {
-    &, body {
-      overflow: hidden;
+    overflow: hidden;
+
+    body {
+      overflow-x: auto;
+      overflow-y: hidden;
     }
   }
 
@@ -126,6 +129,19 @@ input, button, textarea, select {
 
 .titleFont {
   font-family: $font-family-title;
+}
+
+.sr-only {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip: rect(0 0 0 0) !important;
+  clip-path: inset(50%) !important;
+  white-space: nowrap !important;
+  border: 0 !important;
 }
 
 [data-fixed-element] {
