@@ -26,8 +26,6 @@ export default function HomeMain() {
   const [scanText, setScanText] = useState('')
   const [showScanner, setShowScanner] = useState(false)
 
-  const { mutate: getMedal } = useAddMedal()
-
   // Initialize
   useEffect(() => {
     if (hasSeenIntro) {
@@ -70,6 +68,10 @@ export default function HomeMain() {
     }, TYPING_SPEED)
     return () => clearInterval(timer)
   }, [phase, setAnimationDone, setHasSeenIntro])
+
+  useEffect(() => {
+    throw new Error('테스트용 에러입니다!')
+  }, [])
 
   return (
     <section className={styles.home}>
