@@ -4,7 +4,6 @@ import { useEffect, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 import { useAnimationContext } from 'contexts/AnimationContext'
-import { useAddMedal } from 'utils/medalUtils'
 import { MENU } from '@constants'
 
 import { FadeInView } from 'components/common/FadeInView'
@@ -26,9 +25,6 @@ export default function HomeMain() {
   const [scanText, setScanText] = useState('')
   const [showScanner, setShowScanner] = useState(false)
 
-  const { mutate: getMedal } = useAddMedal()
-
-  // Initialize
   useEffect(() => {
     if (hasSeenIntro) {
       setAnimationDone(true)
