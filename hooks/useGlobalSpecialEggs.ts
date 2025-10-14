@@ -1,13 +1,15 @@
 import { useEffect, useRef } from 'react'
 
 import { recognizePattern } from 'utils/patternRecognition'
-import { GlobalSpecialState } from 'types'
+import { useDeviceDetection } from 'hooks/useDeviceDetection'
 import { SPECIAL_CHALLENGES } from '@constants'
+import { GlobalSpecialState } from 'types'
 
 /**
  * 전역 스페셜 이스터에그 감지 훅
  * 키보드 조합, 마우스 패턴, 스크롤 등의 인터랙션을 감지하여
  * 스페셜 이스터에그를 트리거함
+ * 모바일에서는 마우스 및 스크롤 관련 챌린지 비활성화
  */
 export function useGlobalSpecialEggs(
   award: (
@@ -20,6 +22,8 @@ export function useGlobalSpecialEggs(
   SPEC_OK_LINES: (code?: string) => string[],
   SPEC_DUP_LINES: (code?: string) => string[],
 ) {
+  const { isMobile } = useDeviceDetection()
+
   // 모든 스페셜 챌린지의 상태를 관리하는 ref
   // 각 타입별로 별도의 추적 시스템을 가지고 있음
   const stateRef = useRef<GlobalSpecialState>({
@@ -57,6 +61,17 @@ export function useGlobalSpecialEggs(
 
     // 모든 스페셜 챌린지 등록
     SPECIAL_CHALLENGES.forEach(({ code, challenge }) => {
+      // 모바일에서는 마우스/스크롤 관련 챌린지 스킵
+      if (
+        isMobile &&
+        (challenge.type === 'mousemove' ||
+          challenge.type === 'doubleclick' ||
+          challenge.type === 'tripleclick' ||
+          challenge.type === 'scroll')
+      ) {
+        return
+      }
+
       if (challenge.type === 'keyhold') {
         state.keyholders[code] = {
           awardCode: code,
@@ -121,7 +136,7 @@ export function useGlobalSpecialEggs(
         }
       }
     })
-  }, [])
+  }, [isMobile])
 
   // 메인 이벤트 리스너들 등록
   useEffect(() => {
@@ -239,6 +254,8 @@ export function useGlobalSpecialEggs(
     }
 
     const onClick = async () => {
+      if (isMobile) return
+
       const state = stateRef.current
       const now = Date.now()
 
@@ -260,6 +277,8 @@ export function useGlobalSpecialEggs(
     }
 
     const onMouseMove = async (e: MouseEvent) => {
+      if (isMobile) return
+
       const state = stateRef.current
       const now = Date.now()
 
@@ -296,16 +315,23 @@ export function useGlobalSpecialEggs(
 
     window.addEventListener('keydown', onKeyDown)
     window.addEventListener('keyup', onKeyUp)
-    window.addEventListener('click', onClick)
-    window.addEventListener('mousemove', onMouseMove, { passive: true })
+
+    // 모바일이 아닐 때만 마우스 이벤트 등록
+    if (!isMobile) {
+      window.addEventListener('click', onClick)
+      window.addEventListener('mousemove', onMouseMove, { passive: true })
+    }
 
     return () => {
       window.removeEventListener('keydown', onKeyDown)
       window.removeEventListener('keyup', onKeyUp)
-      window.removeEventListener('click', onClick)
-      window.removeEventListener('mousemove', onMouseMove)
+
+      if (!isMobile) {
+        window.removeEventListener('click', onClick)
+        window.removeEventListener('mousemove', onMouseMove)
+      }
     }
-  }, [award, notify, setModalMsg, setModalOpen, SPEC_OK_LINES, SPEC_DUP_LINES])
+  }, [award, notify, setModalMsg, setModalOpen, SPEC_OK_LINES, SPEC_DUP_LINES, isMobile])
 
   return stateRef
 }

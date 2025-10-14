@@ -233,18 +233,12 @@ export default function CaseMain() {
                       whileHover={{ scale: 1.05 }}
                       whileTap={{ scale: 0.95 }}
                     >
-                      {`${filter} (${count})`}
+                      {filter} {filter === '전체' && `(${count})`}
                     </motion.button>
                   )
                 })}
               </div>
             </FadeInView>
-
-            {(filteredCases.length !== cases.length || activeFilters.length > 0) && (
-              <FadeInView className={styles.resultsCount} delay={0.45} duration={BASIC_DURATION}>
-                <p>{filteredCases.length}개의 사건이 발견되었습니다</p>
-              </FadeInView>
-            )}
 
             <AnimatePresence mode="wait">
               <motion.div

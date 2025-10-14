@@ -123,18 +123,25 @@ export default function MedalMain() {
           </div>
         )}
         {!isLoading &&
-          medalItems.map((medal, i) => (
-            <motion.div
-              key={medal.id ?? i}
-              className={styles.medalItem}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={inViewList ? { opacity: 1, scale: 1 } : {}}
-              transition={{ duration: 0.4, delay: i * 0.1 }}
-            >
-              <p>+ {medal.amount ?? 1}</p>
-              <span>{labelOf(medal.type)}</span>
-              <span className={styles.date}>{format(medal.awarded_at)}</span>
-            </motion.div>
+          (medalItems?.length ? (
+            medalItems.map((medal, i) => (
+              <motion.div
+                key={medal.id ?? i}
+                className={styles.medalItem}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={inViewList ? { opacity: 1, scale: 1 } : {}}
+                transition={{ duration: 0.4, delay: i * 0.1 }}
+              >
+                <p>+ {medal.amount ?? 1}</p>
+                <span>{labelOf(medal.type)}</span>
+                <span className={styles.date}>{format(medal.awarded_at)}</span>
+              </motion.div>
+            ))
+          ) : (
+            <p>
+              획득한 메달이 없습니다. <br />
+              아래의 메달 수집 방법을 확인하고 메달을 수집해보세요!
+            </p>
           ))}
       </motion.div>
 

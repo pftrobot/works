@@ -1,24 +1,6 @@
 export type MousePosition = { x: number; y: number; time: number }
 
-export function recognizeCirclePattern(
-  positions: MousePosition[],
-  threshold = { distance: 50, movement: 200 },
-): boolean {
-  if (positions.length < 10) return false
-
-  const start = positions[0]
-  const end = positions[positions.length - 1]
-  const distance = Math.sqrt((end.x - start.x) ** 2 + (end.y - start.y) ** 2)
-
-  const totalMovement = positions.reduce((sum, pos, i) => {
-    if (i === 0) return sum
-    const prev = positions[i - 1]
-    return sum + Math.sqrt((pos.x - prev.x) ** 2 + (pos.y - prev.y) ** 2)
-  }, 0)
-
-  return distance < threshold.distance && totalMovement > threshold.movement
-}
-
+// 지그재그 패턴 감지
 export function recognizeZigzagPattern(
   positions: MousePosition[],
   minDirectionChanges = 3,
@@ -43,17 +25,16 @@ export function recognizeZigzagPattern(
   return directionChanges >= minDirectionChanges
 }
 
-export function recognizePattern(pattern: string, positions: MousePosition[]): boolean {
-  switch (pattern) {
-    case 'circle':
-      return recognizeCirclePattern(positions)
-    case 'zigzag':
-      return recognizeZigzagPattern(positions)
-    default:
-      return false
-  }
+const PATTERN_RECOGNIZERS: Record<string, (positions: MousePosition[]) => boolean> = {
+  zigzag: recognizeZigzagPattern,
 }
 
+export function recognizePattern(pattern: string, positions: MousePosition[]): boolean {
+  const recognizer = PATTERN_RECOGNIZERS[pattern]
+  return recognizer ? recognizer(positions) : false
+}
+
+// 일반 에그의 랜덤 모양 생성
 export function generateShapeClass(
   type: string,
   eggId: string,

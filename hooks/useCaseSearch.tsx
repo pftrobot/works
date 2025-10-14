@@ -114,6 +114,29 @@ export function useCaseSearch({ cases, activeFilters }: UseCaseSearchProps) {
     setSelectedSuggestionIndex(-1)
   }, [searchQuery])
 
+  const keyHandlers: Record<string, (e: React.KeyboardEvent) => void> = {
+    ArrowDown: (e) => {
+      e.preventDefault()
+      setSelectedSuggestionIndex((prev) => (prev < searchSuggestions.length - 1 ? prev + 1 : 0))
+    },
+    ArrowUp: (e) => {
+      e.preventDefault()
+      setSelectedSuggestionIndex((prev) => (prev > 0 ? prev - 1 : searchSuggestions.length - 1))
+    },
+    Enter: (e) => {
+      e.preventDefault()
+      if (selectedSuggestionIndex >= 0) {
+        handleSuggestionClick(searchSuggestions[selectedSuggestionIndex])
+      } else {
+        handleSearchSubmit()
+      }
+    },
+    Escape: () => {
+      setShowAutocomplete(false)
+      setSelectedSuggestionIndex(-1)
+    },
+  }
+
   const handleKeyDown = useCallback(
     (e: React.KeyboardEvent) => {
       if (!showAutocomplete || searchSuggestions.length === 0) {
@@ -124,27 +147,9 @@ export function useCaseSearch({ cases, activeFilters }: UseCaseSearchProps) {
         return
       }
 
-      switch (e.key) {
-        case 'ArrowDown':
-          e.preventDefault()
-          setSelectedSuggestionIndex((prev) => (prev < searchSuggestions.length - 1 ? prev + 1 : 0))
-          break
-        case 'ArrowUp':
-          e.preventDefault()
-          setSelectedSuggestionIndex((prev) => (prev > 0 ? prev - 1 : searchSuggestions.length - 1))
-          break
-        case 'Enter':
-          e.preventDefault()
-          if (selectedSuggestionIndex >= 0) {
-            handleSuggestionClick(searchSuggestions[selectedSuggestionIndex])
-          } else {
-            handleSearchSubmit()
-          }
-          break
-        case 'Escape':
-          setShowAutocomplete(false)
-          setSelectedSuggestionIndex(-1)
-          break
+      const handler = keyHandlers[e.key]
+      if (handler) {
+        handler(e)
       }
     },
     [

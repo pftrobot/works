@@ -41,76 +41,70 @@ export function useEdgeEasterEgg() {
       const edges: EdgePosition[] = ['left', 'right', 'top', 'bottom']
       const selectedEdges = edges.sort(() => Math.random() - 0.5).slice(0, 2) // 랜덤으로 2개 선택
 
-      return selectedEdges.map((edge) => {
-        const triggerRadius = 50
-        const eggSize = 50
+      const triggerRadius = 50
+      const eggSize = 50
 
-        switch (edge) {
-          case 'left': {
-            const y = Math.random() * (innerHeight - eggSize * 2) + eggSize
-            return {
-              edge,
-              x: 10,
-              y,
-              triggerArea: {
-                x1: 0,
-                y1: y - triggerRadius,
-                x2: 20 + triggerRadius,
-                y2: y + triggerRadius,
-              },
-            }
+      // 각 엣지별 히든 스팟 생성 함수 매핑
+      const edgeSpotGenerators: Record<EdgePosition, () => HiddenSpot> = {
+        left: () => {
+          const y = Math.random() * (innerHeight - eggSize * 2) + eggSize
+          return {
+            edge: 'left',
+            x: 10,
+            y,
+            triggerArea: {
+              x1: 0,
+              y1: y - triggerRadius,
+              x2: 20 + triggerRadius,
+              y2: y + triggerRadius,
+            },
           }
-          case 'right': {
-            const y = Math.random() * (innerHeight - eggSize * 2) + eggSize
-            return {
-              edge,
-              x: innerWidth - 60,
-              y,
-              triggerArea: {
-                x1: innerWidth - 60 - triggerRadius,
-                y1: y - triggerRadius,
-                x2: innerWidth,
-                y2: y + triggerRadius,
-              },
-            }
+        },
+        right: () => {
+          const y = Math.random() * (innerHeight - eggSize * 2) + eggSize
+          return {
+            edge: 'right',
+            x: innerWidth - 60,
+            y,
+            triggerArea: {
+              x1: innerWidth - 60 - triggerRadius,
+              y1: y - triggerRadius,
+              x2: innerWidth,
+              y2: y + triggerRadius,
+            },
           }
-          case 'top': {
-            const x = Math.random() * (innerWidth - eggSize * 2) + eggSize
-            return {
-              edge,
-              x,
-              y: 10,
-              triggerArea: {
-                x1: x - triggerRadius,
-                y1: 0,
-                x2: x + triggerRadius,
-                y2: 20 + triggerRadius,
-              },
-            }
+        },
+        top: () => {
+          const x = Math.random() * (innerWidth - eggSize * 2) + eggSize
+          return {
+            edge: 'top',
+            x,
+            y: 10,
+            triggerArea: {
+              x1: x - triggerRadius,
+              y1: 0,
+              x2: x + triggerRadius,
+              y2: 20 + triggerRadius,
+            },
           }
-          case 'bottom': {
-            const x = Math.random() * (innerWidth - eggSize * 2) + eggSize
-            return {
-              edge,
-              x,
-              y: innerHeight - 60,
-              triggerArea: {
-                x1: x - triggerRadius,
-                y1: innerHeight - 60 - triggerRadius,
-                x2: x + triggerRadius,
-                y2: innerHeight,
-              },
-            }
+        },
+        bottom: () => {
+          const x = Math.random() * (innerWidth - eggSize * 2) + eggSize
+          return {
+            edge: 'bottom',
+            x,
+            y: innerHeight - 60,
+            triggerArea: {
+              x1: x - triggerRadius,
+              y1: innerHeight - 60 - triggerRadius,
+              x2: x + triggerRadius,
+              y2: innerHeight,
+            },
           }
-          default:
-            return {
-              edge: 'left',
-              x: 0,
-              y: 0,
-              triggerArea: { x1: 0, y1: 0, x2: 0, y2: 0 },
-            }
-        }
-      })
+        },
+      }
+
+      return selectedEdges.map((edge) => edgeSpotGenerators[edge]())
     }
 
     setHiddenSpots(generateHiddenSpots())

@@ -4,13 +4,13 @@ import { supabase, CaseMeta } from 'lib/supabase'
 interface CaseState {
   cases: CaseMeta[]
   filteredCases: CaseMeta[]
-  activeFilters: string[]
+  activeFilters: FilterKeyword[]
   isLoading: boolean
   error: string | null
 
   fetchCases: () => Promise<void>
-  setActiveFilters: (filters: string[]) => void
-  filterCases: (filters: string[]) => void
+  setActiveFilters: (filters: FilterKeyword[]) => void
+  filterCases: (filters: FilterKeyword[]) => void
   getCaseById: (id: number) => CaseMeta | undefined
 }
 
@@ -45,12 +45,12 @@ export const useCaseStore = create<CaseState>((set, get) => ({
     }
   },
 
-  setActiveFilters: (filters: string[]) => {
+  setActiveFilters: (filters: FilterKeyword[]) => {
     set({ activeFilters: filters })
     get().filterCases(filters)
   },
 
-  filterCases: (filters: string[]) => {
+  filterCases: (filters: FilterKeyword[]) => {
     const { cases } = get()
 
     if (filters.length === 0) {

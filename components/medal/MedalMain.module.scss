@@ -116,6 +116,11 @@
       padding-block-start: space(9);
     }
 
+    > p {
+      text-align: center;
+      padding-block-start: space(8);
+    }
+
     .medalItem {
       @include flex(column, stretch, center);
       place-content: center;
