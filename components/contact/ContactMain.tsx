@@ -9,6 +9,7 @@ import { useAnimationContext } from 'contexts/AnimationContext'
 import { validateContact, ContactForm } from 'lib/validation'
 import { useAddMedal } from 'utils/medalUtils'
 import { MedalType, APIResponse } from 'types'
+import { containerVariants, leftVariants, rightVariants } from '@constants'
 
 import BasicButton from 'components/common/BasicButton'
 import { TypingText } from 'components/common/TypingText'
@@ -99,26 +100,6 @@ export default function ContactMain() {
   const exceededToday = remaining === 0
 
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.1 })
-
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.3,
-      },
-    },
-  }
-
-  const leftVariants = {
-    hidden: { opacity: 0, x: -50 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.8 } },
-  }
-
-  const rightVariants = {
-    hidden: { opacity: 0, x: 50 },
-    visible: { opacity: 1, x: 0, transition: { duration: 0.8 } },
-  }
 
   useEffect(() => {
     const timeout = setTimeout(() => {

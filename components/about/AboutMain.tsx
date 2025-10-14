@@ -19,6 +19,14 @@ import { useAnimationContext } from 'contexts/AnimationContext'
 import { useStaggerAnimation } from 'hooks/useStaggerAnimation'
 import { TimelineItem } from 'types'
 import { dnaList, techGroups } from 'data/aboutData'
+import {
+  parallelogramVariants,
+  barLineVariants,
+  barLineTransition,
+  barFillTransition,
+  techItemAnimation,
+  getTechItemTransition,
+} from '@constants'
 
 import PageTitle from 'components/common/PageTitle'
 import { FadeInView } from 'components/common/FadeInView'
@@ -40,6 +48,7 @@ const SHOW_GNB = 600
 interface AboutMainProps {
   timelines: TimelineItem[]
 }
+
 export default function AboutMain({ timelines }: AboutMainProps) {
   const { setAnimationDone } = useAnimationContext()
   const [refProfile, inViewProfile] = useInView({ triggerOnce: true, threshold: 0.1 })
@@ -103,75 +112,32 @@ export default function AboutMain({ timelines }: AboutMainProps) {
               <div className={styles.labelLine}>
                 <motion.div
                   className={styles.parallelogramMain}
-                  variants={{
-                    hidden: { opacity: 0, x: -8 },
-                    visible: {
-                      opacity: 1,
-                      x: 0,
-                      transition: {
-                        duration: 0.4,
-                        ease: 'easeOut',
-                      },
-                    },
-                  }}
+                  variants={parallelogramVariants.main}
                 />
                 <motion.div
                   className={styles.parallelogramSmall1}
-                  variants={{
-                    hidden: { opacity: 0, x: 0 },
-                    visible: {
-                      opacity: 1,
-                      x: 5,
-                      transition: {
-                        delay: 0.2,
-                        duration: 0.3,
-                        ease: 'easeOut',
-                      },
-                    },
-                  }}
+                  variants={parallelogramVariants.small1}
                 />
                 <motion.div
                   className={styles.parallelogramSmall2}
-                  variants={{
-                    hidden: { opacity: 0, x: 4 },
-                    visible: {
-                      opacity: 1,
-                      x: 8,
-                      transition: {
-                        delay: 0.3,
-                        duration: 0.3,
-                        ease: 'easeOut',
-                      },
-                    },
-                  }}
+                  variants={parallelogramVariants.small2}
                 />
                 <motion.div
                   className={styles.parallelogramSmall3}
-                  variants={{
-                    hidden: { opacity: 0, x: 8 },
-                    visible: {
-                      opacity: 1,
-                      x: 12,
-                      transition: {
-                        delay: 0.4,
-                        duration: 0.3,
-                        ease: 'easeOut',
-                      },
-                    },
-                  }}
+                  variants={parallelogramVariants.small3}
                 />
                 <span className={styles.labelText}>{label.toUpperCase()}</span>
               </div>
               <motion.div
                 className={styles.barLine}
-                variants={{ hidden: { width: 0 }, visible: { width: '100%' } }}
-                transition={{ duration: 0.2, ease: 'easeOut', delay: 0.1 }}
+                variants={barLineVariants}
+                transition={barLineTransition}
               >
                 <motion.div
                   className={styles.barFill}
                   initial={{ width: 0 }}
                   animate={inViewDna ? { width: size } : { width: 0 }}
-                  transition={{ duration: 0.1, ease: 'easeOut', delay: 0.6 }}
+                  transition={barFillTransition}
                 />
               </motion.div>
               <div className={styles.percentage}>{size}</div>
@@ -202,14 +168,8 @@ export default function AboutMain({ timelines }: AboutMainProps) {
                       className={classNames(styles.toolItem, {
                         [styles.highlight]: highlight,
                       })}
-                      initial={{ rotateY: 90, opacity: 0 }}
-                      whileInView={{ rotateY: 0, opacity: 1 }}
-                      transition={{
-                        duration: 0.6,
-                        ease: 'easeOut',
-                        delay: index * 0.1,
-                      }}
-                      viewport={{ once: true, amount: 0.2 }}
+                      {...techItemAnimation}
+                      transition={getTechItemTransition(index)}
                     >
                       <div className={classNames(styles.toolIcon, logoClass)}>
                         {IconComp && <IconComp width={24} height={24} />}

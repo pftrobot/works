@@ -1,3 +1,5 @@
+export * from './aboutAnimations'
 export * from './common'
+export * from './contactAnimations'
 export * from './cube'
 export * from './egg'
