@@ -112,8 +112,11 @@
     padding-block-start: space(14);
 
     @include containerQuery('md') {
-      @include grid-auto-fit(6rem, 4, 6);
       padding-block-start: space(9);
+
+      &:not(.empty) {
+        @include grid-auto-fit(6rem, 4, 6);
+      }
     }
 
     > p {

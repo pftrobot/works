@@ -1,6 +1,6 @@
 @use "@styles/layout" as *;
 @use "@styles/spacing" as *;
-@use "@styles/mixins" as *;
+@use "@mixins" as *;
 
 .layout {
   display: flex;

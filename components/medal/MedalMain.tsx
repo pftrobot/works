@@ -110,12 +110,14 @@ export default function MedalMain() {
 
       <motion.div
         ref={refList}
-        className={styles.medalList}
+        className={classNames(styles.medalList, {
+          [styles.empty]: isLoading || (!isLoading && !medalItems?.length),
+        })}
         initial={{ opacity: 0, y: 20 }}
         animate={inViewList ? { opacity: 1, y: 0 } : {}}
         transition={{ duration: 0.5 }}
       >
-        {isLoading && <div>로딩중</div>}
+        {isLoading && <div>수집한 메달을 찾는 중이에요!</div>}
         {isError && (
           <div>
             데이터를 불러오는 데 실패했습니다. <br />
