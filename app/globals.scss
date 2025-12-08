@@ -43,6 +43,12 @@ html {
 
     body {
       overflow: hidden;
+      padding-right: var(--scrollbar-width, 0);
+
+      /* iOS Safari에서의 스크롤 바운스 방지 */
+      position: relative;
+      touch-action: none;
+
       // 모바일에서는 동적 뷰포트, 데스크톱에서는 안정적인 vh 사용
       @media (hover: hover) {
         min-height: 100vh;
@@ -50,11 +56,6 @@ html {
       @media (hover: none) {
         min-height: 100dvh;
       }
-      padding-right: var(--scrollbar-width, 0);
-
-      /* iOS Safari에서의 스크롤 바운스 방지 */
-      position: relative;
-      touch-action: none;
     }
   }
 
@@ -95,13 +96,6 @@ ul, ol {
 }
 
 body {
-  @media (hover: hover) {
-    min-height: 100vh;
-  }
-  @media (hover: none) {
-    min-height: 100dvh;
-  }
-
   font-family: $font-family-basic;
   font-size: $text-base;
   color: color('text', 'basic');
@@ -111,6 +105,13 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   transition: padding-right 0.3s ease;
+
+  @media (hover: hover) {
+    min-height: 100vh;
+  }
+  @media (hover: none) {
+    min-height: 100dvh;
+  }
 }
 
 a {

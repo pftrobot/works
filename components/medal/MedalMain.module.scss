@@ -9,8 +9,8 @@
 
   container: medal-container / inline-size;
 
-  @include container();
   margin-block-end: $footer-margin-block;
+  @include container();
 
   @include respondTo('tablet') {
     margin-block-end: space(20);

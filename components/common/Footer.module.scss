@@ -15,9 +15,9 @@
   border-block-start: 1px solid #2c2c2c;
 
   .inner {
+    text-align: center;
     @include flex(column, center, center, 5);
     @include container();
-    text-align: center;
 
     @include containerQuery('xl') {
       gap: space(3);
