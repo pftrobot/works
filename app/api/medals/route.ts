@@ -29,30 +29,3 @@ export async function GET() {
 
   return NextResponse.json({ items, count })
 }
-
-export async function POST(req: Request) {
-  const visitorId = await ensureVisitor()
-  const body = await req.json().catch(() => ({}))
-  const { type, sourceId, amount } = body as {
-    type: 'case' | 'contact' | 'egg' | 'special10'
-    sourceId?: string | number | null
-    amount?: number
-  }
-
-  if (!type) return NextResponse.json({ error: 'type required' }, { status: 400 })
-
-  const { data, error } = await supabaseAdmin
-    .from('medal_events')
-    .insert({
-      visitor_id: visitorId,
-      type,
-      source_id: sourceId != null ? String(sourceId) : null,
-      amount: Math.max(1, Number.isFinite(amount) ? Number(amount) : 1),
-    })
-    .select('id,type,source_id,amount,created_at')
-    .single()
-
-  if (error) return NextResponse.json({ error: error.message }, { status: 500 })
-
-  return NextResponse.json({ ok: true, item: data })
-}

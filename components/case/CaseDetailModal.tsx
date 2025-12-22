@@ -4,10 +4,11 @@ import { useEffect, useState, useRef } from 'react'
 import Link from 'next/link'
 import { motion } from 'framer-motion'
 import classNames from 'classnames'
+import { useQueryClient } from '@tanstack/react-query'
 
 import { CaseMeta } from 'lib/supabase'
-import { useAddMedal } from 'utils/medalUtils'
-import { MedalType } from 'types'
+import { claimCaseMedal } from 'actions/medal'
+import { medalsKeys } from 'utils/medalUtils'
 
 import Modal from 'components/common/Modal'
 import ConfirmModal from 'components/common/ConfirmModal'
@@ -32,7 +33,7 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
   // 정답 맞췄을 때, 메달 중복 지급 방지 ref
   const awardedRef = useRef(false)
 
-  const { mutate: getMedal } = useAddMedal()
+  const queryClient = useQueryClient()
 
   if (!caseMeta) return null
 
@@ -62,13 +63,18 @@ export default function CaseDetailModal({ open, onClose, caseMeta }: Props) {
   // 정답이고 중복지급이 아닌 경우에 메달 지급
   useEffect(() => {
     if (!open || !caseMeta) return
-    const isCorrectAnswer = selectedOption === caseMeta.quiz.answer
+    const isCorrect = selectedOption === caseMeta.quiz.answer
 
-    if (quizStep === 'answer' && isCorrectAnswer && !awardedRef.current) {
+    if (quizStep === 'answer' && isCorrect && !awardedRef.current) {
       awardedRef.current = true
-      getMedal({ type: MedalType.Case, sourceId: caseMeta.id })
+
+      claimCaseMedal(caseMeta.id).then((result) => {
+        if (result.ok) {
+          queryClient.invalidateQueries({ queryKey: medalsKeys.all })
+        }
+      })
     }
-  }, [open, quizStep, selectedOption, caseMeta?.id, getMedal])
+  }, [open, quizStep, selectedOption, caseMeta?.id, queryClient])
 
   return (
     <Modal open={open} onClose={onClose} width={1120}>
