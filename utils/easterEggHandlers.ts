@@ -1,5 +1,6 @@
 import { useQueryClient } from '@tanstack/react-query'
 import { medalsKeys } from 'utils/medalUtils'
+import { claimEggMedal, claimSpecialMedal } from 'actions/egg'
 
 export function useEasterEggHandlers(
   pathname: string,
@@ -12,26 +13,20 @@ export function useEasterEggHandlers(
     kind: 'medal' | 'special10',
     opts: { eggId?: string; fieldId?: string; awardCode?: string } = {},
   ): Promise<{ ok: boolean; awarded: boolean; amount: number }> {
-    const payload =
+    const result =
       kind === 'medal'
-        ? { kind, route: pathname, eggId: opts.eggId }
-        : { kind, route: pathname, awardCode: opts.awardCode! }
+        ? await claimEggMedal(pathname, opts.eggId!, 1)
+        : await claimSpecialMedal(pathname, opts.awardCode!)
 
-    const res = await fetch('/api/egg', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      credentials: 'include',
-      body: JSON.stringify(payload),
-    })
-    const json = await res.json().catch(() => ({}))
-    const ok = !!json?.ok
-
-    if (ok && json?.awarded) {
-      // 실제로 메달을 받았을 때만 쿼리 무효화
-      queryClient.invalidateQueries({ queryKey: medalsKeys.all })
+    if (result.ok && result.awarded) {
+      await queryClient.invalidateQueries({ queryKey: medalsKeys.all })
     }
 
-    return { ok, awarded: !!json?.awarded, amount: json?.amount ?? 0 }
+    return {
+      ok: result.ok,
+      awarded: result.awarded ?? false,
+      amount: result.amount ?? 0,
+    }
   }
 
   function notify(lines: string[]) {
