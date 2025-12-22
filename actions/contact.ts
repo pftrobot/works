@@ -12,6 +12,7 @@ export type ContactState = {
   ok: boolean
   code?: 'VALIDATION' | 'LIMIT' | 'SEND_FAILED' | 'SERVER_ERROR'
   errors?: { name?: string; email?: string; message?: string }
+  values?: { name: string; email: string; message: string } // 추가
   remaining?: number
 }
 
@@ -29,16 +30,18 @@ export async function submitContact(
   _prevState: ContactState | null,
   formData: FormData,
 ): Promise<ContactState> {
+  // 입력값 추출
+  const values = {
+    name: (formData.get('name') as string) ?? '',
+    email: (formData.get('email') as string) ?? '',
+    message: (formData.get('message') as string) ?? '',
+  }
+
   try {
     const visitorId = await ensureVisitor()
 
     // 폼 데이터 검증
-    const raw = {
-      name: formData.get('name'),
-      email: formData.get('email'),
-      message: formData.get('message'),
-    }
-    const parsed = contactSchema.safeParse(raw)
+    const parsed = contactSchema.safeParse(values)
 
     if (!parsed.success) {
       const errors: ContactState['errors'] = {}
@@ -46,7 +49,7 @@ export async function submitContact(
         const field = issue.path[0] as keyof typeof errors
         if (!errors[field]) errors[field] = issue.message
       }
-      return { ok: false, code: 'VALIDATION', errors }
+      return { ok: false, code: 'VALIDATION', errors, values }
     }
 
     const { name, email, message } = parsed.data
@@ -62,11 +65,11 @@ export async function submitContact(
 
     if (countError) {
       console.error('Count Error:: Contact::', countError)
-      return { ok: false, code: 'SERVER_ERROR' }
+      return { ok: false, code: 'SERVER_ERROR', values }
     }
 
     if ((todayCount ?? 0) >= DAILY_LIMIT) {
-      return { ok: false, code: 'LIMIT', remaining: 0 }
+      return { ok: false, code: 'LIMIT', remaining: 0, values }
     }
 
     // 이메일 전송
@@ -86,7 +89,7 @@ export async function submitContact(
 
     if (sendError) {
       console.error('Resend Error::', sendError)
-      return { ok: false, code: 'SEND_FAILED' }
+      return { ok: false, code: 'SEND_FAILED', values }
     }
 
     // 전송 로그 저장
@@ -113,9 +116,9 @@ export async function submitContact(
     const used = (todayCount ?? 0) + 1
     const remaining = Math.max(DAILY_LIMIT - used, 0)
 
-    return { ok: true, remaining }
+    return { ok: true, remaining } // 성공 시 폼 리셋
   } catch (e) {
     console.error('Exception Error:: Contact::', e)
-    return { ok: false, code: 'SERVER_ERROR' }
+    return { ok: false, code: 'SERVER_ERROR', values }
   }
 }

@@ -132,6 +132,8 @@ export default function ContactMain() {
                   type="text"
                   name="name"
                   placeholder="Name*"
+                  defaultValue={state.values?.name ?? ''}
+                  key={`name-${state.ok}`} // 성공시 리셋
                   className={classNames(styles.input, { [styles.error]: !!state.errors?.name })}
                   aria-invalid={!!state.errors?.name}
                   aria-describedby="error-name"
@@ -153,6 +155,8 @@ export default function ContactMain() {
                   type="email"
                   name="email"
                   placeholder="Email*"
+                  defaultValue={state.values?.email ?? ''}
+                  key={`email-${state.ok}`}
                   className={classNames(styles.input, { [styles.error]: !!state.errors?.email })}
                   aria-invalid={!!state.errors?.email}
                   aria-describedby="error-email"
@@ -173,6 +177,8 @@ export default function ContactMain() {
                   id="contact-message"
                   name="message"
                   placeholder="Project Information*"
+                  defaultValue={state.values?.message ?? ''}
+                  key={`message-${state.ok}`}
                   className={classNames(styles.textarea, {
                     [styles.error]: !!state.errors?.message,
                   })}
