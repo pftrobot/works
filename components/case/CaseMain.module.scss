@@ -8,8 +8,8 @@
   $keyColor: #ff4d4d;
 
   container: container-width / inline-size;
-  @include container();
   padding-block-end: space(24);
+  @include container();
 
   @include respondTo('tablet') {
     padding-block-end: space(20);

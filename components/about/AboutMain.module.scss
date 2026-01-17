@@ -7,8 +7,8 @@
 .aboutWrap {
   container: about-container / inline-size;
 
-  @include container();
   z-index: zIndex('base');
+  @include container();
 
   > * {
     position: relative;

@@ -7,9 +7,9 @@
 .contactWrap {
   container: contact-container / inline-size;
 
+  padding-block: space(20);
   @include flex(row, center, center);
   @include container();
-  padding-block: space(20);
 
   &::before {
     display: block;

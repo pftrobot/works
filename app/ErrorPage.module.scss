@@ -5,16 +5,16 @@
 @use "@mixins" as *;
 
 .errorPage {
-  @include container();
   min-height: 100vh;
   display: flex;
   align-items: center;
   justify-content: center;
   padding: space(6);
   background-color: #faf6f1;
-
   /* 헤더 마진 대응 */
   margin-top: calc(-1 * (#{$header-block-size} + #{$space-12}));
+
+  @include container();
 
   @include respondTo('tablet') {
     margin-top: calc(-1 * (#{$header-block-size-tablet} + #{$space-12}));

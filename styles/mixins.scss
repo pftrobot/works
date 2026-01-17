@@ -1,3 +1,4 @@
+@use "sass:list";
 @use './colors' as *;
 @use './typography' as *;
 @use './spacing' as *;
@@ -89,10 +90,10 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax($min-size, 1fr));
 
-  @if length($gaps) == 1 {
-    gap: space(nth($gaps, 1));
-  } @else if length($gaps) == 2 {
-    gap: space(nth($gaps, 1)) space(nth($gaps, 2));
+  @if list.length($gaps) == 1 {
+    gap: space(list.nth($gaps, 1));
+  } @else if list.length($gaps) == 2 {
+    gap: space(list.nth($gaps, 1)) space(list.nth($gaps, 2));
   } @else {
     gap: 0;
   }
