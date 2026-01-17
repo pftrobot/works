@@ -133,6 +133,7 @@ export class Particles {
     uMap: { value: THREE.Texture }
     uOpacity: { value: number }
     uSizeScale: { value: number }
+    uPixelRatio: { value: number }
   }
   public initialPositions: Float32Array
   public initialSizes: Float32Array
@@ -188,6 +189,7 @@ export class Particles {
       uMap: { value: circleTex },
       uOpacity: { value: 0.0 },
       uSizeScale: { value: 1.0 },
+      uPixelRatio: { value: 1.0 },
     }
 
     // Shader로 미세 설정 (거리에 따라 크기 보정)
@@ -199,6 +201,7 @@ export class Particles {
       uniforms: this.uniforms,
       vertexShader: `
         uniform float uSizeScale;
+        uniform float uPixelRatio;
         attribute float size;
         attribute vec3 color;
         varying vec3 vColor;
@@ -206,7 +209,7 @@ export class Particles {
           vColor = color;
           vec4 mv = modelViewMatrix * vec4(position, 1.0);
           float distAtten = 1.0 / max(0.0001, -mv.z);
-          gl_PointSize = size * uSizeScale * distAtten * 320.0;
+          gl_PointSize = size * uSizeScale * uPixelRatio * distAtten * 320.0;
           gl_Position = projectionMatrix * mv;
         }
       `,

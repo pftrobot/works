@@ -46,6 +46,8 @@ export const PARTICLE_COLOR_SET = [
 ]
 export const PARTICLE_RENDER_ORDER = 1000
 export const PARTICLE_BLEND_MODE = THREE.AdditiveBlending
+export const PARTICLE_SIZE_SCALE_START = 3.2
+export const PARTICLE_SIZE_SCALE_END = 0.6
 
 // Shockwave
 export const SHOCKWAVE_INNER_RADIUS = 0.18

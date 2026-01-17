@@ -13,6 +13,8 @@ import {
   CAMERA_END_Z,
   CUBE_ZOOM_SCALE,
   GLOW_SCALE_MULTIPLIER,
+  PARTICLE_SIZE_SCALE_END,
+  PARTICLE_SIZE_SCALE_START,
 } from '@constants'
 
 export class AnimationController {
@@ -75,9 +77,8 @@ export class AnimationController {
       antialias: true,
       alpha: true,
       premultipliedAlpha: false,
+      powerPreference: 'high-performance',
     })
-    this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-    this.renderer.setSize(window.innerWidth, window.innerHeight)
     this.renderer.setClearColor(0x111111, 1)
     this.renderer.shadowMap.enabled = true
     this.renderer.shadowMap.type = THREE.PCFSoftShadowMap
@@ -115,7 +116,10 @@ export class AnimationController {
     back.position.set(0, -2, -3)
     this.scene.add(back)
 
-    createPostprocessing(this.renderer, this.scene, this.camera).then((v) => (this.postfx = v))
+    createPostprocessing(this.renderer, this.scene, this.camera).then((v) => {
+      this.postfx = v
+      this.handleResize()
+    })
 
     window.addEventListener('resize', this.handleResize)
     this.handleResize()
@@ -127,12 +131,34 @@ export class AnimationController {
     const inOverlay = !!host.closest('#cube-overlay-root')
     const w = inOverlay ? window.innerWidth : host.clientWidth || 600
     const h = inOverlay ? window.innerHeight : host.clientHeight || 600
+    const dpr = this.getPixelRatio(w, h)
+    const fxScale = this.getPostfxScale(w, h)
+    const fxW = Math.max(1, Math.floor(w * fxScale))
+    const fxH = Math.max(1, Math.floor(h * fxScale))
+    this.renderer.setPixelRatio(dpr)
     this.renderer.setSize(w, h)
-    this.postfx?.composer?.setSize(w, h)
-    ;(this.postfx as any)?.bloom?.setSize?.(w, h)
-    ;(this.postfx as any)?.trailsPass?.setSize?.(w, h)
+    if (this.particles?.uniforms?.uPixelRatio) {
+      this.particles.uniforms.uPixelRatio.value = dpr
+    }
+    this.postfx?.composer?.setSize(fxW, fxH)
+    ;(this.postfx as any)?.bloom?.setSize?.(fxW, fxH)
+    ;(this.postfx as any)?.trailsPass?.setSize?.(fxW, fxH)
     this.camera.aspect = w / h
     this.camera.updateProjectionMatrix()
+  }
+
+  private getPixelRatio(w: number, h: number) {
+    const device = window.devicePixelRatio || 1
+    const maxPixels = 2_000_000
+    const target = Math.sqrt(maxPixels / (w * h))
+    const dpr = Math.min(device, target, 2)
+    return Math.max(0.6, dpr)
+  }
+
+  private getPostfxScale(w: number, h: number) {
+    const maxFxPixels = 1_100_000
+    const scale = Math.min(1, Math.sqrt(maxFxPixels / (w * h)))
+    return Math.max(0.7, scale)
   }
 
   /* 렌더 루프 시작 */
@@ -168,8 +194,11 @@ export class AnimationController {
    */
   private animate = () => {
     this.rafId = requestAnimationFrame(this.animate)
-    const ms = this.clock.getElapsedTime() * 1000
-    const s = ms * 0.001
+    const delta = this.clock.getDelta()
+    const elapsed = this.clock.elapsedTime
+    const ms = elapsed * 1000
+    const s = elapsed
+    const frameScale = delta * 60
 
     // Config
     const {
@@ -213,11 +242,12 @@ export class AnimationController {
     // 2) 회전 + 스캔바 하강
     if (this.phase === 'rotating') {
       const cube = this.cube.cube
-      cube.rotation.x += this.rotationSpeed
-      cube.rotation.y += this.rotationSpeed * 0.7
-      cube.rotation.z += this.rotationSpeed * 0.5
+      cube.rotation.x += this.rotationSpeed * frameScale
+      cube.rotation.y += this.rotationSpeed * 0.7 * frameScale
+      cube.rotation.z += this.rotationSpeed * 0.5 * frameScale
 
-      if (!this.scanHolding && !this.scanDisappearing) this.scanBar.mesh.position.y -= SCANBAR_SPEED
+      if (!this.scanHolding && !this.scanDisappearing)
+        this.scanBar.mesh.position.y -= SCANBAR_SPEED * frameScale
       if (
         this.scanBar.mesh.position.y <= SCAN_END_Y &&
         !this.scanHolding &&
@@ -234,7 +264,7 @@ export class AnimationController {
       ) {
         this.particles.uniforms.uOpacity.value = Math.min(
           PARTICLE_VISIBLE_OPACITY,
-          this.particles.uniforms.uOpacity.value + 0.12,
+          this.particles.uniforms.uOpacity.value + 0.12 * frameScale,
         )
       }
 
@@ -288,9 +318,15 @@ export class AnimationController {
         t < w0
           ? 0.65 * Math.pow(t / w0, 3)
           : 0.65 + 0.35 * (1 - Math.pow(2, -10 * ((t - w0) / (1 - w0))))
-      const swirlAmp = THREE.MathUtils.lerp(1.2, 0.0, conv)
-      this.particles.uniforms.uSizeScale.value = THREE.MathUtils.lerp(3.2, 0.425, conv)
-      const willFlash = !this.flashFired && conv >= CONVERGE_SNAP_AT
+      const snapReady = conv >= CONVERGE_SNAP_AT
+      const convEff = snapReady ? CONVERGE_SNAP_AT : conv
+      const swirlAmp = THREE.MathUtils.lerp(1.2, 0.0, convEff)
+      this.particles.uniforms.uSizeScale.value = THREE.MathUtils.lerp(
+        PARTICLE_SIZE_SCALE_START,
+        PARTICLE_SIZE_SCALE_END,
+        convEff,
+      )
+      const willFlash = !this.flashFired && snapReady
 
       // 포지션 업데이트(초기 스냅샷 → 중심으로)
       const arr = this.particles.geo.attributes.position.array as Float32Array
@@ -304,16 +340,10 @@ export class AnimationController {
         const sx = Math.sin(s * 2.0 + sseed) * swirlAmp
         const sy = Math.cos(s * 2.2 + sseed) * swirlAmp * 0.6
         const sz = Math.sin(s * 1.8 + sseed) * swirlAmp
-        const k = 1 - conv
+        const k = 1 - convEff
         arr[i3] = x0 * k + sx * k
         arr[i3 + 1] = y0 * k + sy * k
         arr[i3 + 2] = z0 * k + sz * k
-        if (willFlash) {
-          // 스냅 직전 살짝 수축감
-          arr[i3] *= 0.2
-          arr[i3 + 1] *= 0.2
-          arr[i3 + 2] *= 0.2
-        }
         sizes[i] = this.particles.initialSizes[i]
       }
       this.particles.geo.attributes.position.needsUpdate = true
@@ -331,11 +361,12 @@ export class AnimationController {
         const shakeIntensity =
           SHAKE_INTENSITY *
           (1 - ((tAlign - SHAKE_START_THRESHOLD) / (0.95 - SHAKE_START_THRESHOLD)) * 0.7)
+        const jitter = (t: number) => Math.sin(t) * Math.cos(t * 1.7) * 0.5
         const shakeQuat = new THREE.Quaternion().setFromEuler(
           new THREE.Euler(
-            (Math.sin(shakeTime * 1.3) + Math.random() - 0.5) * shakeIntensity,
-            (Math.cos(shakeTime * 1.7) + Math.random() - 0.5) * shakeIntensity,
-            (Math.sin(shakeTime * 2.1) + Math.random() - 0.5) * shakeIntensity,
+            (Math.sin(shakeTime * 1.3) + jitter(shakeTime * 2.1)) * shakeIntensity,
+            (Math.cos(shakeTime * 1.7) + jitter(shakeTime * 2.7)) * shakeIntensity,
+            (Math.sin(shakeTime * 2.1) + jitter(shakeTime * 3.3)) * shakeIntensity,
           ),
         )
         this.cube.cube.quaternion.multiplyQuaternions(baseQuat, shakeQuat)
@@ -354,7 +385,11 @@ export class AnimationController {
         this.shock.start = ms
       }
 
-      if (tAlign >= 1) {
+      if (snapReady) {
+        this.cube.cube.quaternion.copy(this.targetQuat)
+        this.waitStart = ms
+        this.phase = 'waiting'
+      } else if (tAlign >= 1) {
         this.waitStart = ms
         this.phase = 'waiting'
       }
