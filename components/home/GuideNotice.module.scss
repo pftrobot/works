@@ -5,12 +5,15 @@
 @use "@mixins" as *;
 
 .guideNotice {
-  position: fixed;
-  inset-block-start: space(32);
-  inset-inline-end: space(12);
+  position: absolute;
+  inset-block-end: calc(100% + #{space(4)});
+  inset-inline: 0;
+  inline-size: max-content;
   font-size: $text-base-sm;
   color: color('semantic', 'warning');
+  text-align: center;
   padding: space(5) space(9);
+  margin-inline: auto;
   background-color: #1a1a1a;
   border-radius: radius('base');
   box-shadow: 0 0 0.5rem rgba(255, 169, 77, 0.1);
@@ -22,7 +25,7 @@
   }
 
   @include respondTo('tablet') {
-    text-align: right;
+    padding: space(4) space(7);
 
     .brM {
       display: block;

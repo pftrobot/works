@@ -13,8 +13,7 @@
     top: 0;
     width: 100%;
     z-index: 100;
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: visible;
     background-color: #141414;
     transition: transform 0.3s ease;
   }
@@ -43,5 +42,9 @@
         margin-top: $header-block-size-mobile;
       }
     }
+  }
+
+  .footerArea {
+    position: relative;
   }
 }

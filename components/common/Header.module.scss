@@ -9,18 +9,23 @@
   top: 0;
   z-index: $z-header;
   min-inline-size: #{$container-min-width}px;
-  padding: space(12);
+  padding-block: space(12);
   background-color: $bg-header;
   border-block-end: 1px solid #2d2d2d;
 
-  @include respondTo('mobile') {
+  @include respondTo('tablet') {
     padding-block: 1.8rem;
-    padding-inline: 1.2rem;
+    padding-inline: 2rem;
+  }
+
+  @include respondTo('mobile') {
+    padding-inline: 1rem;
   }
 
   .inner {
     @include flex(row, center, space-between);
     @include container();
+    overflow-x: auto;
 
     @include respondTo('tablet') {
       gap: space(9);
@@ -38,51 +43,126 @@
     text-decoration: none;
   }
 
-  .nav {
-    @include flex(row, stretch, flex-start, 9);
-
-    .icon {
-      display: none;
-    }
-
-    .label {
-      display: inline;
-    }
-
-    a {
-      @include flex(row, center, flex-start, 2);
-      font-size: $text-base;
-      color: #bbb;
-      text-decoration: none;
-      transition: color $transition-fast;
-
-      @media (hover: hover) {
-        &:hover {
-          color: color('text', 'basic');
-        }
-      }
-
-      &.active {
-        font-weight: $font-semibold;
-        color: color('key', 'primary-deep');
-      }
-    }
+  .navGroup {
+    @include flex(row, center, flex-start, 8);
 
     @include respondTo('tablet') {
-      justify-content: center;
-      flex-wrap: wrap;
+      gap: space(6);
+    }
+
+    .nav {
+      @include flex(row, stretch, flex-start, 9);
 
       .icon {
-        display: inline;
-      }
-
-      .label {
         display: none;
       }
 
-      a {
-        font-size: $text-base-sm;
+      .label {
+        display: inline;
       }
+
+      a {
+        @include flex(row, center, flex-start, 2);
+        font-size: $text-base;
+        color: #bbb;
+        text-decoration: none;
+        transition: color $transition-fast;
+
+        @media (hover: hover) {
+          &:hover {
+            color: color('text', 'basic');
+          }
+        }
+
+        &.active {
+          font-weight: $font-semibold;
+          color: color('key', 'primary-deep');
+        }
+      }
+
+      @include respondTo('tablet') {
+        justify-content: center;
+        flex-wrap: wrap;
+
+        .icon {
+          display: inline;
+        }
+
+        .label {
+          display: none;
+        }
+
+        a {
+          font-size: $text-base-sm;
+        }
+      }
+    }
+  }
+
+  .downloadWrap {
+    position: relative;
+    @include flex(row, center, flex-start);
+
+    .downloadBtn {
+      @include flex(row, center, center, 2);
+      inline-size: 38px;
+      block-size: 36px;
+      padding: 0;
+      border-radius: 2px;
+      border: 1px solid color('key', 'primary-dim');
+      background: linear-gradient(135deg, rgba(245, 200, 100, 0.18), rgba(245, 200, 100, 0.05));
+      color: color('key', 'primary');
+      font-size: 0.65rem;
+      font-weight: $font-semibold;
+      letter-spacing: $tracking-wide;
+      text-decoration: none;
+      transition: transform $transition-fast, border-color $transition-fast, color $transition-fast;
+
+      @include respondTo('mobile') {
+        inline-size: 30px;
+        block-size: 28px;
+        //font-size: 0.5rem;
+      }
+    }
+  }
+
+  .tipRow {
+    @include container();
+    @include flex(row, center, flex-end);
+    position: absolute;
+    top: calc(100% - #{space(4)});
+    inset-inline: 0;
+
+    @include respondTo('mobile') {
+      margin-inline: 0;
+    }
+  }
+
+  .downloadTip {
+    color: color('semantic', 'warning');
+    font-size: $text-base-sm;
+    line-height: 1.4;
+    white-space: nowrap;
+    padding: space(5) space(9);
+    margin-block-start: 0;
+    border-radius: radius('base');
+    border: 1px solid color('semantic', 'warning');
+    background-color: #1a1a1a;
+    box-shadow: 0 0 0.5rem rgba(255, 169, 77, 0.1);
+    z-index: 1;
+    opacity: 0;
+    transform: translateY(-8px);
+    transition: opacity 0.6s ease, transform 0.6s ease;
+    will-change: transform, opacity;
+
+    &[data-visible='true'] {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    @include respondTo('tablet') {
+      white-space: normal;
+      padding: space(4) space(7);
     }
   }
 }

@@ -11,18 +11,31 @@ import { DELTA_SKIP, HIDE_AFTER, TOP_STICKY, EASE_LINEAR } from '@constants'
 import Header from 'components/common/Header'
 import Footer from 'components/common/Footer'
 import EasterEggLayer from 'components/common/EasterEggLayer'
+import GuideNotice from 'components/home/GuideNotice'
 import styles from 'components/common/LayoutContent.module.scss'
 
+const GUIDE_NOTICE_DELAY = 2000
 export default function LayoutContent({ children }: { children: ReactNode }) {
-  const { animationDone } = useAnimationContext()
+  const { animationDone, guideNoticeReady } = useAnimationContext()
   const pathname = usePathname()
   const [showHeader, setShowHeader] = useState(true)
   const lastYRef = useRef(0)
   const [headerEntered, setHeaderEntered] = useState(false)
+  const [showGuideNotice, setShowGuideNotice] = useState(false)
 
   useEffect(() => {
     if (animationDone && !headerEntered) setHeaderEntered(true)
   }, [animationDone, headerEntered])
+
+  useEffect(() => {
+    if (pathname !== '/' || !guideNoticeReady) {
+      setShowGuideNotice(false)
+      return
+    }
+
+    const timeout = setTimeout(() => setShowGuideNotice(true), GUIDE_NOTICE_DELAY)
+    return () => clearTimeout(timeout)
+  }, [pathname, guideNoticeReady])
 
   useEffect(() => {
     if (!animationDone) return
@@ -78,10 +91,12 @@ export default function LayoutContent({ children }: { children: ReactNode }) {
 
       {animationDone && (
         <motion.div
+          className={styles.footerArea}
           initial={{ opacity: 0, y: '100%' }}
           animate={{ opacity: animationDone ? 1 : 0, y: animationDone ? 0 : '100%' }}
           transition={{ duration: 0.6, ease: EASE_LINEAR }}
         >
+          {pathname === '/' && showGuideNotice && <GuideNotice />}
           <Footer />
         </motion.div>
       )}

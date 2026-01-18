@@ -9,7 +9,6 @@ import { MENU } from '@constants'
 import { FadeInView } from 'components/common/FadeInView'
 import BasicButton from 'components/common/BasicButton'
 import CubeScanner from 'components/home/CubeScanner'
-import GuideNotice from 'components/home/GuideNotice'
 import styles from './HomeMain.module.scss'
 
 const FULL_TEXT = 'ACCESS AUTHORIZED'
@@ -19,7 +18,8 @@ const SHOW_GNB = 500
 const { LIST, ABOUT } = MENU
 
 export default function HomeMain() {
-  const { setAnimationDone, hasSeenIntro, setHasSeenIntro } = useAnimationContext()
+  const { setAnimationDone, hasSeenIntro, setHasSeenIntro, setGuideNoticeReady } =
+    useAnimationContext()
   const [phase, setPhase] = useState<'scan' | 'typing' | 'done'>('scan')
   const [displayedText, setDisplayedText] = useState('')
   const [scanText, setScanText] = useState('')
@@ -38,21 +38,26 @@ export default function HomeMain() {
   useEffect(() => {
     if (phase !== 'scan') return
     let i = 0
+    let scannerTimeout: ReturnType<typeof setTimeout> | null = null
     const interval = setInterval(() => {
       if (i <= '시스템 스캔 중...'.length) {
         setScanText('시스템 스캔 중...'.slice(0, i))
         i++
       } else {
         clearInterval(interval)
-        setTimeout(() => setShowScanner(true), 300)
+        scannerTimeout = setTimeout(() => setShowScanner(true), 300)
       }
     }, 80)
-    return () => clearInterval(interval)
+    return () => {
+      clearInterval(interval)
+      if (scannerTimeout) clearTimeout(scannerTimeout)
+    }
   }, [phase])
 
   useEffect(() => {
     if (phase !== 'typing') return
     let currentIndex = 0
+    let guideTimeout: ReturnType<typeof setTimeout> | null = null
     const timer = setInterval(() => {
       if (currentIndex <= FULL_TEXT.length) {
         setDisplayedText(FULL_TEXT.slice(0, currentIndex))
@@ -61,11 +66,17 @@ export default function HomeMain() {
         clearInterval(timer)
         setHasSeenIntro(true) // 큐브 애니메이션 스킵
         setAnimationDone(true)
-        setTimeout(() => setPhase('done'), SHOW_GNB)
+        guideTimeout = setTimeout(() => {
+          setGuideNoticeReady(true)
+          setPhase('done')
+        }, SHOW_GNB + 500)
       }
     }, TYPING_SPEED)
-    return () => clearInterval(timer)
-  }, [phase, setAnimationDone, setHasSeenIntro])
+    return () => {
+      clearInterval(timer)
+      if (guideTimeout) clearTimeout(guideTimeout)
+    }
+  }, [phase, setAnimationDone, setHasSeenIntro, setGuideNoticeReady])
 
   return (
     <section className={styles.home}>
@@ -113,8 +124,6 @@ export default function HomeMain() {
           </FadeInView>
         </div>
       )}
-
-      {phase === 'done' && <GuideNotice />}
     </section>
   )
 }

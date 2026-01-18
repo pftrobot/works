@@ -9,6 +9,8 @@ interface AnimationContextValue {
   setHasSeenIntro: (v: boolean) => void
   guideNoticeVisible: boolean
   setGuideNoticeVisible: (visible: boolean) => void
+  guideNoticeReady: boolean
+  setGuideNoticeReady: (ready: boolean) => void
 }
 
 const AnimationContext = createContext<AnimationContextValue | null>(null)
@@ -17,6 +19,7 @@ export const AnimationProvider = ({ children }: { children: ReactNode }) => {
   const [animationDone, setAnimationDone] = useState(false)
   const [hasSeenIntro, setHasSeenIntro] = useState(false)
   const [guideNoticeVisible, setGuideNoticeVisible] = useState(true)
+  const [guideNoticeReady, setGuideNoticeReady] = useState(false)
 
   return (
     <AnimationContext.Provider
@@ -27,6 +30,8 @@ export const AnimationProvider = ({ children }: { children: ReactNode }) => {
         setHasSeenIntro,
         guideNoticeVisible,
         setGuideNoticeVisible,
+        guideNoticeReady,
+        setGuideNoticeReady,
       }}
     >
       {children}
